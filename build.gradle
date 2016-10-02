@@ -1,0 +1,26 @@
+group 'Farabi'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'antlr'
+
+sourceCompatibility = 1.7
+
+sourceSets {
+    src {
+        main {
+            java {
+                srcDir 'src'
+            }
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    antlr "org.antlr:antlr4:4.5" // use ANTLR version 4
+}
