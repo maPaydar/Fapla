@@ -44,7 +44,6 @@ blockStatement
     |   statement
     ;
 
-
 statement
     :   'if' expression statement ('else' statement)?
     |   'while' expression statement
@@ -52,21 +51,22 @@ statement
     |   expression ';'
     |   varDeclaration
     |   RETURN expression SEMI
+    |   block
     ;
 
 expression
     :   primary
-        |   ('not') expression
-        |   expression ('*'|'/'|'%') expression
-        |   expression ('+'|'-') expression
-        |   expression ('<' '<' | '>' '>' '>' | '>' '>') expression
-        |   expression ('<=' | '>=' | '>' | '<') expression
-        |   expression ('==' | '<>') expression
-        |   expression 'and' expression
-        |   expression '^' expression
-        |   expression 'xor' expression
-        |   expression 'or' expression
-        |   expression '?' expression ':' expression
+    |   ('not') expression
+    |   expression ('*'|'/'|'%') expression
+    |   expression ('+'|'-') expression
+    |   expression ('<' '<' | '>' '>' '>' | '>' '>') expression
+    |   expression ('<=' | '>=' | '>' | '<') expression
+    |   expression ('==' | '<>') expression
+    |   expression 'and' expression
+    |   expression '^' expression
+    |   expression 'xor' expression
+    |   expression 'or' expression
+    |   expression '?' expression ':' expression
     ;
 
 expressionList
@@ -99,8 +99,8 @@ literal
     |   StringLiteral
     |   BoolLiteral
     ;
-
-
+*/
+/*
 RealLiteral
     :   DecimalIntegerLiteral
     |   HexIntegerLiteral
@@ -219,12 +219,13 @@ IF            : 'if';
 RETURN        : 'return';
 WHILE         : 'while';
 MODULE        : 'module' | 'Module' ;
+BEGIN           : 'Begin';
+END             : 'End';
+
 
 SEMI            : ';';
 COMMA           : ',';
 DOT             : '.';
-BEGIN           : 'Begin';
-END             : 'End';
 
 ASSIGN          : '=';
 GT              : '>';
@@ -253,11 +254,11 @@ Identifier
     :   JavaLetter JavaLetterOrDigit*
     ;
 JavaLetter
-    :   [a-zA-Z] // these are the "java letters" below 0x7F
+    :   [a-zA-Z]
     ;
 
 JavaLetterOrDigit
-    :   [a-zA-Z0-9] // these are the "java letters or digits" below 0x7F
+    :   [a-zA-Z0-9]
     ;
 
 
@@ -265,9 +266,9 @@ WS  :  [ \t\r\n\u000C]+ -> skip
     ;
 
 COMMENT
-    :   '/*' .*? '*/' -> skip
+    :   '%%%' .*? '%%%' -> skip
     ;
 
 LINE_COMMENT
-    :   '//' ~[\r\n]* -> skip
+    :   '%%' ~[\r\n]* -> skip
     ;
