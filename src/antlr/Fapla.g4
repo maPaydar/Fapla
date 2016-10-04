@@ -1,23 +1,11 @@
 grammar Fapla;
 
 compilationUnit
-    :   /*moduleDeclaration**/ mainModuleDeclaration /*varDeclaration* moduleDeclaration* varDeclaration**/ EOF
+    :   moduleDeclaration* mainModuleDeclaration /*varDeclaration* moduleDeclaration* varDeclaration**/ EOF
     ;
-
-WS  :  [ \t\r\n\u000C]+ -> skip
-    ;
-
-COMMENT
-    :   '/*' .*? '*/' -> skip
-    ;
-
-LINE_COMMENT
-    :   '//' ~[\r\n]* -> skip
-    ;
-
 
 moduleDeclaration
-    :   ('Module'|'module')
+    :   MODULE
         Identifier
         (moduleInput)?
         (moduleOutput)?
@@ -25,7 +13,7 @@ moduleDeclaration
     ;
 
 mainModuleDeclaration
-    :   ('Module'|'module')
+    :   MODULE
         ('Main'|'main')
         (moduleBody)
     ;
@@ -34,13 +22,13 @@ moduleInput
     :   ('Input'|'input')
         COLON
         (varDeclaration)*
-        SEMI
     ;
 
 moduleOutput
     :   ('Output'|'output')
         COLON
         (primitiveType)
+        SEMI
     ;
 
 moduleBody
@@ -62,6 +50,7 @@ statement
     |   'while' expression statement
     |   ';'
     |   expression ';'
+    |   varDeclaration
     |   RETURN expression SEMI
     ;
 
@@ -87,9 +76,10 @@ expressionList
 
 primary
     :
-    |   literal
+//    |   literal
     |   Identifier
     ;
+
 
 primitiveType
     :   BOOL
@@ -103,7 +93,7 @@ varDeclaration
         primitiveType SEMI)
     ;
 
-
+/*
 literal
     :   RealLiteral
     |   StringLiteral
@@ -215,14 +205,20 @@ UnicodeEscape
     :   '\\' 'u' HexDigit HexDigit HexDigit HexDigit
     ;
 
+*/
+
+/* Data Types */
 STRING        : 'string';
-REAL          : 'real';
-BOOL          : 'bool';
+REAL          : 'Real';
+BOOL          : 'Bool';
+
+/* KeyWords */
 ELSE          : 'else';
+THEN          : 'then';
 IF            : 'if';
 RETURN        : 'return';
 WHILE         : 'while';
-MODULE        : 'module';
+MODULE        : 'module' | 'Module' ;
 
 SEMI            : ';';
 COMMA           : ',';
@@ -262,4 +258,16 @@ JavaLetter
 
 JavaLetterOrDigit
     :   [a-zA-Z0-9] // these are the "java letters or digits" below 0x7F
+    ;
+
+
+WS  :  [ \t\r\n\u000C]+ -> skip
+    ;
+
+COMMENT
+    :   '/*' .*? '*/' -> skip
+    ;
+
+LINE_COMMENT
+    :   '//' ~[\r\n]* -> skip
     ;
