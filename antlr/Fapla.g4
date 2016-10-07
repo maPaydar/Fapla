@@ -42,13 +42,13 @@ moduleDeclaration
         Identifier
         (moduleInput)?
         (moduleOutput)?
-        (moduleBody)
+        (block)
     ;
 
 mainModuleDeclaration
     :   MODULE
         MAIN
-        (moduleBody)
+        (block)
     ;
 
 moduleInput
@@ -64,17 +64,8 @@ moduleOutput
         SEMI
     ;
 
-moduleBody
-    :   block
-    ;
-
 block
-    :   BEGIN (blockStatement)* END
-    ;
-
-blockStatement
-    :   varDeclaration
-    |   statement
+    :   BEGIN (statement)* END
     ;
 
 statement
@@ -84,8 +75,9 @@ statement
     |   expression SEMI
     |   assignment
     |   varDeclaration
+    |   WRITE expression SEMI
+    |   READ Identifier SEMI
     |   RETURN expression SEMI
-    |   block
     ;
 
 expression
@@ -101,6 +93,7 @@ expression
     |   expression QUESTION expression COLON expression
     |   Identifier PO expressionList PC
     |   primary
+    |   block
     ;
 
 expressionList
@@ -138,112 +131,7 @@ Literal
     |   'true' |'false'
     ;
 
-/*
-Literal
-    :   RealLiteral
-    |   StringLiteral
-    |   BoolLiteral
-    ;
 
-RealLiteral
-    :   DecimalIntegerLiteral
-    |   HexIntegerLiteral
-    |   FloatingPointLiteral
-    ;
-FloatingPointLiteral
-    :   DecimalFloatingPointLiteral
-    ;
-DecimalFloatingPointLiteral
-    :   Digits '.' Digits? ExponentPart? FloatTypeSuffix?
-    |   '.' Digits ExponentPart? FloatTypeSuffix?
-    |   Digits ExponentPart FloatTypeSuffix?
-    |   Digits FloatTypeSuffix
-    ;
-ExponentPart
-    :   ExponentIndicator SignedInteger
-    ;
-ExponentIndicator
-    :   [eE]
-    ;
-SignedInteger
-    :   Sign? Digits
-    ;
-Sign
-    :   [+-]
-    ;
-FloatTypeSuffix
-    :   [fFdD]
-    ;
-DecimalIntegerLiteral
-    :   DecimalNumeral IntegerTypeSuffix?
-    ;
-HexIntegerLiteral
-    :   HexNumeral IntegerTypeSuffix?
-    ;
-IntegerTypeSuffix
-    :   [lL]
-    ;
-DecimalNumeral
-    :   '0'
-    |   NonZeroDigit (Digits?)
-    ;
-Digits
-    :   Digit (Digit+)?
-    ;
-Digit
-    :   '0'
-    |   NonZeroDigit
-    ;
-NonZeroDigit
-    :   [1-9]
-    ;
-HexNumeral
-    :   '0' [xX] HexDigits
-    ;
-HexDigits
-    :   HexDigit (HexDigitOrUnderscore* HexDigit)?
-    ;
-HexDigit
-    :   [0-9a-fA-F]
-    ;
-HexDigitOrUnderscore
-    :   HexDigit
-    |   '_'
-    ;
-BoolLiteral
-    :   'true'
-    |   'false'
-    ;
-StringLiteral
-    :   '"' StringCharacters? '"'
-    ;
-StringCharacters
-    :   StringCharacter+
-    ;
-StringCharacter
-    :   ~["\\]
-    |   EscapeSequence
-    ;
-EscapeSequence
-    :   '\\' [btnfr"'\\]
-    |   OctalEscape
-    |   UnicodeEscape
-    ;
-OctalEscape
-    :   '\\' OctalDigit
-    |   '\\' OctalDigit OctalDigit
-    |   '\\' ZeroToThree OctalDigit OctalDigit
-    ;
-OctalDigit
-    :   [0-7]
-    ;
-ZeroToThree
-    :   [0-3]
-    ;
-UnicodeEscape
-    :   '\\' 'u' HexDigit HexDigit HexDigit HexDigit
-    ;
-*/
 /* Data Types */
 STRING        : 'String';
 REAL          : 'Real';
@@ -261,6 +149,8 @@ END           : 'End';
 MAIN          : 'Main' | 'main';
 INPUT         : 'Input' | 'input';
 OUTPUT        : 'Output' | 'output';
+WRITE         : 'write';
+READ          : 'read';
 
 SEMI            : ';';
 COMMA           : ',';
@@ -287,6 +177,7 @@ POW             : '^';
 MOD             : '%';
 PO              : '(';
 PC              : ')';
+
 
 /*
 Identifier
