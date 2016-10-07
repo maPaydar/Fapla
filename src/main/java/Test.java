@@ -87,6 +87,7 @@ public class Test {
                 "\n" +
                 "\ttext: String;\n" +
                 "\tprint(text);\n" +
+                "a = 0x123 + 123.654;" +
                 "\n" +
                 "End")));
         CommonTokenStream tokens = new CommonTokenStream(lexer);

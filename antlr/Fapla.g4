@@ -9,8 +9,6 @@ import java.util.*;
 //import src.antlr.FaplaLexer.Variable;
 import java.util.*;
 }
-// explicitly define keyword token types to avoid implicit def warnings
-// tokens { BEGIN, END, IF, THEN, WHILE }
 
 @lexer::members {
 static class Variable {
@@ -112,7 +110,7 @@ expressionList
 
 primary
     :
-//    |   literal
+    |   Literal
     |   Identifier /*{ if(variables.containsKey($Identifier)) { setType() } }*/
     ;
 
@@ -133,14 +131,20 @@ varDeclaration
 assignment
     :   Identifier ASSIGN expression SEMI { System.out.println($expression.text); }
     ;
+
+Literal
+    :   [0-9]+ | [0-9]+ DOT [0-9]+ | '0'('x'|'X')[0-9A-Fa-f]+
+    |   '"' (~["\\]*)? '"'
+    |   'true' |'false'
+    ;
+
 /*
-literal
+Literal
     :   RealLiteral
     |   StringLiteral
     |   BoolLiteral
     ;
-*/
-/*
+
 RealLiteral
     :   DecimalIntegerLiteral
     |   HexIntegerLiteral
@@ -170,8 +174,6 @@ Sign
 FloatTypeSuffix
     :   [fFdD]
     ;
-
-
 DecimalIntegerLiteral
     :   DecimalNumeral IntegerTypeSuffix?
     ;
@@ -208,13 +210,10 @@ HexDigitOrUnderscore
     :   HexDigit
     |   '_'
     ;
-
-
 BoolLiteral
     :   'true'
     |   'false'
     ;
-
 StringLiteral
     :   '"' StringCharacters? '"'
     ;
@@ -244,9 +243,7 @@ ZeroToThree
 UnicodeEscape
     :   '\\' 'u' HexDigit HexDigit HexDigit HexDigit
     ;
-
 */
-
 /* Data Types */
 STRING        : 'String';
 REAL          : 'Real';
