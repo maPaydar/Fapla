@@ -101,7 +101,7 @@ expression
     |   expression XOR expression
     |   expression OR expression
     |   expression QUESTION expression COLON expression
-    |   Identifier PO expressionList PC
+    |   Identifier PO expressionList PC SEMI
     |   primary
     ;
 
