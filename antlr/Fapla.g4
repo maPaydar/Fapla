@@ -55,7 +55,7 @@ moduleDeclaration
         Identifier { m.name = $Identifier.text;}
         (INPUT COLON (Identifier COLON primitiveType SEMI {m.args.add(new Variable($primitiveType.text, $Identifier.text, null)); variables.put($Identifier.text, new Variable($primitiveType.text, $Identifier.text, null));})*)?
         (OUTPUT COLON (primitiveType) SEMI)? { m.returnType = $primitiveType.text; }
-        (block) { modules.put(m.name, m); System.out.println(modules.size());}
+        (block) { modules.put(m.name, m);}
     ;
 
 mainModuleDeclaration
@@ -104,9 +104,9 @@ expression
     |   expression XOR expression
     |   expression OR expression
     |   expression QUESTION expression COLON expression
-    |   Identifier PO expressionList PC { if(!modules.containsKey($Identifier.text)) { System.err.println("Module " + $Identifier.text + " not decleared before"); } }
+    |   Identifier PO expressionList PC { if(!modules.containsKey($Identifier.text)) { System.err.println("Error:: Module " + $Identifier.text + " not decleared before at line::" + $Identifier.line); } }
     |   Literal
-    |   Identifier { if(!variables.containsKey($Identifier.text)) { System.err.println("Variable " + $Identifier.text + " not decleared before"); } }
+    |   Identifier { if(!variables.containsKey($Identifier.text)) { System.err.println("Error:: Variable " + $Identifier.text + " not decleared before at line::" + $Identifier.line); } }
     |   block
     ;
 
@@ -128,7 +128,7 @@ varDeclaration
 
 
 assignment
-    :   Identifier ASSIGN expression SEMI
+    :   Identifier ASSIGN expression SEMI { if(!variables.containsKey($Identifier.text)) { System.err.println("Error:: Variable " + $Identifier.text + " not decleared before at line::" + $Identifier.line); } }
     ;
 
 Literal
