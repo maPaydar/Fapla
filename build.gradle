@@ -24,3 +24,27 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     antlr "org.antlr:antlr4:4.5" // use ANTLR version 4
 }
+
+antlr4 {
+    source = file('src/main/java/antlr')
+    output = file('src/main/java/fapla/front')
+    extraArgs = ['-package', 'fapla.front']
+}
+
+compileJava.dependsOn antlr4
+
+sourceSets.main.java.srcDirs += antlr4.output
+
+configurations {
+    compile.extendsFrom antlr4
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Python-Parser',
+                'Implementation-Version': '0.0.1'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
