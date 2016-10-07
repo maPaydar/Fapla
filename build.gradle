@@ -24,3 +24,10 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     antlr "org.antlr:antlr4:4.5" // use ANTLR version 4
 }
+
+/*
+    to generate scanner and parser
+    cd /media/amin/Local\ Disk/Mine/MyCourses/Term\ 5/Fapla/antlr
+    antlr4 Fapla.g4 -o ../src/main/java
+
+ */
