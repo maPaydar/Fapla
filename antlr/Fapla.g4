@@ -101,12 +101,12 @@ expression
     |   expression XOR expression
     |   expression OR expression
     |   expression QUESTION expression COLON expression
-    |   Identifier PO expressionList PC SEMI
+    |   Identifier PO expressionList PC
     |   primary
     ;
 
 expressionList
-    :   expression (',' expression)*
+    :   expression (COMMA expression)*
     ;
 
 
