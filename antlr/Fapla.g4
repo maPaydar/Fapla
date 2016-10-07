@@ -10,7 +10,8 @@ import java.util.*;
 import java.util.*;
 }
 
-@lexer::members {
+@parser::members {
+
 static class Variable {
     public String type;
     public String name;
@@ -27,10 +28,22 @@ static class Variable {
         return obj.equals(this.name);
     }
 }
+static class Module {
+
+    public String name;
+    public List<Variable> args = new ArrayList();
+    public String returnType;
+
+    public Module(){}
+    public Module(String name, String returnType, List<Variable> args) {
+        this.name = name;
+        this.args = args;
+        this.returnType = returnType;
+    }
 }
 
-@parser::members {
-Map<String, FaplaLexer.Variable> variables = new HashMap<String, FaplaLexer.Variable>();
+Map<String, Variable> variables = new HashMap<String, Variable>();
+Map<String, Module> modules = new HashMap<String, Module>();
 }
 
 compilationUnit
@@ -38,11 +51,11 @@ compilationUnit
     ;
 
 moduleDeclaration
-    :   MODULE
-        Identifier
-        (moduleInput)?
-        (moduleOutput)?
-        (block)
+    :   MODULE { Module m = new Module(); }
+        Identifier { m.name = $Identifier.text;}
+        (INPUT COLON (Identifier COLON primitiveType SEMI {m.args.add(new Variable($primitiveType.text, $Identifier.text, null)); variables.put($Identifier.text, new Variable($primitiveType.text, $Identifier.text, null));})*)?
+        (OUTPUT COLON (primitiveType) SEMI)? { m.returnType = $primitiveType.text; }
+        (block) { modules.put(m.name, m); System.out.println(modules.size());}
     ;
 
 mainModuleDeclaration
@@ -69,7 +82,7 @@ block
     ;
 
 statement
-    :   IF expression { System.out.println($expression.text); } THEN statement (ELSE statement)?
+    :   IF expression THEN statement (ELSE statement)?
     |   WHILE expression statement
     |   SEMI
     |   expression SEMI
@@ -91,22 +104,15 @@ expression
     |   expression XOR expression
     |   expression OR expression
     |   expression QUESTION expression COLON expression
-    |   Identifier PO expressionList PC
-    |   primary
+    |   Identifier PO expressionList PC { if(!modules.containsKey($Identifier.text)) { System.err.println("Module " + $Identifier.text + " not decleared before"); } }
+    |   Literal
+    |   Identifier { if(!variables.containsKey($Identifier.text)) { System.err.println("Variable " + $Identifier.text + " not decleared before"); } }
     |   block
     ;
 
 expressionList
     :   expression (COMMA expression)*
     ;
-
-
-primary
-    :
-    |   Literal
-    |   Identifier /*{ if(variables.containsKey($Identifier)) { setType() } }*/
-    ;
-
 
 primitiveType
     :   BOOL
@@ -117,12 +123,12 @@ primitiveType
 varDeclaration
     :   (Identifier
         COLON
-        primitiveType SEMI) { variables.put($Identifier.text, new FaplaLexer.Variable($primitiveType.text, $Identifier.text, null));}
+        primitiveType SEMI) { variables.put($Identifier.text, new Variable($primitiveType.text, $Identifier.text, null)); }
     ;
 
 
 assignment
-    :   Identifier ASSIGN expression SEMI { System.out.println($expression.text); }
+    :   Identifier ASSIGN expression SEMI
     ;
 
 Literal
