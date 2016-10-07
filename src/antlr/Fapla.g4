@@ -4,14 +4,18 @@ grammar Fapla;
 package src.antlr;
 import java.util.*;
 }
+@parser::header {
+package src.antlr;
+import src.antlr.FaplaLexer.Variable;
+}
 // explicitly define keyword token types to avoid implicit def warnings
 // tokens { BEGIN, END, IF, THEN, WHILE }
 
 @lexer::members {
-class Variable {
-    public type;
-    public name;
-    public value;
+static class Variable {
+    public String type;
+    public String name;
+    public String value;
 
     public Variable(String type, String name, String value) {
         this.type = type;
@@ -19,6 +23,9 @@ class Variable {
         this.value = value;
     }
 }
+}
+
+@parser::members {
 List<Variable> variables = new ArrayList();
 }
 
