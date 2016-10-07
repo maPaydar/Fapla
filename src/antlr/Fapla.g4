@@ -1,5 +1,27 @@
 grammar Fapla;
 
+@lexer::header {
+package src.antlr;
+import java.util.*;
+}
+// explicitly define keyword token types to avoid implicit def warnings
+// tokens { BEGIN, END, IF, THEN, WHILE }
+
+@lexer::members {
+class Variable {
+    public type;
+    public name;
+    public value;
+
+    public Variable(String type, String name, String value) {
+        this.type = type;
+        this.name = name;
+        this.value = value;
+    }
+}
+List<Variable> variables = new ArrayList();
+}
+
 compilationUnit
     :   moduleDeclaration* mainModuleDeclaration /*varDeclaration* moduleDeclaration* varDeclaration**/ EOF
     ;
@@ -45,7 +67,7 @@ blockStatement
     ;
 
 statement
-    :   'if' expression statement ('else' statement)?
+    :   'if' expression { System.out.println($expression.text); } statement ('else' statement)?
     |   'while' expression statement
     |   ';'
     |   expression ';'
@@ -90,7 +112,7 @@ primitiveType
 varDeclaration
     :   (Identifier
         COLON
-        primitiveType SEMI)
+        primitiveType SEMI) { variables.add(new Variable($primitiveType.text, $Identifier.text, null)); }
     ;
 
 /*
