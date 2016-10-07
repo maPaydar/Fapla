@@ -55,7 +55,7 @@ moduleDeclaration
         Identifier { m.name = $Identifier.text;}
         (INPUT COLON (Identifier COLON primitiveType SEMI {m.args.add(new Variable($primitiveType.text, $Identifier.text, null)); variables.put($Identifier.text, new Variable($primitiveType.text, $Identifier.text, null));})*)?
         (OUTPUT COLON (primitiveType) SEMI)? { m.returnType = $primitiveType.text; }
-        (block) { modules.put(m.name, m);}
+        (block) { modules.put(m.name, m);le}
     ;
 
 mainModuleDeclaration
