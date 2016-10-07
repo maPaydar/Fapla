@@ -101,6 +101,7 @@ expression
     |   expression XOR expression
     |   expression OR expression
     |   expression QUESTION expression COLON expression
+    |   Identifier PO expressionList PC
     |   primary
     ;
 
@@ -287,7 +288,8 @@ MUL             : '*';
 DIV             : '/';
 POW             : '^';
 MOD             : '%';
-
+PO              : '(';
+PC              : ')';
 
 /*
 Identifier
