@@ -199,11 +199,6 @@ JavaLetterOrDigit
 */
 Identifier
 :
-/*
-	Identifiernondigit
-	| Identifier Identifiernondigit
-	| Identifier DIGIT
-	*/
 	Identifiernondigit
 	(
 		Identifiernondigit
