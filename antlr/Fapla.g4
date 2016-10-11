@@ -1,7 +1,7 @@
 grammar Fapla;
 
 compilationUnit
-    :   moduleDeclaration* mainModuleDeclaration /*varDeclaration* moduleDeclaration* varDeclaration**/ EOF
+    :   moduleDeclaration* mainModuleDeclaration moduleDeclaration* EOF
     ;
 
 moduleDeclaration
