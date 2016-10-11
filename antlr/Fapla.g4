@@ -1,61 +1,15 @@
 grammar Fapla;
 
-@lexer::header {
-//package src.antlr;
-import java.util.*;
-}
-@parser::header {
-//package src.antlr;
-//import src.antlr.FaplaLexer.Variable;
-import java.util.*;
-}
-
-@parser::members {
-
-static class Variable {
-    public String type;
-    public String name;
-    public String value;
-
-    public Variable(String type, String name, String value) {
-        this.type = type;
-        this.name = name;
-        this.value = value;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj.equals(this.name);
-    }
-}
-static class Module {
-
-    public String name;
-    public List<Variable> args = new ArrayList();
-    public String returnType;
-
-    public Module(){}
-    public Module(String name, String returnType, List<Variable> args) {
-        this.name = name;
-        this.args = args;
-        this.returnType = returnType;
-    }
-}
-
-Map<String, Variable> variables = new HashMap<String, Variable>();
-Map<String, Module> modules = new HashMap<String, Module>();
-}
-
 compilationUnit
     :   moduleDeclaration* mainModuleDeclaration /*varDeclaration* moduleDeclaration* varDeclaration**/ EOF
     ;
 
 moduleDeclaration
-    :   MODULE { Module m = new Module(); }
-        Identifier { m.name = $Identifier.text;}
-        (INPUT COLON (Identifier COLON primitiveType SEMI {m.args.add(new Variable($primitiveType.text, $Identifier.text, null)); variables.put($Identifier.text, new Variable($primitiveType.text, $Identifier.text, null));})*)?
-        (OUTPUT COLON (primitiveType) SEMI)? { m.returnType = $primitiveType.text; }
-        (block) { modules.put(m.name, m);le}
+    :   MODULE
+        Identifier
+        (INPUT COLON (Identifier COLON primitiveType SEMI)*)?
+        (OUTPUT COLON (primitiveType) SEMI)?
+        (block)
     ;
 
 mainModuleDeclaration
@@ -104,9 +58,9 @@ expression
     |   expression XOR expression
     |   expression OR expression
     |   expression QUESTION expression COLON expression
-    |   Identifier PO expressionList PC { if(!modules.containsKey($Identifier.text)) { System.err.println("Error:: Module " + $Identifier.text + " not decleared before at line::" + $Identifier.line); } }
+    |   Identifier PO expressionList PC
     |   Literal
-    |   Identifier { if(!variables.containsKey($Identifier.text)) { System.err.println("Error:: Variable " + $Identifier.text + " not decleared before at line::" + $Identifier.line); } }
+    |   Identifier
     |   block
     ;
 
@@ -123,17 +77,17 @@ primitiveType
 varDeclaration
     :   (Identifier
         COLON
-        primitiveType SEMI) { variables.put($Identifier.text, new Variable($primitiveType.text, $Identifier.text, null)); }
+        primitiveType SEMI)
     ;
 
 
 assignment
-    :   Identifier ASSIGN expression SEMI { if(!variables.containsKey($Identifier.text)) { System.err.println("Error:: Variable " + $Identifier.text + " not decleared before at line::" + $Identifier.line); } }
+    :   Identifier ASSIGN expression SEMI
     ;
 
 Literal
-    :   [0-9]+ | [0-9]+ DOT [0-9]+ | '0'('x'|'X')[0-9A-Fa-f]+
-    |   '"' (~["\\]*)? '"'
+    :   [0-9]+ | [0-9]+ DOT [0-9]+ | '0'('x'|'X')[0-9A-Fa-f]+ | ('0'('x'|'X')[0-9A-Fa-f]+ DOT '0'('x'|'X')[0-9A-Fa-f]+)
+    |   '"' (~["\\, '\n']*)? '"'
     |   'true' |'false'
     ;
 
