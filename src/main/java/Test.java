@@ -30,19 +30,19 @@ public class Test {
 
     public static void main(String[] args) {
         FaplaLexer lexer = new FaplaLexer((new ANTLRInputStream(
-                "Module print" +
-                " Input:" +
-                "x:Real;" +
-                "y:Real;" +
-                "Output:Real;" +
-                "Begin " +
-                "return x + y;" +
-                " End "+
+                "Module print\n" +
+                " Input:\n" +
+                "x:Real;\n" +
+                "y:Real;\n" +
+                "Output:Real;\n" +
+                "Begin \n" +
+                "return x + y;\n" +
+                " End \n"+
                 "Module main\n" +
                 "Begin\n" +
                 "\n" +
                 "\ttext: String;\n" +
-                "\tprint(text);\n" +
+                "\tprints(text);\n" +
                 "a = 0x123 + 123.654;" +
                 "write \"asdfasdfasdf\";" +
                 "\n" +
