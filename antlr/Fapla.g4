@@ -139,65 +139,8 @@ PO              : '(';
 PC              : ')';
 
 
-/*
 Identifier
-    :   JavaLetter JavaLetterOrDigit*
-    ;
-JavaLetter
-    :   [a-zA-Z]
-    ;
-
-JavaLetterOrDigit
-    :   [a-zA-Z0-9]
-    ;
-*/
-Identifier
-:
-/*
-	Identifiernondigit
-	| Identifier Identifiernondigit
-	| Identifier DIGIT
-	*/
-	Identifiernondigit
-	(
-		Identifiernondigit
-		| DIGIT
-	)*
-;
-
-fragment
-Identifiernondigit
-:
-	NONDIGIT
-	| Universalcharactername
-	/* other implementation defined characters*/
-;
-fragment
-NONDIGIT
-:
-	[a-zA-Z_]
-;
-fragment
-DIGIT
-:
-	[0-9]
-;
-fragment
-Universalcharactername
-:
-	'\\u' Hexquad
-	| '\\U' Hexquad Hexquad
-;
-/*Lexer*/
-fragment
-Hexquad
-:
-	HEXADECIMALDIGIT HEXADECIMALDIGIT HEXADECIMALDIGIT HEXADECIMALDIGIT
-;
-fragment
-HEXADECIMALDIGIT
-:
-	[0-9a-fA-F]
+    : [a-zA-Z_] ([a-zA-Z_] | [0-9])*
 ;
 
 
