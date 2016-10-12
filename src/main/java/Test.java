@@ -30,23 +30,35 @@ public class Test {
 
     public static void main(String[] args) {
         FaplaLexer lexer = new FaplaLexer((new ANTLRInputStream(
-                "Module print" +
-                " Input:" +
-                "x:Real;" +
-                "y:Real;" +
-                "Output:Real;" +
-                "Begin " +
-                "return x + y;" +
-                " End "+
-                "Module main\n" +
-                "Begin\n" +
-                "\n" +
-                "\ttext: String;\n" +
-                "\tprint(text);\n" +
-                "a = 0x123 + 123.654;" +
-                "write \"asdfasdfasdf\";" +
-                "\n" +
-                "End")));
+                "%%% this is a one line comment %%%\n" +
+                        "Module print" +
+                        "%%% this is a \none line comment %%%\n" +
+                        " Input:" +
+                        "__xYy:Real;" +
+                        "y:Real;" +
+                        "%%% this \n\n\nis a one line comment %%%\n" +
+                        "Output:Real;" +
+                        "Begin " +
+                        "return x + y;" +
+                        " End " +
+                        "Module main\n" +
+                        "Begin\n" +
+                        "\n" +
+                        "%%% this is a one line comment %%%\n" +
+                        "\ttext: String;\n" +
+                        "\tprint(text);\n" +
+                        "a = 0x123 + 123.654;" +
+                        "write \"asdxcnv__./^#$dewfasdfasdf\";" +
+                        "\n" +
+                        "End "
+                        + "Module print" +
+                        " Input:" +
+                        "x:Real;" +
+                        "y:Real;" +
+                        "Output:Real;" +
+                        "Begin " +
+                        "return x + y;" +
+                        " End ")));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         FaplaParser parser = new FaplaParser(tokens);
 
