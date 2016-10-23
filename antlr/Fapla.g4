@@ -1,89 +1,4 @@
-grammar Fapla;
-
-compilationUnit
-    :   moduleDeclaration* mainModuleDeclaration moduleDeclaration* EOF
-    ;
-
-moduleDeclaration
-    :   MODULE
-        Identifier
-        (INPUT COLON (Identifier COLON primitiveType SEMI)*)?
-        (OUTPUT COLON (primitiveType) SEMI)?
-        (block)
-    ;
-
-mainModuleDeclaration
-    :   MODULE
-        MAIN
-        (block)
-    ;
-
-moduleInput
-    :   INPUT
-        COLON
-        (varDeclaration)*
-    ;
-
-moduleOutput
-    :   OUTPUT
-        COLON
-        (primitiveType)
-        SEMI
-    ;
-
-block
-    :   BEGIN (statement)* END
-    ;
-
-statement
-    :   IF expression THEN statement (ELSE statement)?
-    |   WHILE expression statement
-    |   SEMI
-    |   expression SEMI
-    |   assignment
-    |   varDeclaration
-    |   WRITE expression SEMI
-    |   READ Identifier SEMI
-    |   RETURN expression SEMI
-    ;
-
-expression
-    :   NOT expression
-    |   expression (MUL|DIV|MOD) expression
-    |   expression (ADD|SUB) expression
-    |   expression (LE | GE | GT | LT) expression
-    |   expression (EQUAL | NOTEQUAL) expression
-    |   expression AND expression
-    |   expression POW expression
-    |   expression XOR expression
-    |   expression OR expression
-    |   expression QUESTION expression COLON expression
-    |   Identifier PO expressionList PC
-    |   Literal
-    |   Identifier
-    |   block
-    ;
-
-expressionList
-    :   expression (COMMA expression)*
-    ;
-
-primitiveType
-    :   BOOL
-    |   REAL
-    |   STRING
-    ;
-
-varDeclaration
-    :   (Identifier
-        COLON
-        primitiveType SEMI)
-    ;
-
-
-assignment
-    :   Identifier ASSIGN expression SEMI
-    ;
+lexer grammar Fapla;
 
 Literal
     :   [0-9]+ | [0-9]+ DOT [0-9]+ | '0'('x'|'X')[0-9A-Fa-f]+ | ('0'('x'|'X')[0-9A-Fa-f]+ DOT '0'('x'|'X')[0-9A-Fa-f]+)
@@ -91,6 +6,11 @@ Literal
     |   'true' |'false'
     ;
 
+PrimitiveType
+    :   BOOL
+    |   REAL
+    |   STRING
+    ;
 
 /* Data Types */
 STRING        : 'String';
@@ -140,7 +60,14 @@ PC              : ')';
 
 
 Identifier
-    : [a-zA-Z_] ([a-zA-Z_] | [0-9])*
+    : [a-zA-Z_]
+    ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9]
+    ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9]
+    ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9]
+    ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9]
+    ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9]
+    ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9]
+     ([a-zA-Z_] | [0-9] [a-zA-Z_] | [0-9]?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?
 ;
 
 
