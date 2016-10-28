@@ -2,7 +2,7 @@ lexer grammar Fapla;
 
 Literal
     :   [0-9]+ | [0-9]+ DOT [0-9]+ | '0'('x'|'X')[0-9A-Fa-f]+ | ('0'('x'|'X')[0-9A-Fa-f]+ DOT '0'('x'|'X')[0-9A-Fa-f]+)
-    |   '"' (~["\\, '\n']*)? '"'
+    |   '"' (~[\r\n]*)? '"'
     |   'true' |'false'
     ;
 
@@ -58,16 +58,20 @@ MOD             : '%';
 PO              : '(';
 PC              : ')';
 
+fragment
+A   :   'a' | 'A';
+
+fragment
+DigitOrLetter : [a-z-A-Z0-9];
 
 Identifier
-    : [a-zA-Z_]
-    ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9]
-    ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9]
-    ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9]
-    ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9]
-    ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9]
-    ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9] ([a-zA-Z_] | [0-9]
-     ([a-zA-Z_] | [0-9] [a-zA-Z_] | [0-9]?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?
+    : [a-zA-Z](DigitOrLetter(DigitOrLetter(DigitOrLetter(DigitOrLetter
+    (DigitOrLetter(DigitOrLetter(DigitOrLetter(DigitOrLetter(DigitOrLetter
+    (DigitOrLetter(DigitOrLetter(DigitOrLetter(DigitOrLetter(DigitOrLetter
+    (DigitOrLetter(DigitOrLetter(DigitOrLetter(DigitOrLetter(DigitOrLetter
+    (DigitOrLetter(DigitOrLetter(DigitOrLetter(DigitOrLetter(DigitOrLetter
+    (DigitOrLetter(DigitOrLetter(DigitOrLetter(DigitOrLetter(DigitOrLetter
+    (DigitOrLetter(DigitOrLetter?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?
 ;
 
 
@@ -75,7 +79,7 @@ WS  :  [ \t\r\n\u000C]+ -> skip
     ;
 
 COMMENT
-    :   '%%%' .*? '%%%' -> skip
+    :   '%%%' ~['%%%']* '%%%' -> skip
     ;
 
 LINE_COMMENT

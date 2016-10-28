@@ -4,48 +4,29 @@
 
 import org.antlr.v4.runtime.*;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 public class Test {
 
-    private static void ex(String source) throws IOException {
-        //FileInputStream f = new FileInputStream(fileAddress);
-        Fapla lexer = new Fapla(new ANTLRInputStream(source));
-        for (Token t : lexer.getAllTokens()) {
-            System.out.println(lexer.tokenNames[t.getType()]);
+    private static String[] testFiles = {
+            "./src/tests/test1.fapla",
+            "./src/tests/test2.fapla",
+    };
+
+    private static void lexicalAnalayze(String fileAddress) throws IOException {
+        FileInputStream fileInputStream = new FileInputStream(fileAddress);
+        Fapla lexer = new Fapla(new ANTLRInputStream(fileInputStream));
+        for (Token token : lexer.getAllTokens()) {
+            System.out.println(lexer.getSymbolicNames()[token.getType()]);
         }
     }
 
-
     public static void main(String[] args) throws IOException {
-        ex("%%% this is a one line comment %%%\n" +
-                "Module printpriprintpriprintpriprintpri" + " %%% this is a one line comment %%% " +
-                "%%% this is a \none line comment %%%\n" +
-                " Input:" +
-                "__xYy:Real;" +
-                "y:Real;" +
-                "%%% this \n\n\nis a one line comment %%%\n" +
-                "Output:Real;" +
-                "Begin " +
-                "return x + y;" +
-                " End " +
-                "Module main\n" +
-                "Begin\n" +
-                "\n" +
-                "%%% this is a one line comment %%%\n" +
-                "\ttext: String;\n" +
-                "\tprint(text);\n" +
-                "a = 0x123 + 123.654;" +
-                "write \"asdxcnv__./^#$dewfasdfasdf\";" +
-                "\n" +
-                "End "
-                + "Module print" +
-                " Input:" +
-                "x:Real;" +
-                "y:Real;" +
-                "Output:Real;" +
-                "Begin " +
-                "return x + y;" +
-                " End ");
+        for (int i = 0; i < testFiles.length; i++) {
+            System.out.println("Test #" + i + " " + testFiles[i] + " lexical Analayzing START");
+            lexicalAnalayze(testFiles[i]);
+            System.out.println("Test #" + i + " " + testFiles[i] + " lexical Analayzing END");
+        }
     }
 }
