@@ -11,14 +11,14 @@ public class Test {
 
     private static String[] testFiles = {
             "./src/tests/test1.fapla",
-            "./src/tests/test2.fapla",
+            //"./src/tests/test2.fapla",
     };
 
     private static void lexicalAnalayze(String fileAddress) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(fileAddress);
         Fapla lexer = new Fapla(new ANTLRInputStream(fileInputStream));
         for (Token token : lexer.getAllTokens()) {
-            System.out.println(lexer.getSymbolicNames()[token.getType()]);
+            System.out.println(lexer._SYMBOLIC_NAMES[token.getType()] + " : " + token.getText());
         }
     }
 
