@@ -2,7 +2,7 @@ lexer grammar Fapla;
 
 
 COMMENT
-    :   '%%%' (~['%%%'])* '%%%'
+    :   '%%%' (~['%%%'] |.)*? '%%%'
     ;
 
 LINE_COMMENT
