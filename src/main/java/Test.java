@@ -21,6 +21,7 @@ public class Test {
         }
     }
 
+
     public static void main(String[] args) throws IOException {
         for (int i = 0; i < testFiles.length; i++) {
             System.out.println("Test #" + i + " " + testFiles[i] + " lexical Analayzing START");
