@@ -1,2 +1,23 @@
-ASASDF %%% as%df %%% asd %%% asdfasdf %%%%%%
-
+%%%This is a sample Written in QUPLA $
+@The program compute fibonacci serie%%%
+module func
+input:
+	X:real;
+output:real;
+begin
+	if x> 0 then
+	begin
+		return Func(x-1)+func(x-2);
+	end
+	return 1;
+	$
+end
+%% This is the main module&%* &()'
+module main
+begin
+	i:real;
+	i=20;
+	write(func(i));
+end
+%%% The code ends here%% %%% %%%
+asdfasd %%%

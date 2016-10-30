@@ -11,7 +11,6 @@ public class Test {
 
     private static String[] testFiles = {
             "./src/tests/test1.fapla",
-            //"./src/tests/test2.fapla",
     };
 
     private static void lexicalAnalayze(String fileAddress) throws IOException {
