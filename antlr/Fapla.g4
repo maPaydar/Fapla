@@ -99,7 +99,7 @@ fragment
 DigitOrLetter : [a-z-A-Z0-9];
 
 startState
-    :   moduleDeclaration* mainModuleDeclaration /*varDeclaration* moduleDeclaration* varDeclaration**/ EOF
+    :   moduleDeclaration* mainModuleDeclaration moduleDeclaration* EOF
     ;
 
 moduleDeclaration
@@ -167,9 +167,9 @@ expressionList
     ;
 
 primitiveType
-    :   'real'
-    |   'bool'
-    |   'string'
+    :   REAL
+    |   BOOL
+    |   STRING
     ;
 
 varDeclaration
