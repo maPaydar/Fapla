@@ -9,8 +9,7 @@ begin
 	begin
 		return Func(x-1)+func(x-2);
 	end
-	return 1;
-	$
+	return "amin";
 end
 %% This is the main module&%* &()'
 module main
@@ -19,5 +18,4 @@ begin
 	i=20;
 	write(func(i));
 end
-%%% The code ends here%% %%% %%%
-asdfasd %%%
+%%% The code ends here%% %%%
