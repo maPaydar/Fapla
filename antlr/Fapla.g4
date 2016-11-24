@@ -102,8 +102,6 @@ statement
     |   READ Identifier SEMI
     |   RETURN expression SEMI
     ;
-//ToDo recursive functions
-//ToDo function arguments not found
 expression
     :   NOT expression
     |   expression (MUL|DIV|MOD) expression
