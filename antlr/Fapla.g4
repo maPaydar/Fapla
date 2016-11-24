@@ -103,11 +103,11 @@ startState
     ;
 
 moduleDeclaration
-    :   MODULE { /*Module m = new Module();*/ }
-        Identifier { /*m.name = $Identifier.text;*/}
-        (INPUT COLON (Identifier COLON primitiveType SEMI {/*m.args.add(new Variable($primitiveType.text, $Identifier.text, null)); variables.put($Identifier.text, new Variable($primitiveType.text, $Identifier.text, null));*/})*)?
-        (OUTPUT COLON (primitiveType) SEMI)? { /*m.returnType = $primitiveType.text;*/ }
-        (block) { /*modules.put(m.name, m);*/}
+    :   MODULE { Module m = new Module(); }
+        Identifier { m.name = $Identifier.text;}
+        (INPUT COLON (Identifier COLON primitiveType SEMI {m.args.add(new Variable($primitiveType.text, $Identifier.text, null)); variables.put($Identifier.text, new Variable($primitiveType.text, $Identifier.text, null));})*)?
+        (OUTPUT COLON (primitiveType) SEMI)? { m.returnType = $primitiveType.text; }
+        (block) { modules.put(m.name, m);}
     ;
 
 mainModuleDeclaration
@@ -144,7 +144,8 @@ statement
     |   READ Identifier SEMI
     |   RETURN expression SEMI
     ;
-
+//ToDo recursive functions
+//ToDo function arguments not found
 expression
     :   NOT expression
     |   expression (MUL|DIV|MOD) expression
@@ -156,9 +157,9 @@ expression
     |   expression XOR expression
     |   expression OR expression
     |   expression QUESTION expression COLON expression
-    |   Identifier PO expressionList PC { /*if(!modules.containsKey($Identifier.text)) { System.err.println("Error:: Module " + $Identifier.text + " not decleared before at line::" + $Identifier.line); }*/ }
+    |   Identifier PO expressionList PC { if(!modules.containsKey($Identifier.text)) { System.err.println("Error:: Module " + $Identifier.text + " not decleared before at line::" + $Identifier.line); } }
     |   Literal
-    |   Identifier { /*if(!variables.containsKey($Identifier.text)) { System.err.println("Error:: Variable " + $Identifier.text + " not decleared before at line::" + $Identifier.line); } */}
+    |   Identifier { if(!variables.containsKey($Identifier.text)) { System.err.println("Error:: Variable " + $Identifier.text + " not decleared before at line::" + $Identifier.line); } }
     |   block
     ;
 
@@ -175,11 +176,11 @@ primitiveType
 varDeclaration
     :   (Identifier
         COLON
-        primitiveType SEMI) { /*variables.put($Identifier.text, new Variable($primitiveType.text, $Identifier.text, null));*/ }
+        primitiveType SEMI) { variables.put($Identifier.text, new Variable($primitiveType.text, $Identifier.text, null)); }
     ;
 
 assignment
-    :   Identifier ASSIGN expression SEMI { /*if(!variables.containsKey($Identifier.text)) { System.err.println("Error:: Variable " + $Identifier.text + " not decleared before at line::" + $Identifier.line); }*/ }
+    :   Identifier ASSIGN expression SEMI { if(!variables.containsKey($Identifier.text)) { System.err.println("Error:: Variable " + $Identifier.text + " not decleared before at line::" + $Identifier.line); } }
     ;
 
 Literal
