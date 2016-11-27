@@ -2,7 +2,6 @@
 
 //package src.antlr;
 //import src.antlr.FaplaLexer.Variable;
-import java.util.*;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;

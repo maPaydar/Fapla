@@ -1,3 +1,5 @@
+
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
@@ -5,7 +7,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -13,15 +14,17 @@ import java.io.IOException;
  */
 public class FaplaPrinter {
 
+    public static final String TEST_FILE_PATH = "./fapla-java/test/test1.fapla";
+
     public static void printTokens() throws IOException {
-        FaplaLexer lexer = new FaplaLexer(new ANTLRInputStream(new FileInputStream(new File("./src/tests/test1.fapla"))));
+        FaplaLexer lexer = new FaplaLexer(new ANTLRInputStream(new FileInputStream(new File("src/test/test1.fapla"))));
         for (Token token : lexer.getAllTokens()) {
             System.out.println("Token : " + token);
         }
     }
 
     public static void printRules() throws IOException {
-        printRules(ParserFacade.parse(new File("./src/tests/test1.fapla")));
+        printRules(ParserFacade.parse(new File(TEST_FILE_PATH)));
     }
 
     public static void printRules(RuleContext ctx) {
