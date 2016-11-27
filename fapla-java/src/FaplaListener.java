@@ -1,9 +1,4 @@
-// Generated from Fapla.g4 by ANTLR 4.5
-
-//package src.antlr;
-//import src.antlr.FaplaLexer.Variable;
-
-import org.antlr.v4.runtime.misc.NotNull;
+// Generated from /home/amin/Documents/Fapla/fapla-antlr/Fapla.g4 by ANTLR 4.5.3
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
