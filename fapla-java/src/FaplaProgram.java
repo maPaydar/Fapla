@@ -4,7 +4,7 @@
 
 import java.io.IOException;
 
-public class Test {
+public class FaplaProgram {
 
     public static void main(String[] args) throws IOException {
         //FaplaPrinter.printTokens();
