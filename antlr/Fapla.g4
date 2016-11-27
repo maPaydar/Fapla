@@ -100,6 +100,7 @@ BOOL          : 'Bool';
 /* KeyWords */
 ELSE          : 'else';
 THEN          : 'then';
+ELSEIF        : 'elseif'
 IF            : 'if';
 RETURN        : 'return';
 WHILE         : 'while';
