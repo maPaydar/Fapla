@@ -1,5 +1,5 @@
 #Fapla Programming Language
-This is Design Compile Project
+This is Design Compiler Project
 
 
 #Make any language
@@ -10,6 +10,5 @@ in the root of project
 ./make JavaScript
 ./make CSharp
 ./make Python
-
 ```
 and then you see generated classes by antlr in fapla-lang directories
