@@ -115,7 +115,9 @@ expression
     |   expression OR expression
     |   expression QUESTION expression COLON expression
     |   Identifier PO expressionList PC
-    |   Literal
+    |   STRINGCONSTANT
+    |   HEXCONSTANT
+    |   REALCONSTANT
     |   Identifier
     |   block
     ;
@@ -124,11 +126,6 @@ expressionList
     :   expression (COMMA expression)*
     ;
 
-primitiveType
-    :   REAL
-    |   BOOL
-    |   STRING
-    ;
 
 varDeclaration
     :   (Identifier
@@ -140,13 +137,9 @@ assignment
     :   Identifier ASSIGN expression SEMI
     ;
 
-Literal
-    :   ('-' | '+')? [0-9]+ | [0-9]+ |  ('-' | '+')? [0-9]+ '.' [0-9]+
-    ;
-
-STRINGCONSTANT: '"' (~[\r\n]*)? '"';
-HEXCONSTANT:    '0' X [0-9A-Fa-f]+;
-REALCONSTANT:   ('-' | '+')? [0-9]+ ('.' [0-9]+)?;
+STRINGCONSTANT  : '"' (~[\r\n]*)? '"';
+HEXCONSTANT     :    '0' X [0-9A-Fa-f]+;
+REALCONSTANT    :   ('-' | '+')? [0-9]+ ('.' [0-9]+)?;
 
 STRING        : S T R I N G;
 REAL          : R E A L;
@@ -203,6 +196,11 @@ Identifier
     (DigitOrLetter(DigitOrLetter?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?
 ;
 
+primitiveType
+    :   REAL
+    |   BOOL
+    |   STRING
+    ;
 WS  :  [ \t\r\n]+ -> skip
     ;
 
