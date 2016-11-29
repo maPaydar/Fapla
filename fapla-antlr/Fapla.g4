@@ -64,37 +64,30 @@ startState
 moduleDeclaration
     :   MODULE
         Identifier
-        (INPUT COLON (Identifier COLON primitiveType SEMI )*)?
-        (OUTPUT COLON (primitiveType) SEMI)?
-        (block)
+        (INPUT COLON (Identifier COLON primitiveType SEMI )+)?
+        (OUTPUT COLON primitiveType SEMI)?
+        block
     ;
 
 mainModuleDeclaration
     :   MODULE
         MAIN
-        (block)
-    ;
-
-moduleInput
-    :   INPUT
-        COLON
-        (varDeclaration)*
-    ;
-
-moduleOutput
-    :   OUTPUT
-        COLON
-        (primitiveType)
-        SEMI
+        block
     ;
 
 block
-    :   BEGIN (statement)* END
+    :   BEGIN statement* END
+    ;
+
+supBlock
+    :
+        BEGIN statement* END
+    |   statement
     ;
 
 statement
-    :   IF expression THEN block (ELSE block)?
-    |   WHILE expression statement
+    :   IF expression THEN supBlock (ELSE supBlock)?
+    |   WHILE expression supBlock
     |   SEMI
     |   expression SEMI
     |   assignment
@@ -114,7 +107,7 @@ expression
     |   expression XOR expression
     |   expression OR expression
     |   expression QUESTION expression COLON expression
-    |   Identifier PO expressionList PC
+    |   Identifier PO expressionList? PC
     |   STRINGCONSTANT
     |   HEXCONSTANT
     |   REALCONSTANT
@@ -128,9 +121,9 @@ expressionList
 
 
 varDeclaration
-    :   (Identifier
+    :   Identifier
         COLON
-        primitiveType SEMI)
+        primitiveType SEMI
     ;
 
 assignment
