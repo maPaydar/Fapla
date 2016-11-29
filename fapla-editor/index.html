@@ -1,93 +1,24 @@
 <html>
 
 <head>
-    <!-- if you feel an urge to move this to bootstrap or something, you're most welcome -->
     <meta charset="utf-8">
-    <title>Online JavaScript beautifier</title>
-    <link rel="icon" href="web/favicon.png" type="image/png">
-    <link rel="stylesheet" href="web/third-party/codemirror/lib/codemirror.css">
+    <title>Fapla IDE</title>
+    <link rel="icon" href="app/fapla-icon.png" type="image/png">
+    <link rel="stylesheet" href="app/libs/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="app/css/mainStyle.css">
 
-    <script src="web/third-party/codemirror/lib/codemirror.js"></script>
-    <script src="web/third-party/codemirror/mode/javascript/javascript.js"></script>
+    <script src="app/libs/codemirror/lib/codemirror.js"></script>
+    <script src="app/libs/codemirror/mode/fapla/fapla.js"></script>
 
-    <style>
-        body {
-            background: #eee;
-            color: #333;
-            margin: 0px;
-            padding: 0px;
-            font-size: 20px;
-        }
-        .CodeMirror {
-            height: 100%;
-            font-size: 90%;
-            background: white;
-        }
-        .contributor-sep {
-          clear: left;
-        }
-    </style>
-    <script>$ = window.$ = window.jQuery = require('./web/third-party/jquery/jquery.js')</script>
-    <script src="web/third-party/jquery/jquery.js"></script>
-
-    <style>
-      .wrapper {
-          width: 100%;
-          height: 100%;
-          margin: 0px;
-          padding: 0px;
-      }
-      .left-panel {
-          width: 20%;
-          height: 100%;
-          background: #eee;
-          float: left;
-      }
-      .v-indicator {
-        width: 2px;
-        height: 100%;
-        background: #c9c9c9;
-        float: left;
-      }
-      .right-panel {
-        width: auto;
-        height: 100%;
-      }
-      .tool-bar {
-          height: 5%;
-      }
-      .tab-pane {
-        height: 5%;
-        background-color: #c9c9c9;
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-      }
-
-      .tab-pane li {
-        float: left;
-
-      }
-      .tab-pane li a {
-        display: block;
-        color: white;
-        text-align: center;
-        padding: 10px;
-        text-decoration: none;
-      }
-      .tab-pane li a:hover {
-        background-color: #7D7D7D;
-      }
-      .is-show {
-        background: #7D7D7D;
-      }
-    </style>
+    <!-- to electron support jquery -->
+    <script>$ = window.$ = window.jQuery = require('./node_modules/jquery/dist/jquery.js')</script>
+    <!-- to browser support jquery -->
+    <script src="node_modules/jquery/dist/jquery.js"></script>
 </head>
 
 <body>
 
-  <div class="wrapper">
+<div class="wrapper">
 
     <div class="left-panel">
     </div>
@@ -95,34 +26,34 @@
     <div class="v-indicator"></div>
 
     <div class="right-panel">
-      <div class="tool-bar"></div>
-      <ul class="tab-pane">
-          <li>
-            <a class="is-show" href="#">main.fapla</a>
-          </li>
-          <li>
-            <a href="#">main.fapla</a>
-          </li>
-          <li>
-            <a href="#">main.fapla</a>
-          </li>
-      </ul>
-      <div style="line-height: 0; height: 90%;">
-          <textarea id="source" rows="30" cols="160"></textarea>
-      </div>
+        <div class="tool-bar"></div>
+        <ul class="tab-pane">
+            <li>
+                <a class="is-show" href="#">main.fapla</a>
+            </li>
+            <li>
+                <a href="#">main.fapla</a>
+            </li>
+            <li>
+                <a href="#">main.fapla</a>
+            </li>
+        </ul>
+        <div style="line-height: 0; height: 90%;">
+            <textarea id="source" rows="30" cols="160"></textarea>
+        </div>
     </div>
 
-  </div>
-    <script>
-        $(function () {
-            var textArea = $('#source')[0];
-            var editor = CodeMirror.fromTextArea(textArea, {
-                    theme: 'default',
-                    lineNumbers: true
-                });
-            editor.focus();
+</div>
+<script>
+    $(function () {
+        var textArea = $('#source')[0];
+        var editor = CodeMirror.fromTextArea(textArea, {
+            theme: 'default',
+            lineNumbers: true
         });
-    </script>
+        editor.focus();
+    });
+</script>
 </body>
 
 </html>

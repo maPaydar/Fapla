@@ -1,33 +1,20 @@
 {
-  "name": "electron-quick-start",
+  "name": "fapla-editor",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Fapla IDE Application",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
+  "repository": "https://github.com/maPaydar/Fapla.git",
+  "keywords": [],
   "dependencies": {
-    "config-chain": "~1.1.5",
-    "editorconfig": "^0.13.2",
-    "mkdirp": "~0.5.0",
-    "nopt": "~3.0.1"
+    "codemirror": "^5.21.0",
+    "jquery": "^3.1.1"
   },
-  "author": "GitHub",
+  "author": "",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^1.4.1",
-    "jshint": "~2.9.1",
-    "node-static": "~0.7.1",
-    "mustache": "~2.2.1",
-    "requirejs": "2.1.x",
-    "benchmark": "2.1.0"
+    "electron": "^1.4.1"
   }
 }
