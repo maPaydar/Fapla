@@ -1,0 +1,23 @@
+{
+  "name": "fapla",
+  "version": "1.0.0",
+  "description": "This is Design Compile Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maPaydar/Fapla.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maPaydar/Fapla/issues"
+  },
+  "homepage": "https://github.com/maPaydar/Fapla#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-watch": "^4.3.11"
+  }
+}
