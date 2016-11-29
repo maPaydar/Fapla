@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6d8fcbe5-4ffe-4afc-ac4e-e0a100c2bd41" name="Default" comment="modify antlr.jar file">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fapla-java/src/Fapla.tokens" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fapla-java/src/FaplaLexer.tokens" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fapla-js/FaplaLexer.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fapla-js/FaplaListener.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fapla-js/FaplaParser.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gulpfile.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/package.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Fapla.iws" />
@@ -42,8 +38,8 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="10" selection-start-line="1" selection-start-column="10" selection-end-line="1" selection-end-column="10" />
+            <state relative-caret-position="170">
+              <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -927,7 +923,7 @@
       <workItem from="1480256537343" duration="708000" />
       <workItem from="1480359246267" duration="357000" />
       <workItem from="1480359626846" duration="172000" />
-      <workItem from="1480398290336" duration="3630000" />
+      <workItem from="1480398290336" duration="3709000" />
     </task>
     <task id="LOCAL-00001" summary="make system added">
       <created>1480246526271</created>
@@ -957,11 +953,18 @@
       <option name="project" value="LOCAL" />
       <updated>1480401903445</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="modify antlr.jar file">
+      <created>1480401941797</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1480401941797</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10608000" />
+    <option name="totallyTimeSpent" value="10687000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="55" y="24" width="1311" height="744" extended-state="6" />
@@ -1038,10 +1041,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="make system added" />
-    <MESSAGE value="modify antlr.jar file" />
     <MESSAGE value="some changes" />
     <MESSAGE value="minor modify" />
-    <option name="LAST_COMMIT_MESSAGE" value="minor modify" />
+    <MESSAGE value="modify antlr.jar file" />
+    <option name="LAST_COMMIT_MESSAGE" value="modify antlr.jar file" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1269,8 +1272,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="10" selection-start-line="1" selection-start-column="10" selection-end-line="1" selection-end-column="10" />
+        <state relative-caret-position="170">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
           <folding />
         </state>
       </provider>
