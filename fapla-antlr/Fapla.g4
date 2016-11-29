@@ -64,8 +64,8 @@ startState
 moduleDeclaration
     :   MODULE
         Identifier
-        (INPUT COLON (Identifier COLON primitiveType SEMI )+)?
-        (OUTPUT COLON primitiveType SEMI)?
+        (INPUT COLON (Identifier COLON primitiveType SEMICOLON )+)?
+        (OUTPUT COLON primitiveType SEMICOLON)?
         block
     ;
 
@@ -88,13 +88,12 @@ supBlock
 statement
     :   IF expression THEN supBlock (ELSE supBlock)?
     |   WHILE expression supBlock
-    |   SEMI
-    |   expression SEMI
+    |   expression SEMICOLON
     |   assignment
     |   varDeclaration
-    |   WRITE PO expression PC SEMI
-    |   READ Identifier SEMI
-    |   RETURN expression SEMI
+    |   WRITE PO expression PC SEMICOLON
+    |   READ Identifier SEMICOLON
+    |   RETURN expression SEMICOLON
     ;
 expression
     :   NOT expression
@@ -109,7 +108,6 @@ expression
     |   expression QUESTION expression COLON expression
     |   Identifier PO expressionList? PC
     |   STRINGCONSTANT
-    |   HEXCONSTANT
     |   REALCONSTANT
     |   Identifier
     |   block
@@ -123,16 +121,15 @@ expressionList
 varDeclaration
     :   Identifier
         COLON
-        primitiveType SEMI
+        primitiveType SEMICOLON
     ;
 
 assignment
-    :   Identifier ASSIGN expression SEMI
+    :   Identifier ASSIGN expression SEMICOLON
     ;
 
-STRINGCONSTANT  : '"' (~[\r\n]*)? '"';
-HEXCONSTANT     :    '0' X [0-9A-Fa-f]+;
-REALCONSTANT    :   ('-' | '+')? [0-9]+ ('.' [0-9]+)?;
+STRINGCONSTANT  :   '"' (~[\r\n]*)? '"';
+REALCONSTANT    :   ('-' | '+')? [0-9]+ ('.' [0-9]+)? | '0' X [0-9A-Fa-f]+;
 
 STRING        : S T R I N G;
 REAL          : R E A L;
@@ -154,7 +151,7 @@ WRITE         : W R I T E;
 READ          : R E A D;
 
 
-SEMI            : ';';
+SEMICOLON            : ';';
 COMMA           : ',';
 ASSIGN          : '=';
 GT              : '>';
