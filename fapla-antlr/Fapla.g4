@@ -64,37 +64,30 @@ startState
 moduleDeclaration
     :   MODULE
         Identifier
-        (INPUT COLON (Identifier COLON primitiveType SEMI )*)?
-        (OUTPUT COLON (primitiveType) SEMI)?
-        (block)
+        (INPUT COLON (Identifier COLON primitiveType SEMI )+)?
+        (OUTPUT COLON primitiveType SEMI)?
+        block
     ;
 
 mainModuleDeclaration
     :   MODULE
         MAIN
-        (block)
-    ;
-
-moduleInput
-    :   INPUT
-        COLON
-        (varDeclaration)*
-    ;
-
-moduleOutput
-    :   OUTPUT
-        COLON
-        (primitiveType)
-        SEMI
+        block
     ;
 
 block
-    :   BEGIN (statement)* END
+    :   BEGIN statement* END
+    ;
+
+supBlock
+    :
+        BEGIN statement* END
+    |   statement
     ;
 
 statement
-    :   IF expression THEN block (ELSE block)?
-    |   WHILE expression statement
+    :   IF expression THEN supBlock (ELSE supBlock)?
+    |   WHILE expression supBlock
     |   SEMI
     |   expression SEMI
     |   assignment
@@ -114,8 +107,10 @@ expression
     |   expression XOR expression
     |   expression OR expression
     |   expression QUESTION expression COLON expression
-    |   Identifier PO expressionList PC
-    |   Literal
+    |   Identifier PO expressionList? PC
+    |   STRINGCONSTANT
+    |   HEXCONSTANT
+    |   REALCONSTANT
     |   Identifier
     |   block
     ;
@@ -124,29 +119,20 @@ expressionList
     :   expression (COMMA expression)*
     ;
 
-primitiveType
-    :   REAL
-    |   BOOL
-    |   STRING
-    ;
 
 varDeclaration
-    :   (Identifier
+    :   Identifier
         COLON
-        primitiveType SEMI)
+        primitiveType SEMI
     ;
 
 assignment
     :   Identifier ASSIGN expression SEMI
     ;
 
-Literal
-    :   ('-' | '+')? [0-9]+ | [0-9]+ |  ('-' | '+')? [0-9]+ '.' [0-9]+
-    ;
-
-STRINGCONSTANT: '"' (~[\r\n]*)? '"';
-HEXCONSTANT:    '0' X [0-9A-Fa-f]+;
-REALCONSTANT:   ('-' | '+')? [0-9]+ ('.' [0-9]+)?;
+STRINGCONSTANT  : '"' (~[\r\n]*)? '"';
+HEXCONSTANT     :    '0' X [0-9A-Fa-f]+;
+REALCONSTANT    :   ('-' | '+')? [0-9]+ ('.' [0-9]+)?;
 
 STRING        : S T R I N G;
 REAL          : R E A L;
@@ -203,6 +189,11 @@ Identifier
     (DigitOrLetter(DigitOrLetter?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?
 ;
 
+primitiveType
+    :   REAL
+    |   BOOL
+    |   STRING
+    ;
 WS  :  [ \t\r\n]+ -> skip
     ;
 
