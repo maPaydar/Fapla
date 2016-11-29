@@ -54,7 +54,6 @@ fragment
 Z   :   'z' | 'Z';
 
 fragment
-
 DigitOrLetter : [a-z-A-Z0-9];
 
 startState
@@ -91,17 +90,18 @@ statement
     |   expression SEMICOLON
     |   assignment
     |   varDeclaration
-    |   WRITE PO expression PC SEMICOLON
+    |   WRITE expression SEMICOLON
     |   READ Identifier SEMICOLON
     |   RETURN expression SEMICOLON
     ;
 
 expression
     :   NOT expression
-    |   expression (MUL|DIV|MOD) expression
-    |   expression (ADD|SUB) expression
+    |   expression (MUL | DIV | MOD) expression
+    |   expression (ADD | SUB) expression
     |   expression (LE | GE | GT | LT) expression
     |   expression (EQUAL | NOTEQUAL) expression
+    |   expression FACTORIAL
     |   expression AND expression
     |   expression POW expression
     |   expression XOR expression
@@ -112,6 +112,7 @@ expression
     |   REALCONSTANT
     |   BOOLEANCONSTANT
     |   Identifier
+    |   PO expression PC
     |   block
     ;
 
@@ -136,7 +137,7 @@ PrimitiveType
     |   STRING
     ;
 
-BOOLEANCONSTANT         :   TRUE | FALSE;
+BOOLEANCONSTANT :   TRUE | FALSE;
 STRINGCONSTANT  :   '"' (~[\r\n]*)? '"';
 REALCONSTANT    :   ('-' | '+')? [0-9]+ ('.' [0-9]+)? | '0' X [0-9A-Fa-f]+;
 
@@ -160,7 +161,7 @@ WRITE         : W R I T E;
 READ          : R E A D;
 
 
-SEMICOLON            : ';';
+SEMICOLON       : ';';
 COMMA           : ',';
 ASSIGN          : '=';
 GT              : '>';
