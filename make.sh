@@ -20,5 +20,5 @@ elif [ "$Lang" = "CSharp" ]; then
 fi
 
 AntlrMake="java -jar $Dir$AntlrJarPath -Dlanguage=$Lang $AntlrGrammerPath -o $Dir$OutPutLang"
-echo $AntlrJar
-$AntlrJar
+echo $AntlrMake
+$AntlrMake
