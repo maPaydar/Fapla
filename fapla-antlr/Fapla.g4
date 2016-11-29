@@ -54,6 +54,7 @@ fragment
 Z   :   'z' | 'Z';
 
 fragment
+
 DigitOrLetter : [a-z-A-Z0-9];
 
 startState
@@ -140,15 +141,18 @@ assignment
     ;
 
 Literal
-    :   ('-' | '+')? [0-9]+ | [0-9]+ |  ('-' | '+')? [0-9]+ '.' [0-9]+ | '0' X [0-9A-Fa-f]+
-    |   '"' (~[\r\n]*)? '"'
-    |   T R U E | F A L S E
+    :   ('-' | '+')? [0-9]+ | [0-9]+ |  ('-' | '+')? [0-9]+ '.' [0-9]+ |
     ;
+
+STRINGCONSTANT: '"' (~[\r\n]*)? '"';
+HEXCONSTANT:    '0' X [0-9A-Fa-f]+;
+REALCONSTANT:   ('-' | '+')? [0-9]+ ('.' [0-9]+)?;
 
 STRING        : S T R I N G;
 REAL          : R E A L;
 BOOL          : B O O L;
-
+TRUE          : T R U E;
+FALSE         : F A L S E;
 ELSE          : E L S E;
 THEN          : T H E N;
 IF            : I F;
@@ -162,6 +166,7 @@ INPUT         : I N P U T;
 OUTPUT        : O U T P U T;
 WRITE         : W R I T E;
 READ          : R E A D;
+
 
 SEMI            : ';';
 COMMA           : ',';
@@ -205,5 +210,5 @@ COMMENT
     :   '%%%' .*? '%%%' -> skip
     ;
 LINE_COMMENT
-    :   '%%' (~[\r\n]*)? -> skip
+    :   '%%' ((~[\r\n])*)? -> skip
     ;
