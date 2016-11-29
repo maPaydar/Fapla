@@ -8,7 +8,7 @@ AntlrJarPath="/fapla-antlr/lib/antlr-4.5.3-complete.jar"
 if [ "$Lang" = "Java" ]; then
     OutPutLang="/fapla-java/src"
 elif [ "$Lang" = "Python" ]; then
-    Lang="Python2"
+    Lang="Python3"
     OutPutLang="/fapla-python"
     echo expression evaluated as python
 elif [ "$Lang" = "JavaScript" ]; then
@@ -19,6 +19,6 @@ elif [ "$Lang" = "CSharp" ]; then
     echo expression evaluated as cs
 fi
 
-AntlrJar="java -jar $Dir$AntlrJarPath -Dlanguage=$Lang $AntlrGrammerPath -o $Dir$OutPutLang"
+AntlrMake="java -jar $Dir$AntlrJarPath -Dlanguage=$Lang $AntlrGrammerPath -o $Dir$OutPutLang"
 echo $AntlrJar
 $AntlrJar
