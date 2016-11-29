@@ -8,8 +8,6 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/fapla-js/FaplaListener.js" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/fapla-js/FaplaParser.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/make.sh" afterPath="$PROJECT_DIR$/make.sh" />
     </list>
@@ -920,7 +918,7 @@
       <workItem from="1480256537343" duration="708000" />
       <workItem from="1480359246267" duration="357000" />
       <workItem from="1480359626846" duration="172000" />
-      <workItem from="1480398290336" duration="3534000" />
+      <workItem from="1480398290336" duration="3575000" />
     </task>
     <task id="LOCAL-00001" summary="make system added">
       <created>1480246526271</created>
@@ -936,11 +934,18 @@
       <option name="project" value="LOCAL" />
       <updated>1480246551269</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="some changes">
+      <created>1480401864405</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1480401864405</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10512000" />
+    <option name="totallyTimeSpent" value="10553000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="55" y="24" width="1311" height="744" extended-state="6" />
@@ -1018,7 +1023,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="make system added" />
     <MESSAGE value="modify antlr.jar file" />
-    <option name="LAST_COMMIT_MESSAGE" value="modify antlr.jar file" />
+    <MESSAGE value="some changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="some changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
