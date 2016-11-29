@@ -15,7 +15,7 @@ elif [ "$Lang" = "JavaScript" ]; then
     OutPutLang="/fapla-js"
     echo expression evaluated as js
 elif [ "$Lang" = "CSharp" ]; then
-    OutPutLang="/fapla-cs"
+    OutPutLang="/fapla-cs/fapla-cs"
     echo expression evaluated as cs
 fi
 
