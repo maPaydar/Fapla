@@ -51,30 +51,6 @@ public class FaplaBaseListener implements FaplaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterModuleInput(FaplaParser.ModuleInputContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitModuleInput(FaplaParser.ModuleInputContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterModuleOutput(FaplaParser.ModuleOutputContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitModuleOutput(FaplaParser.ModuleOutputContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBlock(FaplaParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -82,6 +58,18 @@ public class FaplaBaseListener implements FaplaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBlock(FaplaParser.BlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSupBlock(FaplaParser.SupBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSupBlock(FaplaParser.SupBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -118,18 +106,6 @@ public class FaplaBaseListener implements FaplaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpressionList(FaplaParser.ExpressionListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPrimitiveType(FaplaParser.PrimitiveTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPrimitiveType(FaplaParser.PrimitiveTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

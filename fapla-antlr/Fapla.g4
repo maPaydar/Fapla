@@ -64,8 +64,8 @@ startState
 moduleDeclaration
     :   MODULE
         Identifier
-        (INPUT COLON (Identifier COLON primitiveType SEMICOLON )+)?
-        (OUTPUT COLON primitiveType SEMICOLON)?
+        (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON )+)?
+        (OUTPUT COLON PrimitiveType SEMICOLON)?
         block
     ;
 
@@ -95,6 +95,7 @@ statement
     |   READ Identifier SEMICOLON
     |   RETURN expression SEMICOLON
     ;
+
 expression
     :   NOT expression
     |   expression (MUL|DIV|MOD) expression
@@ -109,6 +110,7 @@ expression
     |   Identifier PO expressionList? PC
     |   STRINGCONSTANT
     |   REALCONSTANT
+    |   BOOLEANCONSTANT
     |   Identifier
     |   block
     ;
@@ -121,13 +123,20 @@ expressionList
 varDeclaration
     :   Identifier
         COLON
-        primitiveType SEMICOLON
+        PrimitiveType SEMICOLON
     ;
 
 assignment
     :   Identifier ASSIGN expression SEMICOLON
     ;
 
+PrimitiveType
+    :   REAL
+    |   BOOL
+    |   STRING
+    ;
+
+BOOLEANCONSTANT         :   TRUE | FALSE;
 STRINGCONSTANT  :   '"' (~[\r\n]*)? '"';
 REALCONSTANT    :   ('-' | '+')? [0-9]+ ('.' [0-9]+)? | '0' X [0-9A-Fa-f]+;
 
@@ -186,11 +195,6 @@ Identifier
     (DigitOrLetter(DigitOrLetter?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?)?
 ;
 
-primitiveType
-    :   REAL
-    |   BOOL
-    |   STRING
-    ;
 WS  :  [ \t\r\n]+ -> skip
     ;
 

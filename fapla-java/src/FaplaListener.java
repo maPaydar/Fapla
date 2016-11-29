@@ -37,26 +37,6 @@ public interface FaplaListener extends ParseTreeListener {
 	 */
 	void exitMainModuleDeclaration(FaplaParser.MainModuleDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FaplaParser#moduleInput}.
-	 * @param ctx the parse tree
-	 */
-	void enterModuleInput(FaplaParser.ModuleInputContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FaplaParser#moduleInput}.
-	 * @param ctx the parse tree
-	 */
-	void exitModuleInput(FaplaParser.ModuleInputContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link FaplaParser#moduleOutput}.
-	 * @param ctx the parse tree
-	 */
-	void enterModuleOutput(FaplaParser.ModuleOutputContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FaplaParser#moduleOutput}.
-	 * @param ctx the parse tree
-	 */
-	void exitModuleOutput(FaplaParser.ModuleOutputContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link FaplaParser#block}.
 	 * @param ctx the parse tree
 	 */
@@ -66,6 +46,16 @@ public interface FaplaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBlock(FaplaParser.BlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FaplaParser#supBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterSupBlock(FaplaParser.SupBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FaplaParser#supBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitSupBlock(FaplaParser.SupBlockContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FaplaParser#statement}.
 	 * @param ctx the parse tree
@@ -96,16 +86,6 @@ public interface FaplaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpressionList(FaplaParser.ExpressionListContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link FaplaParser#primitiveType}.
-	 * @param ctx the parse tree
-	 */
-	void enterPrimitiveType(FaplaParser.PrimitiveTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FaplaParser#primitiveType}.
-	 * @param ctx the parse tree
-	 */
-	void exitPrimitiveType(FaplaParser.PrimitiveTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FaplaParser#varDeclaration}.
 	 * @param ctx the parse tree
