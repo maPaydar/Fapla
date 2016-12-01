@@ -1,12 +1,16 @@
 
+import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.Arrays;
 
 
 /**
@@ -24,6 +28,19 @@ public class ParserFacade {
         FaplaLexer lexer = new FaplaLexer(new ANTLRInputStream(code));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         FaplaParser parser = new FaplaParser(tokens);
-        return parser.startState();
+        ParseTree tree = parser.startState();
+        JFrame frame = new JFrame("Antlr TreeViewer");
+        JPanel panel = new JPanel();
+        TreeViewer viewr = new TreeViewer(Arrays.asList(
+                parser.getRuleNames()), tree);
+        viewr.setScale(1.4);//scale a little
+        panel.add(viewr);
+        JScrollPane scroll = new JScrollPane(panel);
+        frame.add(scroll);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setUndecorated(true);
+        frame.setVisible(true);
+        return (ParserRuleContext) tree;
     }
 }
