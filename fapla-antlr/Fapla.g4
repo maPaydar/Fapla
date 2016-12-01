@@ -139,7 +139,7 @@ PrimitiveType
 
 BOOLEANCONSTANT :   TRUE | FALSE;
 STRINGCONSTANT  :   '"' (~[\r\n]*)? '"';
-REALCONSTANT    :   ('-' | '+')? [0-9]* ('.' [0-9]+)? | '0' X [0-9A-Fa-f]+;
+REALCONSTANT    :   ('-' | '+')? [0-9]+ | ('-' | '+')? [0-9]* ('.' [0-9]+) | '0' X [0-9A-Fa-f]+;
 
 STRING        : S T R I N G;
 REAL          : R E A L;

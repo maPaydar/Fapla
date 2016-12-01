@@ -7,7 +7,7 @@ import java.io.IOException;
 public class FaplaProgram {
 
     public static void main(String[] args) throws IOException {
-        //FaplaPrinter.printTokens();
-        FaplaPrinter.printRules();
+        FaplaPrinter.printTokens();
+        //FaplaPrinter.printRules();
     }
 }
