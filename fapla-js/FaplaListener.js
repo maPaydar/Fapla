@@ -1,4 +1,4 @@
-// Generated from /home/amin/Documents/Fapla/fapla-antlr/Fapla.g4 by ANTLR 4.5.3
+// Generated from /home/amin/Programming/Courses/Fapla/fapla-antlr/Fapla.g4 by ANTLR 4.5.3
 // jshint ignore: start
 var antlr4 = require('antlr4/index');
 
@@ -38,30 +38,21 @@ FaplaListener.prototype.exitMainModuleDeclaration = function(ctx) {
 };
 
 
-// Enter a parse tree produced by FaplaParser#moduleInput.
-FaplaListener.prototype.enterModuleInput = function(ctx) {
-};
-
-// Exit a parse tree produced by FaplaParser#moduleInput.
-FaplaListener.prototype.exitModuleInput = function(ctx) {
-};
-
-
-// Enter a parse tree produced by FaplaParser#moduleOutput.
-FaplaListener.prototype.enterModuleOutput = function(ctx) {
-};
-
-// Exit a parse tree produced by FaplaParser#moduleOutput.
-FaplaListener.prototype.exitModuleOutput = function(ctx) {
-};
-
-
 // Enter a parse tree produced by FaplaParser#block.
 FaplaListener.prototype.enterBlock = function(ctx) {
 };
 
 // Exit a parse tree produced by FaplaParser#block.
 FaplaListener.prototype.exitBlock = function(ctx) {
+};
+
+
+// Enter a parse tree produced by FaplaParser#supBlock.
+FaplaListener.prototype.enterSupBlock = function(ctx) {
+};
+
+// Exit a parse tree produced by FaplaParser#supBlock.
+FaplaListener.prototype.exitSupBlock = function(ctx) {
 };
 
 
@@ -89,15 +80,6 @@ FaplaListener.prototype.enterExpressionList = function(ctx) {
 
 // Exit a parse tree produced by FaplaParser#expressionList.
 FaplaListener.prototype.exitExpressionList = function(ctx) {
-};
-
-
-// Enter a parse tree produced by FaplaParser#primitiveType.
-FaplaListener.prototype.enterPrimitiveType = function(ctx) {
-};
-
-// Exit a parse tree produced by FaplaParser#primitiveType.
-FaplaListener.prototype.exitPrimitiveType = function(ctx) {
 };
 
 

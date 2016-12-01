@@ -44,7 +44,11 @@
     </div>
 
 </div>
+</body>
 <script>
+    var antlr4 = require('antlr4');
+    var FaplaLexer = require('../fapla-js/FaplaLexer');
+    var FaplaParser = require('../fapla-js/FaplaParser');
     $(function () {
         var textArea = $('#source')[0];
         var editor = CodeMirror.fromTextArea(textArea, {
@@ -52,8 +56,17 @@
             lineNumbers: true
         });
         editor.focus();
+        editor.on('change', function () {
+            var input = editor.getValue();
+            var chars = new antlr4.InputStream(input);
+            var lexer = new FaplaLexer.FaplaLexer(chars);
+            var tokens = new antlr4.CommonTokenStream(lexer);
+            var parser = new FaplaParser.FaplaParser(tokens);
+            parser.buildParseTrees = true;
+            var tree = parser.startState();
+            //tree.ParseTreeListener.call(this);
+            //console.log(tree);
+        });
     });
 </script>
-</body>
-
 </html>

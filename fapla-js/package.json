@@ -1,21 +1,15 @@
 {
-  "name": "fapla-editor",
+  "name": "fapla-js",
   "version": "1.0.0",
   "description": "Fapla IDE Application",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
   },
   "repository": "https://github.com/maPaydar/Fapla.git",
   "keywords": [],
   "dependencies": {
-    "antlr4": "^4.5.3",
-    "codemirror": "^5.21.0",
-    "jquery": "^3.1.1"
+    "antlr4": "^4.5.3"
   },
   "author": "",
-  "license": "CC0-1.0",
-  "devDependencies": {
-    "electron": "^1.4.1"
-  }
+  "license": "CC0-1.0"
 }
