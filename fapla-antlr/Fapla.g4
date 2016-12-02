@@ -52,12 +52,11 @@ fragment
 Y   :   'y' | 'Y';
 fragment
 Z   :   'z' | 'Z';
-
 fragment
-DigitOrLetter : [a-z-A-Z0-9];
+DigitOrLetter : [a-zA-Z0-9];
 
 startState
-    :   moduleDeclaration* mainModuleDeclaration moduleDeclaration* EOF
+    :   moduleDeclaration* mainModuleDeclaration moduleDeclaration*
     ;
 
 moduleDeclaration
@@ -96,30 +95,28 @@ statement
     ;
 
 expression
-    :   NOT expression
-    |   expression (MUL | DIV | MOD) expression
-    |   expression (ADD | SUB) expression
-    |   expression (LE | GE | GT | LT) expression
-    |   expression (EQUAL | NOTEQUAL) expression
-    |   expression FACTORIAL
-    |   expression AND expression
-    |   expression POW expression
-    |   expression XOR expression
-    |   expression OR expression
-    |   expression QUESTION expression COLON expression
-    |   Identifier PO expressionList? PC
+    :   block
     |   STRINGCONSTANT
     |   REALCONSTANT
     |   BOOLEANCONSTANT
-    |   Identifier
     |   PO expression PC
-    |   block
+    |   Identifier PO expressionList? PC
+    |   NOT expression
+    |   expression FACTORIAL
+    |   expression POW expression
+    |   expression (MUL | DIV | MOD) expression
+    |   expression (ADD | SUB) expression
+    |   expression (LE | GE | GT | LT | EQUAL | NOTEQUAL) expression
+    |   expression XOR expression
+    |   expression AND expression
+    |   expression OR expression
+    |   expression QUESTION expression COLON expression
+    |   Identifier
     ;
 
 expressionList
     :   expression (COMMA expression)*
     ;
-
 
 varDeclaration
     :   Identifier
@@ -138,8 +135,14 @@ PrimitiveType
     ;
 
 BOOLEANCONSTANT :   TRUE | FALSE;
+
 STRINGCONSTANT  :   '"' (~[\r\n]*)? '"';
-REALCONSTANT    :   ('-' | '+')? [0-9]+ | ('-' | '+')? [0-9]* ('.' [0-9]+) | '0' X [0-9A-Fa-f]+;
+
+REALCONSTANT
+     :  [0-9]+
+     |  [0-9]* ('.' [0-9]+)
+     |  '0' X [0-9A-Fa-f]+
+     ;
 
 STRING        : S T R I N G;
 REAL          : R E A L;
@@ -152,9 +155,9 @@ IF            : I F;
 RETURN        : R E T U R N;
 WHILE         : W H I L E;
 MODULE        : M O D U L E;
+MAIN          : M A I N;
 BEGIN         : B E G I N;
 END           : E N D;
-MAIN          : M A I N;
 INPUT         : I N P U T;
 OUTPUT        : O U T P U T;
 WRITE         : W R I T E;
@@ -202,6 +205,7 @@ WS  :  [ \t\r\n]+ -> skip
 COMMENT
     :   '%%%' .*? '%%%' -> skip
     ;
+
 LINE_COMMENT
     :   '%%' ((~[\r\n])*)? -> skip
     ;
