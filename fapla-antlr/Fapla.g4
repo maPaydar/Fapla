@@ -56,7 +56,7 @@ fragment
 DigitOrLetter : [a-zA-Z0-9];
 
 startState
-    :   moduleDeclaration* mainModuleDeclaration moduleDeclaration*
+    :   moduleDeclaration+
     ;
 
 moduleDeclaration
@@ -64,12 +64,6 @@ moduleDeclaration
         Identifier
         (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON )+)?
         (OUTPUT COLON PrimitiveType SEMICOLON)?
-        block
-    ;
-
-mainModuleDeclaration
-    :   MODULE
-        MAIN
         block
     ;
 
@@ -155,7 +149,6 @@ IF            : I F;
 RETURN        : R E T U R N;
 WHILE         : W H I L E;
 MODULE        : M O D U L E;
-MAIN          : M A I N;
 BEGIN         : B E G I N;
 END           : E N D;
 INPUT         : I N P U T;
