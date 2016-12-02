@@ -89,8 +89,7 @@ statement
     ;
 
 expression
-    :   block
-    |   STRINGCONSTANT
+    :   STRINGCONSTANT
     |   REALCONSTANT
     |   BOOLEANCONSTANT
     |   PO expression PC
