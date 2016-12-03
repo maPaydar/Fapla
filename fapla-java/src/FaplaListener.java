@@ -27,16 +27,6 @@ public interface FaplaListener extends ParseTreeListener {
 	 */
 	void exitModuleDeclaration(FaplaParser.ModuleDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FaplaParser#mainModuleDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterMainModuleDeclaration(FaplaParser.MainModuleDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FaplaParser#mainModuleDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitMainModuleDeclaration(FaplaParser.MainModuleDeclarationContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link FaplaParser#block}.
 	 * @param ctx the parse tree
 	 */

@@ -82,10 +82,12 @@ statement
     |   WHILE expression supBlock
     |   expression SEMICOLON
     |   assignment
+    |   SEMICOLON
     |   varDeclaration
     |   WRITE expression SEMICOLON
     |   READ Identifier SEMICOLON
     |   RETURN expression SEMICOLON
+    |   block
     ;
 
 expression

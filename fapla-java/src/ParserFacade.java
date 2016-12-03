@@ -39,7 +39,8 @@ public class ParserFacade {
         frame.add(scroll);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setUndecorated(true);
+        //frame.setUndecorated(true);
+        frame.setSize(500, 500);
         frame.setVisible(true);
         return (ParserRuleContext) tree;
     }

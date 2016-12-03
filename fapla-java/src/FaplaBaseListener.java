@@ -39,18 +39,6 @@ public class FaplaBaseListener implements FaplaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMainModuleDeclaration(FaplaParser.MainModuleDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMainModuleDeclaration(FaplaParser.MainModuleDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBlock(FaplaParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}

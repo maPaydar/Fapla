@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class FaplaPrinter {
 
-    public static final String TEST_FILE_PATH = "./fapla-java/test/test1.fapla";
+    public static final String TEST_FILE_PATH = "./fapla-java/test/test3.fapla";
 
     public static void printTokens() throws IOException {
         FaplaLexer lexer = new FaplaLexer(new ANTLRInputStream(new FileInputStream(new File(TEST_FILE_PATH))));
