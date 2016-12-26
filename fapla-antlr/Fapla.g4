@@ -55,8 +55,8 @@ Z   :   'z' | 'Z';
 fragment
 DigitOrLetter : [a-zA-Z0-9];
 
-startState
-    :   moduleDeclaration+
+program
+    :   (moduleDeclaration | noRetuenModuleDeclaration)* mainModuleDeclaration (moduleDeclaration | noRetuenModuleDeclaration)*
     ;
 
 moduleDeclaration
@@ -67,14 +67,53 @@ moduleDeclaration
         block
     ;
 
+noRetuenModuleDeclaration
+    :   MODULE
+        Identifier
+        (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON )+)?
+        noReturnBlock
+    ;
+
+mainModuleDeclaration
+    :   MODULE
+        Identifier
+        (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON )+)?
+        (OUTPUT COLON PrimitiveType SEMICOLON)?
+        noReturnBlock
+    ;
+
 block
     :   BEGIN statement* END
+    ;
+
+noReturnBlock
+    :
+        BEGIN noReturnStatement* END
     ;
 
 supBlock
     :
         BEGIN statement* END
     |   statement
+    ;
+
+noReturnSupBlock
+    :
+    BEGIN noReturnStatement* END
+    |   noReturnStatement
+    ;
+
+noReturnStatement
+    :
+        IF expression THEN noReturnSupBlock (ELSE noReturnSupBlock)?
+    |   WHILE expression noReturnSupBlock
+    |   expression SEMICOLON
+    |   assignment
+    |   SEMICOLON
+    |   varDeclaration
+    |   WRITE expression SEMICOLON
+    |   READ Identifier SEMICOLON
+    |   noReturnBlock
     ;
 
 statement
