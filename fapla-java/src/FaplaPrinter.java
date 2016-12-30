@@ -24,7 +24,8 @@ public class FaplaPrinter {
     }
 
     public static void printRules() throws IOException {
-        printRules(ParserFacade.parse(new File(TEST_FILE_PATH)));
+        ParserFacade.parse(new File(TEST_FILE_PATH));
+        //printRules();
     }
 
     public static void printRules(RuleContext ctx) {

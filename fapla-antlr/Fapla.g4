@@ -1,5 +1,121 @@
 grammar Fapla;
 
+@parser::header {
+import java.util.List;
+import java.util.ArrayList;
+}
+
+@parser::members {
+private Scope rootScope = new Scope(null);
+private Scope currentScope = rootScope;
+private List<Scope> rootScopeList = new ArrayList();
+}
+
+program
+    :   (moduleDeclaration {Scope scope = new Scope(rootScope);currentScope=scope;} | noRetuenModuleDeclaration {Scope scope = new Scope(rootScope);currentScope=scope;})* mainModuleDeclaration {Scope mainScope = new Scope(rootScope);currentScope=mainScope;} (moduleDeclaration {Scope scope = new Scope(rootScope);currentScope=scope;} | noRetuenModuleDeclaration {Scope scope = new Scope(rootScope);currentScope=scope;})*
+    ;
+
+moduleDeclaration
+    :   MODULE
+        Identifier
+        (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON {currentScope.addSymbol(new Symbol($Identifier.text, $PrimitiveType.text, null));})+)?
+        (OUTPUT COLON PrimitiveType SEMICOLON)?
+        block
+    ;
+
+noRetuenModuleDeclaration
+    :   MODULE
+        Identifier
+        (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON {currentScope.addSymbol(new Symbol($Identifier.text, $PrimitiveType.text, null));})+)?
+        noReturnBlock
+    ;
+
+mainModuleDeclaration
+    :   MODULE
+        Identifier
+        noReturnBlock
+    ;
+
+block
+    :   BEGIN {currentScope = currentScope.enterScope();} statement* END {currentScope = currentScope.exitScope();}
+    ;
+
+noReturnBlock
+    :
+        BEGIN {currentScope = currentScope.enterScope();} noReturnStatement* END {currentScope = currentScope.exitScope();}
+    ;
+
+supBlock
+    :
+        BEGIN {currentScope = currentScope.enterScope();} statement* END {currentScope = currentScope.exitScope();}
+    |   statement
+    ;
+
+noReturnSupBlock
+    :
+    BEGIN {currentScope = currentScope.enterScope();}  noReturnStatement* END {currentScope = currentScope.exitScope();}
+    |   noReturnStatement
+    ;
+
+noReturnStatement
+    :
+        IF expression THEN noReturnSupBlock (ELSE noReturnSupBlock)?
+    |   WHILE expression noReturnSupBlock
+    |   expression SEMICOLON
+    |   assignment
+    |   SEMICOLON
+    |   varDeclaration
+    |   WRITE expression SEMICOLON
+    |   READ Identifier SEMICOLON
+    |   noReturnBlock
+    ;
+
+statement
+    :   IF expression THEN supBlock (ELSE supBlock)?
+    |   WHILE expression supBlock
+    |   expression SEMICOLON
+    |   assignment
+    |   SEMICOLON
+    |   varDeclaration
+    |   WRITE expression SEMICOLON
+    |   READ Identifier SEMICOLON
+    |   RETURN expression SEMICOLON
+    |   block
+    ;
+
+expression
+    :   STRINGCONSTANT
+    |   REALCONSTANT
+    |   BOOLEANCONSTANT
+    |   PO expression PC
+    |   Identifier PO expressionList? PC
+    |   NOT expression
+    |   expression FACTORIAL
+    |   expression POW expression
+    |   expression (MUL | DIV | MOD) expression
+    |   expression (ADD | SUB) expression
+    |   expression (LE | GE | GT | LT | EQUAL | NOTEQUAL) expression
+    |   expression XOR expression
+    |   expression AND expression
+    |   expression OR expression
+    |   expression QUESTION expression COLON expression
+    |   Identifier {if(currentScope.findSymbol($Identifier.text) == null) System.err.println("variable " +  $Identifier.text + " not defined");}
+    ;
+
+expressionList
+    :   expression (COMMA expression)*
+    ;
+
+varDeclaration
+    :   Identifier
+        COLON
+        PrimitiveType SEMICOLON {currentScope.addSymbol(new Symbol($Identifier.text, $PrimitiveType.text, null));}
+    ;
+
+assignment
+    :   Identifier ASSIGN expression SEMICOLON
+    ;
+
 fragment
 A   :   'a' | 'A';
 fragment
@@ -54,113 +170,6 @@ fragment
 Z   :   'z' | 'Z';
 fragment
 DigitOrLetter : [a-zA-Z0-9];
-
-program
-    :   (moduleDeclaration | noRetuenModuleDeclaration)* mainModuleDeclaration (moduleDeclaration | noRetuenModuleDeclaration)*
-    ;
-
-moduleDeclaration
-    :   MODULE
-        Identifier
-        (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON )+)?
-        (OUTPUT COLON PrimitiveType SEMICOLON)?
-        block
-    ;
-
-noRetuenModuleDeclaration
-    :   MODULE
-        Identifier
-        (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON )+)?
-        noReturnBlock
-    ;
-
-mainModuleDeclaration
-    :   MODULE
-        Identifier
-        (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON )+)?
-        (OUTPUT COLON PrimitiveType SEMICOLON)?
-        noReturnBlock
-    ;
-
-block
-    :   BEGIN statement* END
-    ;
-
-noReturnBlock
-    :
-        BEGIN noReturnStatement* END
-    ;
-
-supBlock
-    :
-        BEGIN statement* END
-    |   statement
-    ;
-
-noReturnSupBlock
-    :
-    BEGIN noReturnStatement* END
-    |   noReturnStatement
-    ;
-
-noReturnStatement
-    :
-        IF expression THEN noReturnSupBlock (ELSE noReturnSupBlock)?
-    |   WHILE expression noReturnSupBlock
-    |   expression SEMICOLON
-    |   assignment
-    |   SEMICOLON
-    |   varDeclaration
-    |   WRITE expression SEMICOLON
-    |   READ Identifier SEMICOLON
-    |   noReturnBlock
-    ;
-
-statement
-    :   IF expression THEN supBlock (ELSE supBlock)?
-    |   WHILE expression supBlock
-    |   expression SEMICOLON
-    |   assignment
-    |   SEMICOLON
-    |   varDeclaration
-    |   WRITE expression SEMICOLON
-    |   READ Identifier SEMICOLON
-    |   RETURN expression SEMICOLON
-    |   block
-    ;
-
-expression
-    :   STRINGCONSTANT
-    |   REALCONSTANT
-    |   BOOLEANCONSTANT
-    |   PO expression PC
-    |   Identifier PO expressionList? PC
-    |   NOT expression
-    |   expression FACTORIAL
-    |   expression POW expression
-    |   expression (MUL | DIV | MOD) expression
-    |   expression (ADD | SUB) expression
-    |   expression (LE | GE | GT | LT | EQUAL | NOTEQUAL) expression
-    |   expression XOR expression
-    |   expression AND expression
-    |   expression OR expression
-    |   expression QUESTION expression COLON expression
-    |   Identifier
-    ;
-
-expressionList
-    :   expression (COMMA expression)*
-    ;
-
-varDeclaration
-    :   Identifier
-        COLON
-        PrimitiveType SEMICOLON
-    ;
-
-assignment
-    :   Identifier ASSIGN expression SEMICOLON
-    ;
 
 PrimitiveType
     :   REAL

@@ -1,5 +1,9 @@
 // Generated from /home/amin/Programming/Courses/Fapla/fapla-antlr/Fapla.g4 by ANTLR 4.5.3
 
+import java.util.List;
+import java.util.ArrayList;
+
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -15,13 +19,13 @@ public class FaplaBaseListener implements FaplaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStartState(FaplaParser.StartStateContext ctx) { }
+	@Override public void enterProgram(FaplaParser.ProgramContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStartState(FaplaParser.StartStateContext ctx) { }
+	@Override public void exitProgram(FaplaParser.ProgramContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -39,6 +43,30 @@ public class FaplaBaseListener implements FaplaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNoRetuenModuleDeclaration(FaplaParser.NoRetuenModuleDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNoRetuenModuleDeclaration(FaplaParser.NoRetuenModuleDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMainModuleDeclaration(FaplaParser.MainModuleDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMainModuleDeclaration(FaplaParser.MainModuleDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBlock(FaplaParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -51,6 +79,18 @@ public class FaplaBaseListener implements FaplaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNoReturnBlock(FaplaParser.NoReturnBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNoReturnBlock(FaplaParser.NoReturnBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterSupBlock(FaplaParser.SupBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -58,6 +98,30 @@ public class FaplaBaseListener implements FaplaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSupBlock(FaplaParser.SupBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNoReturnSupBlock(FaplaParser.NoReturnSupBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNoReturnSupBlock(FaplaParser.NoReturnSupBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNoReturnStatement(FaplaParser.NoReturnStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNoReturnStatement(FaplaParser.NoReturnStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
