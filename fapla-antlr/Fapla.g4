@@ -118,87 +118,94 @@ expression returns [value, type]
                                 }
                                }
 
-    |   a=expression POW b=expression {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
-                                            $type = "real";
-                                       else {
-                                            console.log($a.type + " can not POW with " + $b.type);
-                                            $type="noType";
-                                       }
-                                      }
+    |   a=expression POW b=expression
+        {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
+                $type = "real";
+           else {
+                console.log($a.type + " can not POW with " + $b.type);
+                $type="noType";
+           }
+          }
 
-    |   a=expression MUL b=expression {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
-                                      $type = "real";
-                                 else {
-                                      console.log($a.type + " can not MUL with " + $b.type);
-                                      $type="noType";
-                                 }
-                                }
-    |   a=expression DIV b=expression{if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
-                                           $type = "real";
-                                      else {
-                                           console.log($a.type + " can not DIV with " + $b.type);
-                                           $type="noType";
-                                      }
-                                     }
-    |   a=expression MOD b=expression{if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
-                                        $type = "real";
-                                   else {
-                                        console.log($a.type + " can not MOD with " + $b.type);
-                                        $type="noType";
-                                   }
-                                  }
-    |   a=expression ADD b=expression{if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
-                                         $type = "real";
-                                    else {
-                                         console.log($a.type + " can not ADD with " + $b.type);
-                                         $type="noType";
-                                    }
-                                   }
-    |   a=expression SUB b=expression{if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
-                                          $type = "real";
-                                     else {
-                                          console.log($a.type + " can not SUB with " + $b.type);
-                                          $type="noType";
-                                     }
-                                    }
-    |   a=expression LE b=expression {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
-                                           $type = "bool";
-                                      else {
-                                           console.log($a.type + " can not LE with " + $b.type);
-                                           $type="noType";
-                                      }
-                                     }
-    |   a=expression GE b=expression{if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
-                                                                               $type = "bool";
-                                                                          else {
-                                                                               console.log($a.type + " can not GE with " + $b.type);
-                                                                               $type="noType";
-                                                                          }
-                                                                         }
+    |   a=expression MUL b=expression
+        {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
+              $type = "real";
+         else {
+              console.log($a.type + " can not MUL with " + $b.type);
+              $type="noType";
+         }
+        }
+    |   a=expression DIV b=expression
+        {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
+           $type = "real";
+        else {
+           console.log($a.type + " can not DIV with " + $b.type);
+           $type="noType";
+        }
+        }
+    |   a=expression MOD b=expression
+        {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
+            $type = "real";
+        else {
+            console.log($a.type + " can not MOD with " + $b.type);
+            $type="noType";
+        }
+        }
+    |   a=expression ADD b=expression
+        {
+            $type = TypeConverting.max($a.type, $b.type);
+        }
+    |   a=expression SUB b=expression
+        {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
+              $type = "real";
+         else {
+              console.log($a.type + " can not SUB with " + $b.type);
+              $type="noType";
+         }
+        }
+    |   a=expression LE b=expression
+        {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
+               $type = "bool";
+          else {
+               console.log($a.type + " can not LE with " + $b.type);
+               $type="noType";
+          }
+         }
+    |   a=expression GE b=expression
+        {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
+               $type = "bool";
+          else {
+               console.log($a.type + " can not GE with " + $b.type);
+               $type="noType";
+          }
+         }
 
-    |   a=expression GT b=expression{if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
-                                                                               $type = "bool";
-                                                                          else {
-                                                                               console.log($a.type + " can not GT with " + $b.type);
-                                                                               $type="noType";
-                                                                          }
-                                                                         }
+    |   a=expression GT b=expression
+        {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
+           $type = "bool";
+         else {
+           console.log($a.type + " can not GT with " + $b.type);
+           $type="noType";
+         }
+        }
 
-    |   a=expression LT b=expression{if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
-                                                                               $type = "bool";
-                                                                          else {
-                                                                               console.log($a.type + " can not SUB with " + $b.type);
-                                                                               $type="noType";
-                                                                          }
-                                                                         }
+    |   a=expression LT b=expression
+        {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
+           $type = "bool";
+         else {
+           console.log($a.type + " can not SUB with " + $b.type);
+           $type="noType";
+         }
+        }
 
-    |   a=expression EQUAL b=expression{if(TypeConverting.canConvertTo($a.type, $b.type))
-                                              $type = "bool";
-                                         else {
-                                              console.log($a.type + " can not EQUAL with " + $b.type);
-                                              $type="noType";
-                                         }
-                                        }
+    |   a=expression EQUAL b=expression
+        {if(TypeConverting.canConvertTo($a.type, $b.type))
+              $type = "bool";
+         else {
+              console.log($a.type + " can not EQUAL with " + $b.type);
+              $type="noType";
+         }
+        }
 
     |   a=expression NOTEQUAL b=expression
         {if(TypeConverting.canConvertTo($a.type, $b.type))
@@ -210,7 +217,7 @@ expression returns [value, type]
         }
     |   a=expression XOR b=expression
         {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
-              $type = "bool";
+              $type = "real";
          else {
               console.log($a.type + " can not XOR with " + $b.type);
               $type="noType";
@@ -261,8 +268,23 @@ varDeclaration
         PrimitiveType SEMICOLON {currentScope.addSymbol(new Symbol($Identifier.text, $PrimitiveType.text, null));}
     ;
 
-assignment
-    :   Identifier ASSIGN expression {currentScope.findSymbol($Identifier.text).value = $expression.value} SEMICOLON
+assignment returns [type]
+    :   Identifier ASSIGN expression SEMICOLON
+        {
+            var s = currentScope.findSymbol($Identifier.text);
+            if(!s) {
+                console.log("variable " +  $Identifier.text + " not defined");
+                $type = "noType";
+            } else {
+                if(TypeConverting.canConvertTo($expression.type, s.type)) {
+                    s.value = $expression.value;
+                    $type = s.type;
+                } else {
+                    console.log("can not assign " + $expression.type + " to " + s.type);
+                    $type = "noType";
+                }
+            }
+        }
     ;
 
 fragment

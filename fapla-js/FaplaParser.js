@@ -231,7 +231,7 @@ var serializedATN = ["\u0003\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd",
     "\u014e\u014f\u0007\u0018\u0002\u0002\u014f\u0150\b\u000e\u0001\u0002",
     "\u0150\u001b\u0003\u0002\u0002\u0002\u0151\u0152\u00070\u0002\u0002",
     "\u0152\u0153\u0007\u001a\u0002\u0002\u0153\u0154\u0005\u0016\f\u0002",
-    "\u0154\u0155\b\u000f\u0001\u0002\u0155\u0156\u0007\u0018\u0002\u0002",
+    "\u0154\u0155\u0007\u0018\u0002\u0002\u0155\u0156\b\u000f\u0001\u0002",
     "\u0156\u001d\u0003\u0002\u0002\u0002\u001a$&13ACIXZgr}\u0083\u008a\u0090",
     "\u0098\u00ac\u00b5\u00cd\u00de\u00e7\u013e\u0140\u0148"].join("");
 
@@ -1946,12 +1946,12 @@ FaplaParser.prototype.expression = function(_p) {
                     this.state = 233;
                     localctx.b = localctx._expression = this.expression(18);
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
-                                                                          localctx.type =  "real"
-                                                                     else {
-                                                                          console.log(localctx.a.type + " can not POW with " + localctx.b.type);
-                                                                          localctx.type = "noType"
-                                                                     }
-                                                                    
+                                              localctx.type =  "real"
+                                         else {
+                                              console.log(localctx.a.type + " can not POW with " + localctx.b.type);
+                                              localctx.type = "noType"
+                                         }
+                                        
                     break;
 
                 case 2:
@@ -1967,12 +1967,12 @@ FaplaParser.prototype.expression = function(_p) {
                     this.state = 238;
                     localctx.b = localctx._expression = this.expression(17);
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
-                                                                    localctx.type =  "real"
-                                                               else {
-                                                                    console.log(localctx.a.type + " can not MUL with " + localctx.b.type);
-                                                                    localctx.type = "noType"
-                                                               }
-                                                              
+                                            localctx.type =  "real"
+                                       else {
+                                            console.log(localctx.a.type + " can not MUL with " + localctx.b.type);
+                                            localctx.type = "noType"
+                                       }
+                                      
                     break;
 
                 case 3:
@@ -1988,12 +1988,12 @@ FaplaParser.prototype.expression = function(_p) {
                     this.state = 243;
                     localctx.b = localctx._expression = this.expression(16);
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
-                                                                         localctx.type =  "real"
-                                                                    else {
-                                                                         console.log(localctx.a.type + " can not DIV with " + localctx.b.type);
-                                                                         localctx.type = "noType"
-                                                                    }
-                                                                   
+                                         localctx.type =  "real"
+                                      else {
+                                         console.log(localctx.a.type + " can not DIV with " + localctx.b.type);
+                                         localctx.type = "noType"
+                                      }
+                                      
                     break;
 
                 case 4:
@@ -2009,12 +2009,12 @@ FaplaParser.prototype.expression = function(_p) {
                     this.state = 248;
                     localctx.b = localctx._expression = this.expression(15);
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
-                                                                      localctx.type =  "real"
-                                                                 else {
-                                                                      console.log(localctx.a.type + " can not MOD with " + localctx.b.type);
-                                                                      localctx.type = "noType"
-                                                                 }
-                                                                
+                                          localctx.type =  "real"
+                                      else {
+                                          console.log(localctx.a.type + " can not MOD with " + localctx.b.type);
+                                          localctx.type = "noType"
+                                      }
+                                      
                     break;
 
                 case 5:
@@ -2029,13 +2029,15 @@ FaplaParser.prototype.expression = function(_p) {
                     this.match(FaplaParser.ADD);
                     this.state = 253;
                     localctx.b = localctx._expression = this.expression(14);
-                    if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
-                                                                       localctx.type =  "real"
-                                                                  else {
-                                                                       console.log(localctx.a.type + " can not ADD with " + localctx.b.type);
-                                                                       localctx.type = "noType"
-                                                                  }
-                                                                 
+
+                                      localctx.type =  TypeConverting.max(localctx.a.type, localctx.b.type)/*
+                                      if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
+
+                                       else {
+                                           console.log($a.type + " can not ADD with " + $b.type);
+                                           $type="noType";
+                                       }*/
+                                      
                     break;
 
                 case 6:
@@ -2051,12 +2053,12 @@ FaplaParser.prototype.expression = function(_p) {
                     this.state = 258;
                     localctx.b = localctx._expression = this.expression(13);
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
-                                                                        localctx.type =  "real"
-                                                                   else {
-                                                                        console.log(localctx.a.type + " can not SUB with " + localctx.b.type);
-                                                                        localctx.type = "noType"
-                                                                   }
-                                                                  
+                                            localctx.type =  "real"
+                                       else {
+                                            console.log(localctx.a.type + " can not SUB with " + localctx.b.type);
+                                            localctx.type = "noType"
+                                       }
+                                      
                     break;
 
                 case 7:
@@ -2072,12 +2074,12 @@ FaplaParser.prototype.expression = function(_p) {
                     this.state = 263;
                     localctx.b = localctx._expression = this.expression(12);
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
-                                                                         localctx.type =  "bool"
-                                                                    else {
-                                                                         console.log(localctx.a.type + " can not LE with " + localctx.b.type);
-                                                                         localctx.type = "noType"
-                                                                    }
-                                                                   
+                                             localctx.type =  "bool"
+                                        else {
+                                             console.log(localctx.a.type + " can not LE with " + localctx.b.type);
+                                             localctx.type = "noType"
+                                        }
+                                       
                     break;
 
                 case 8:
@@ -2093,12 +2095,12 @@ FaplaParser.prototype.expression = function(_p) {
                     this.state = 268;
                     localctx.b = localctx._expression = this.expression(11);
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
-                                                                                                             localctx.type =  "bool"
-                                                                                                        else {
-                                                                                                             console.log(localctx.a.type + " can not GE with " + localctx.b.type);
-                                                                                                             localctx.type = "noType"
-                                                                                                        }
-                                                                                                       
+                                             localctx.type =  "bool"
+                                        else {
+                                             console.log(localctx.a.type + " can not GE with " + localctx.b.type);
+                                             localctx.type = "noType"
+                                        }
+                                       
                     break;
 
                 case 9:
@@ -2114,12 +2116,12 @@ FaplaParser.prototype.expression = function(_p) {
                     this.state = 273;
                     localctx.b = localctx._expression = this.expression(10);
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
-                                                                                                             localctx.type =  "bool"
-                                                                                                        else {
-                                                                                                             console.log(localctx.a.type + " can not GT with " + localctx.b.type);
-                                                                                                             localctx.type = "noType"
-                                                                                                        }
-                                                                                                       
+                                         localctx.type =  "bool"
+                                       else {
+                                         console.log(localctx.a.type + " can not GT with " + localctx.b.type);
+                                         localctx.type = "noType"
+                                       }
+                                      
                     break;
 
                 case 10:
@@ -2135,12 +2137,12 @@ FaplaParser.prototype.expression = function(_p) {
                     this.state = 278;
                     localctx.b = localctx._expression = this.expression(9);
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
-                                                                                                             localctx.type =  "bool"
-                                                                                                        else {
-                                                                                                             console.log(localctx.a.type + " can not SUB with " + localctx.b.type);
-                                                                                                             localctx.type = "noType"
-                                                                                                        }
-                                                                                                       
+                                         localctx.type =  "bool"
+                                       else {
+                                         console.log(localctx.a.type + " can not SUB with " + localctx.b.type);
+                                         localctx.type = "noType"
+                                       }
+                                      
                     break;
 
                 case 11:
@@ -2156,12 +2158,12 @@ FaplaParser.prototype.expression = function(_p) {
                     this.state = 283;
                     localctx.b = localctx._expression = this.expression(8);
                     if(TypeConverting.canConvertTo(localctx.a.type, localctx.b.type))
-                                                                            localctx.type =  "bool"
-                                                                       else {
-                                                                            console.log(localctx.a.type + " can not EQUAL with " + localctx.b.type);
-                                                                            localctx.type = "noType"
-                                                                       }
-                                                                      
+                                            localctx.type =  "bool"
+                                       else {
+                                            console.log(localctx.a.type + " can not EQUAL with " + localctx.b.type);
+                                            localctx.type = "noType"
+                                       }
+                                      
                     break;
 
                 case 12:
@@ -2198,7 +2200,7 @@ FaplaParser.prototype.expression = function(_p) {
                     this.state = 293;
                     localctx.b = localctx._expression = this.expression(6);
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
-                                            localctx.type =  "bool"
+                                            localctx.type =  "real"
                                        else {
                                             console.log(localctx.a.type + " can not XOR with " + localctx.b.type);
                                             localctx.type = "noType"
@@ -2494,6 +2496,7 @@ function AssignmentContext(parser, parent, invokingState) {
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
     this.ruleIndex = FaplaParser.RULE_assignment;
+    this.type = null
     this._Identifier = null; // Token
     this._expression = null; // ExpressionContext
     return this;
@@ -2547,9 +2550,23 @@ FaplaParser.prototype.assignment = function() {
         this.match(FaplaParser.ASSIGN);
         this.state = 337;
         localctx._expression = this.expression(0);
-        currentScope.findSymbol((localctx._Identifier===null ? null : localctx._Identifier.text)).value = localctx._expression.value
-        this.state = 339;
+        this.state = 338;
         this.match(FaplaParser.SEMICOLON);
+
+                    var s = currentScope.findSymbol((localctx._Identifier===null ? null : localctx._Identifier.text));
+                    if(!s) {
+                        console.log("variable " +  (localctx._Identifier===null ? null : localctx._Identifier.text) + " not defined");
+                        localctx.type =  "noType"
+                    } else {
+                        if(TypeConverting.canConvertTo(localctx._expression.type, s.type)) {
+                            s.value = localctx._expression.value;
+                            localctx.type =  s.type
+                        } else {
+                            console.log("can not assign " + localctx._expression.type + " to " + s.type);
+                            localctx.type =  "noType"
+                        }
+                    }
+                
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
 	        localctx.exception = re;
