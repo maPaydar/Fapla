@@ -71,7 +71,7 @@ noReturnStatement
     ;
 
 statement
-    :   IF expression THEN supBlock (ELSE supBlock)?
+    :   IF expression {if($expression.type != "bool") console.log("expression " + $expression.text + " must be a bool in if-statement condition");} THEN supBlock (ELSE supBlock)?
     |   WHILE expression supBlock
     |   expression SEMICOLON
     |   assignment
@@ -83,23 +83,28 @@ statement
     |   block
     ;
 
-expression
-    :   STRINGCONSTANT
-    |   REALCONSTANT
-    |   BOOLEANCONSTANT
-    |   PO expression PC
+expression returns [value, type]
+    :   STRINGCONSTANT {$type = "string";
+                        $value = $STRINGCONSTANT.text; }
+    |   REALCONSTANT {$type = "real";
+                      $value = $REALCONSTANT.text; }
+    |   BOOLEANCONSTANT {$type = "bool";
+                         $value = $BOOLEANCONSTANT.text; }
+    |   PO expression PC {$value = $expression.value;}
     |   Identifier PO expressionList? PC
     |   NOT expression
     |   expression FACTORIAL
     |   expression POW expression
     |   expression (MUL | DIV | MOD) expression
     |   expression (ADD | SUB) expression
-    |   expression (LE | GE | GT | LT | EQUAL | NOTEQUAL) expression
+    |   expression (LE | GE | GT | LT | EQUAL | NOTEQUAL) expression {$type = "bool";}
     |   expression XOR expression
     |   expression AND expression
     |   expression OR expression
     |   expression QUESTION expression COLON expression
-    |   Identifier {if(!currentScope.findSymbol($Identifier.text)) console.log("variable " +  $Identifier.text + " not defined");}
+    |   Identifier {var s = currentScope.findSymbol($Identifier.text);
+                    if(!s) console.log("variable " +  $Identifier.text + " not defined");
+                    else $value = s.value}
     ;
 
 expressionList
@@ -113,7 +118,7 @@ varDeclaration
     ;
 
 assignment
-    :   Identifier ASSIGN expression SEMICOLON
+    :   Identifier ASSIGN expression {currentScope.findSymbol($Identifier.text).value = $expression.value} SEMICOLON
     ;
 
 fragment
