@@ -1,18 +1,18 @@
 grammar Fapla;
 
 @parser::header {
-import java.util.List;
-import java.util.ArrayList;
+const Scope = require('./Scope').Scope;
+const Symbol = require('./Symbol').Symbol;
+var rootScope = new Scope(null);
+var currentScope = rootScope;
 }
 
 @parser::members {
-private Scope rootScope = new Scope(null);
-private Scope currentScope = rootScope;
-private List<Scope> rootScopeList = new ArrayList();
+
 }
 
 program
-    :   (moduleDeclaration {Scope scope = new Scope(rootScope);currentScope=scope;} | noRetuenModuleDeclaration {Scope scope = new Scope(rootScope);currentScope=scope;})* mainModuleDeclaration {Scope mainScope = new Scope(rootScope);currentScope=mainScope;} (moduleDeclaration {Scope scope = new Scope(rootScope);currentScope=scope;} | noRetuenModuleDeclaration {Scope scope = new Scope(rootScope);currentScope=scope;})*
+    :   (moduleDeclaration {var scope = new Scope(rootScope);currentScope=scope;} | noRetuenModuleDeclaration {var scope = new Scope(rootScope);currentScope=scope;})* mainModuleDeclaration {var mainScope = new Scope(rootScope);currentScope=mainScope;} (moduleDeclaration {var scope = new Scope(rootScope);currentScope=scope;} | noRetuenModuleDeclaration {var scope = new Scope(rootScope);currentScope=scope;})*
     ;
 
 moduleDeclaration
@@ -99,7 +99,7 @@ expression
     |   expression AND expression
     |   expression OR expression
     |   expression QUESTION expression COLON expression
-    |   Identifier {if(currentScope.findSymbol($Identifier.text) == null) System.err.println("variable " +  $Identifier.text + " not defined");}
+    |   Identifier {if(!currentScope.findSymbol($Identifier.text)) console.log("variable " +  $Identifier.text + " not defined");}
     ;
 
 expressionList
