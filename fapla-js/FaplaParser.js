@@ -5,13 +5,14 @@ var FaplaListener = require('./FaplaListener').FaplaListener;
 
 const Scope = require('./Scope').Scope;
 const Symbol = require('./Symbol').Symbol;
+const TypeConverting = require('./TypeConverting').TypeConverting;
 var rootScope = new Scope(null);
 var currentScope = rootScope;
 
 var grammarFileName = "Fapla.g4";
 
 var serializedATN = ["\u0003\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd",
-    "\u00033\u0120\u0004\u0002\t\u0002\u0004\u0003\t\u0003\u0004\u0004\t",
+    "\u00033\u0158\u0004\u0002\t\u0002\u0004\u0003\t\u0003\u0004\u0004\t",
     "\u0004\u0004\u0005\t\u0005\u0004\u0006\t\u0006\u0004\u0007\t\u0007\u0004",
     "\b\t\b\u0004\t\t\t\u0004\n\t\n\u0004\u000b\t\u000b\u0004\f\t\f\u0004",
     "\r\t\r\u0004\u000e\t\u000e\u0004\u000f\t\u000f\u0003\u0002\u0003\u0002",
@@ -43,161 +44,196 @@ var serializedATN = ["\u0003\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd",
     "\u000b\u0003\u000b\u0003\u000b\u0003\u000b\u0003\u000b\u0003\u000b\u0005",
     "\u000b\u00ce\n\u000b\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f",
     "\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003",
-    "\f\u0005\f\u00df\n\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0005\f",
-    "\u00e6\n\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003",
+    "\f\u0005\f\u00df\n\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f",
+    "\u0003\f\u0005\f\u00e8\n\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003",
     "\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003",
     "\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003",
-    "\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0007\f\u0107\n\f\f\f\u000e",
-    "\f\u010a\u000b\f\u0003\r\u0003\r\u0003\r\u0007\r\u010f\n\r\f\r\u000e",
-    "\r\u0112\u000b\r\u0003\u000e\u0003\u000e\u0003\u000e\u0003\u000e\u0003",
-    "\u000e\u0003\u000e\u0003\u000f\u0003\u000f\u0003\u000f\u0003\u000f\u0003",
-    "\u000f\u0003\u000f\u0003\u000f\u0002\u0003\u0016\u0010\u0002\u0004\u0006",
-    "\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a\u001c\u0002\u0005\u0004",
-    "\u0002*+--\u0003\u0002()\u0004\u0002\u001b\u001c #\u0144\u0002&\u0003",
-    "\u0002\u0002\u0002\u00046\u0003\u0002\u0002\u0002\u0006M\u0003\u0002",
-    "\u0002\u0002\b^\u0003\u0002\u0002\u0002\nb\u0003\u0002\u0002\u0002\f",
-    "m\u0003\u0002\u0002\u0002\u000e\u0083\u0003\u0002\u0002\u0002\u0010",
-    "\u0090\u0003\u0002\u0002\u0002\u0012\u00ac\u0003\u0002\u0002\u0002\u0014",
-    "\u00cd\u0003\u0002\u0002\u0002\u0016\u00e5\u0003\u0002\u0002\u0002\u0018",
-    "\u010b\u0003\u0002\u0002\u0002\u001a\u0113\u0003\u0002\u0002\u0002\u001c",
-    "\u0119\u0003\u0002\u0002\u0002\u001e\u001f\u0005\u0004\u0003\u0002\u001f",
-    " \b\u0002\u0001\u0002 %\u0003\u0002\u0002\u0002!\"\u0005\u0006\u0004",
-    "\u0002\"#\b\u0002\u0001\u0002#%\u0003\u0002\u0002\u0002$\u001e\u0003",
-    "\u0002\u0002\u0002$!\u0003\u0002\u0002\u0002%(\u0003\u0002\u0002\u0002",
-    "&$\u0003\u0002\u0002\u0002&\'\u0003\u0002\u0002\u0002\')\u0003\u0002",
-    "\u0002\u0002(&\u0003\u0002\u0002\u0002)*\u0005\b\u0005\u0002*3\b\u0002",
-    "\u0001\u0002+,\u0005\u0004\u0003\u0002,-\b\u0002\u0001\u0002-2\u0003",
-    "\u0002\u0002\u0002./\u0005\u0006\u0004\u0002/0\b\u0002\u0001\u00020",
-    "2\u0003\u0002\u0002\u00021+\u0003\u0002\u0002\u00021.\u0003\u0002\u0002",
-    "\u000225\u0003\u0002\u0002\u000231\u0003\u0002\u0002\u000234\u0003\u0002",
-    "\u0002\u00024\u0003\u0003\u0002\u0002\u000253\u0003\u0002\u0002\u0002",
-    "67\u0007\u0011\u0002\u00027C\u00070\u0002\u000289\u0007\u0014\u0002",
-    "\u00029?\u0007\u001f\u0002\u0002:;\u00070\u0002\u0002;<\u0007\u001f",
-    "\u0002\u0002<=\u0007\u0003\u0002\u0002=>\u0007\u0018\u0002\u0002>@\b",
-    "\u0003\u0001\u0002?:\u0003\u0002\u0002\u0002@A\u0003\u0002\u0002\u0002",
-    "A?\u0003\u0002\u0002\u0002AB\u0003\u0002\u0002\u0002BD\u0003\u0002\u0002",
-    "\u0002C8\u0003\u0002\u0002\u0002CD\u0003\u0002\u0002\u0002DI\u0003\u0002",
-    "\u0002\u0002EF\u0007\u0015\u0002\u0002FG\u0007\u001f\u0002\u0002GH\u0007",
-    "\u0003\u0002\u0002HJ\u0007\u0018\u0002\u0002IE\u0003\u0002\u0002\u0002",
-    "IJ\u0003\u0002\u0002\u0002JK\u0003\u0002\u0002\u0002KL\u0005\n\u0006",
-    "\u0002L\u0005\u0003\u0002\u0002\u0002MN\u0007\u0011\u0002\u0002NZ\u0007",
-    "0\u0002\u0002OP\u0007\u0014\u0002\u0002PV\u0007\u001f\u0002\u0002QR",
-    "\u00070\u0002\u0002RS\u0007\u001f\u0002\u0002ST\u0007\u0003\u0002\u0002",
-    "TU\u0007\u0018\u0002\u0002UW\b\u0004\u0001\u0002VQ\u0003\u0002\u0002",
-    "\u0002WX\u0003\u0002\u0002\u0002XV\u0003\u0002\u0002\u0002XY\u0003\u0002",
-    "\u0002\u0002Y[\u0003\u0002\u0002\u0002ZO\u0003\u0002\u0002\u0002Z[\u0003",
-    "\u0002\u0002\u0002[\\\u0003\u0002\u0002\u0002\\]\u0005\f\u0007\u0002",
-    "]\u0007\u0003\u0002\u0002\u0002^_\u0007\u0011\u0002\u0002_`\u00070\u0002",
-    "\u0002`a\u0005\f\u0007\u0002a\t\u0003\u0002\u0002\u0002bc\u0007\u0012",
-    "\u0002\u0002cg\b\u0006\u0001\u0002df\u0005\u0014\u000b\u0002ed\u0003",
-    "\u0002\u0002\u0002fi\u0003\u0002\u0002\u0002ge\u0003\u0002\u0002\u0002",
-    "gh\u0003\u0002\u0002\u0002hj\u0003\u0002\u0002\u0002ig\u0003\u0002\u0002",
-    "\u0002jk\u0007\u0013\u0002\u0002kl\b\u0006\u0001\u0002l\u000b\u0003",
-    "\u0002\u0002\u0002mn\u0007\u0012\u0002\u0002nr\b\u0007\u0001\u0002o",
-    "q\u0005\u0012\n\u0002po\u0003\u0002\u0002\u0002qt\u0003\u0002\u0002",
-    "\u0002rp\u0003\u0002\u0002\u0002rs\u0003\u0002\u0002\u0002su\u0003\u0002",
-    "\u0002\u0002tr\u0003\u0002\u0002\u0002uv\u0007\u0013\u0002\u0002vw\b",
-    "\u0007\u0001\u0002w\r\u0003\u0002\u0002\u0002xy\u0007\u0012\u0002\u0002",
-    "y}\b\b\u0001\u0002z|\u0005\u0014\u000b\u0002{z\u0003\u0002\u0002\u0002",
-    "|\u007f\u0003\u0002\u0002\u0002}{\u0003\u0002\u0002\u0002}~\u0003\u0002",
-    "\u0002\u0002~\u0080\u0003\u0002\u0002\u0002\u007f}\u0003\u0002\u0002",
-    "\u0002\u0080\u0081\u0007\u0013\u0002\u0002\u0081\u0084\b\b\u0001\u0002",
-    "\u0082\u0084\u0005\u0014\u000b\u0002\u0083x\u0003\u0002\u0002\u0002",
-    "\u0083\u0082\u0003\u0002\u0002\u0002\u0084\u000f\u0003\u0002\u0002\u0002",
-    "\u0085\u0086\u0007\u0012\u0002\u0002\u0086\u008a\b\t\u0001\u0002\u0087",
-    "\u0089\u0005\u0012\n\u0002\u0088\u0087\u0003\u0002\u0002\u0002\u0089",
-    "\u008c\u0003\u0002\u0002\u0002\u008a\u0088\u0003\u0002\u0002\u0002\u008a",
-    "\u008b\u0003\u0002\u0002\u0002\u008b\u008d\u0003\u0002\u0002\u0002\u008c",
-    "\u008a\u0003\u0002\u0002\u0002\u008d\u008e\u0007\u0013\u0002\u0002\u008e",
-    "\u0091\b\t\u0001\u0002\u008f\u0091\u0005\u0012\n\u0002\u0090\u0085\u0003",
-    "\u0002\u0002\u0002\u0090\u008f\u0003\u0002\u0002\u0002\u0091\u0011\u0003",
-    "\u0002\u0002\u0002\u0092\u0093\u0007\u000e\u0002\u0002\u0093\u0094\u0005",
-    "\u0016\f\u0002\u0094\u0095\u0007\r\u0002\u0002\u0095\u0098\u0005\u0010",
-    "\t\u0002\u0096\u0097\u0007\f\u0002\u0002\u0097\u0099\u0005\u0010\t\u0002",
-    "\u0098\u0096\u0003\u0002\u0002\u0002\u0098\u0099\u0003\u0002\u0002\u0002",
-    "\u0099\u00ad\u0003\u0002\u0002\u0002\u009a\u009b\u0007\u0010\u0002\u0002",
-    "\u009b\u009c\u0005\u0016\f\u0002\u009c\u009d\u0005\u0010\t\u0002\u009d",
-    "\u00ad\u0003\u0002\u0002\u0002\u009e\u009f\u0005\u0016\f\u0002\u009f",
-    "\u00a0\u0007\u0018\u0002\u0002\u00a0\u00ad\u0003\u0002\u0002\u0002\u00a1",
-    "\u00ad\u0005\u001c\u000f\u0002\u00a2\u00ad\u0007\u0018\u0002\u0002\u00a3",
-    "\u00ad\u0005\u001a\u000e\u0002\u00a4\u00a5\u0007\u0016\u0002\u0002\u00a5",
-    "\u00a6\u0005\u0016\f\u0002\u00a6\u00a7\u0007\u0018\u0002\u0002\u00a7",
-    "\u00ad\u0003\u0002\u0002\u0002\u00a8\u00a9\u0007\u0017\u0002\u0002\u00a9",
-    "\u00aa\u00070\u0002\u0002\u00aa\u00ad\u0007\u0018\u0002\u0002\u00ab",
-    "\u00ad\u0005\f\u0007\u0002\u00ac\u0092\u0003\u0002\u0002\u0002\u00ac",
-    "\u009a\u0003\u0002\u0002\u0002\u00ac\u009e\u0003\u0002\u0002\u0002\u00ac",
-    "\u00a1\u0003\u0002\u0002\u0002\u00ac\u00a2\u0003\u0002\u0002\u0002\u00ac",
-    "\u00a3\u0003\u0002\u0002\u0002\u00ac\u00a4\u0003\u0002\u0002\u0002\u00ac",
-    "\u00a8\u0003\u0002\u0002\u0002\u00ac\u00ab\u0003\u0002\u0002\u0002\u00ad",
-    "\u0013\u0003\u0002\u0002\u0002\u00ae\u00af\u0007\u000e\u0002\u0002\u00af",
-    "\u00b0\u0005\u0016\f\u0002\u00b0\u00b1\b\u000b\u0001\u0002\u00b1\u00b2",
-    "\u0007\r\u0002\u0002\u00b2\u00b5\u0005\u000e\b\u0002\u00b3\u00b4\u0007",
-    "\f\u0002\u0002\u00b4\u00b6\u0005\u000e\b\u0002\u00b5\u00b3\u0003\u0002",
-    "\u0002\u0002\u00b5\u00b6\u0003\u0002\u0002\u0002\u00b6\u00ce\u0003\u0002",
-    "\u0002\u0002\u00b7\u00b8\u0007\u0010\u0002\u0002\u00b8\u00b9\u0005\u0016",
-    "\f\u0002\u00b9\u00ba\u0005\u000e\b\u0002\u00ba\u00ce\u0003\u0002\u0002",
-    "\u0002\u00bb\u00bc\u0005\u0016\f\u0002\u00bc\u00bd\u0007\u0018\u0002",
-    "\u0002\u00bd\u00ce\u0003\u0002\u0002\u0002\u00be\u00ce\u0005\u001c\u000f",
-    "\u0002\u00bf\u00ce\u0007\u0018\u0002\u0002\u00c0\u00ce\u0005\u001a\u000e",
-    "\u0002\u00c1\u00c2\u0007\u0016\u0002\u0002\u00c2\u00c3\u0005\u0016\f",
-    "\u0002\u00c3\u00c4\u0007\u0018\u0002\u0002\u00c4\u00ce\u0003\u0002\u0002",
-    "\u0002\u00c5\u00c6\u0007\u0017\u0002\u0002\u00c6\u00c7\u00070\u0002",
-    "\u0002\u00c7\u00ce\u0007\u0018\u0002\u0002\u00c8\u00c9\u0007\u000f\u0002",
-    "\u0002\u00c9\u00ca\u0005\u0016\f\u0002\u00ca\u00cb\u0007\u0018\u0002",
-    "\u0002\u00cb\u00ce\u0003\u0002\u0002\u0002\u00cc\u00ce\u0005\n\u0006",
-    "\u0002\u00cd\u00ae\u0003\u0002\u0002\u0002\u00cd\u00b7\u0003\u0002\u0002",
-    "\u0002\u00cd\u00bb\u0003\u0002\u0002\u0002\u00cd\u00be\u0003\u0002\u0002",
-    "\u0002\u00cd\u00bf\u0003\u0002\u0002\u0002\u00cd\u00c0\u0003\u0002\u0002",
-    "\u0002\u00cd\u00c1\u0003\u0002\u0002\u0002\u00cd\u00c5\u0003\u0002\u0002",
-    "\u0002\u00cd\u00c8\u0003\u0002\u0002\u0002\u00cd\u00cc\u0003\u0002\u0002",
-    "\u0002\u00ce\u0015\u0003\u0002\u0002\u0002\u00cf\u00d0\b\f\u0001\u0002",
-    "\u00d0\u00d1\u0007\u0005\u0002\u0002\u00d1\u00e6\b\f\u0001\u0002\u00d2",
-    "\u00d3\u0007\u0006\u0002\u0002\u00d3\u00e6\b\f\u0001\u0002\u00d4\u00d5",
-    "\u0007\u0004\u0002\u0002\u00d5\u00e6\b\f\u0001\u0002\u00d6\u00d7\u0007",
-    ".\u0002\u0002\u00d7\u00d8\u0005\u0016\f\u0002\u00d8\u00d9\u0007/\u0002",
-    "\u0002\u00d9\u00da\b\f\u0001\u0002\u00da\u00e6\u0003\u0002\u0002\u0002",
-    "\u00db\u00dc\u00070\u0002\u0002\u00dc\u00de\u0007.\u0002\u0002\u00dd",
-    "\u00df\u0005\u0018\r\u0002\u00de\u00dd\u0003\u0002\u0002\u0002\u00de",
-    "\u00df\u0003\u0002\u0002\u0002\u00df\u00e0\u0003\u0002\u0002\u0002\u00e0",
-    "\u00e6\u0007/\u0002\u0002\u00e1\u00e2\u0007&\u0002\u0002\u00e2\u00e6",
-    "\u0005\u0016\f\r\u00e3\u00e4\u00070\u0002\u0002\u00e4\u00e6\b\f\u0001",
-    "\u0002\u00e5\u00cf\u0003\u0002\u0002\u0002\u00e5\u00d2\u0003\u0002\u0002",
-    "\u0002\u00e5\u00d4\u0003\u0002\u0002\u0002\u00e5\u00d6\u0003\u0002\u0002",
-    "\u0002\u00e5\u00db\u0003\u0002\u0002\u0002\u00e5\u00e1\u0003\u0002\u0002",
-    "\u0002\u00e5\u00e3\u0003\u0002\u0002\u0002\u00e6\u0108\u0003\u0002\u0002",
-    "\u0002\u00e7\u00e8\f\u000b\u0002\u0002\u00e8\u00e9\u0007,\u0002\u0002",
-    "\u00e9\u0107\u0005\u0016\f\f\u00ea\u00eb\f\n\u0002\u0002\u00eb\u00ec",
-    "\t\u0002\u0002\u0002\u00ec\u0107\u0005\u0016\f\u000b\u00ed\u00ee\f\t",
-    "\u0002\u0002\u00ee\u00ef\t\u0003\u0002\u0002\u00ef\u0107\u0005\u0016",
-    "\f\n\u00f0\u00f1\f\b\u0002\u0002\u00f1\u00f2\t\u0004\u0002\u0002\u00f2",
-    "\u00f3\u0005\u0016\f\t\u00f3\u00f4\b\f\u0001\u0002\u00f4\u0107\u0003",
-    "\u0002\u0002\u0002\u00f5\u00f6\f\u0007\u0002\u0002\u00f6\u00f7\u0007",
-    "\'\u0002\u0002\u00f7\u0107\u0005\u0016\f\b\u00f8\u00f9\f\u0006\u0002",
-    "\u0002\u00f9\u00fa\u0007$\u0002\u0002\u00fa\u0107\u0005\u0016\f\u0007",
-    "\u00fb\u00fc\f\u0005\u0002\u0002\u00fc\u00fd\u0007%\u0002\u0002\u00fd",
-    "\u0107\u0005\u0016\f\u0006\u00fe\u00ff\f\u0004\u0002\u0002\u00ff\u0100",
-    "\u0007\u001e\u0002\u0002\u0100\u0101\u0005\u0016\f\u0002\u0101\u0102",
-    "\u0007\u001f\u0002\u0002\u0102\u0103\u0005\u0016\f\u0005\u0103\u0107",
-    "\u0003\u0002\u0002\u0002\u0104\u0105\f\f\u0002\u0002\u0105\u0107\u0007",
-    "\u001d\u0002\u0002\u0106\u00e7\u0003\u0002\u0002\u0002\u0106\u00ea\u0003",
-    "\u0002\u0002\u0002\u0106\u00ed\u0003\u0002\u0002\u0002\u0106\u00f0\u0003",
-    "\u0002\u0002\u0002\u0106\u00f5\u0003\u0002\u0002\u0002\u0106\u00f8\u0003",
-    "\u0002\u0002\u0002\u0106\u00fb\u0003\u0002\u0002\u0002\u0106\u00fe\u0003",
-    "\u0002\u0002\u0002\u0106\u0104\u0003\u0002\u0002\u0002\u0107\u010a\u0003",
-    "\u0002\u0002\u0002\u0108\u0106\u0003\u0002\u0002\u0002\u0108\u0109\u0003",
-    "\u0002\u0002\u0002\u0109\u0017\u0003\u0002\u0002\u0002\u010a\u0108\u0003",
-    "\u0002\u0002\u0002\u010b\u0110\u0005\u0016\f\u0002\u010c\u010d\u0007",
-    "\u0019\u0002\u0002\u010d\u010f\u0005\u0016\f\u0002\u010e\u010c\u0003",
-    "\u0002\u0002\u0002\u010f\u0112\u0003\u0002\u0002\u0002\u0110\u010e\u0003",
-    "\u0002\u0002\u0002\u0110\u0111\u0003\u0002\u0002\u0002\u0111\u0019\u0003",
-    "\u0002\u0002\u0002\u0112\u0110\u0003\u0002\u0002\u0002\u0113\u0114\u0007",
-    "0\u0002\u0002\u0114\u0115\u0007\u001f\u0002\u0002\u0115\u0116\u0007",
-    "\u0003\u0002\u0002\u0116\u0117\u0007\u0018\u0002\u0002\u0117\u0118\b",
-    "\u000e\u0001\u0002\u0118\u001b\u0003\u0002\u0002\u0002\u0119\u011a\u0007",
-    "0\u0002\u0002\u011a\u011b\u0007\u001a\u0002\u0002\u011b\u011c\u0005",
-    "\u0016\f\u0002\u011c\u011d\b\u000f\u0001\u0002\u011d\u011e\u0007\u0018",
-    "\u0002\u0002\u011e\u001d\u0003\u0002\u0002\u0002\u001a$&13ACIXZgr}\u0083",
-    "\u008a\u0090\u0098\u00ac\u00b5\u00cd\u00de\u00e5\u0106\u0108\u0110"].join("");
+    "\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003",
+    "\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003",
+    "\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003",
+    "\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003",
+    "\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003",
+    "\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003",
+    "\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0003\f\u0007\f\u013f",
+    "\n\f\f\f\u000e\f\u0142\u000b\f\u0003\r\u0003\r\u0003\r\u0007\r\u0147",
+    "\n\r\f\r\u000e\r\u014a\u000b\r\u0003\u000e\u0003\u000e\u0003\u000e\u0003",
+    "\u000e\u0003\u000e\u0003\u000e\u0003\u000f\u0003\u000f\u0003\u000f\u0003",
+    "\u000f\u0003\u000f\u0003\u000f\u0003\u000f\u0002\u0003\u0016\u0010\u0002",
+    "\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a\u001c\u0002",
+    "\u0002\u0184\u0002&\u0003\u0002\u0002\u0002\u00046\u0003\u0002\u0002",
+    "\u0002\u0006M\u0003\u0002\u0002\u0002\b^\u0003\u0002\u0002\u0002\nb",
+    "\u0003\u0002\u0002\u0002\fm\u0003\u0002\u0002\u0002\u000e\u0083\u0003",
+    "\u0002\u0002\u0002\u0010\u0090\u0003\u0002\u0002\u0002\u0012\u00ac\u0003",
+    "\u0002\u0002\u0002\u0014\u00cd\u0003\u0002\u0002\u0002\u0016\u00e7\u0003",
+    "\u0002\u0002\u0002\u0018\u0143\u0003\u0002\u0002\u0002\u001a\u014b\u0003",
+    "\u0002\u0002\u0002\u001c\u0151\u0003\u0002\u0002\u0002\u001e\u001f\u0005",
+    "\u0004\u0003\u0002\u001f \b\u0002\u0001\u0002 %\u0003\u0002\u0002\u0002",
+    "!\"\u0005\u0006\u0004\u0002\"#\b\u0002\u0001\u0002#%\u0003\u0002\u0002",
+    "\u0002$\u001e\u0003\u0002\u0002\u0002$!\u0003\u0002\u0002\u0002%(\u0003",
+    "\u0002\u0002\u0002&$\u0003\u0002\u0002\u0002&\'\u0003\u0002\u0002\u0002",
+    "\')\u0003\u0002\u0002\u0002(&\u0003\u0002\u0002\u0002)*\u0005\b\u0005",
+    "\u0002*3\b\u0002\u0001\u0002+,\u0005\u0004\u0003\u0002,-\b\u0002\u0001",
+    "\u0002-2\u0003\u0002\u0002\u0002./\u0005\u0006\u0004\u0002/0\b\u0002",
+    "\u0001\u000202\u0003\u0002\u0002\u00021+\u0003\u0002\u0002\u00021.\u0003",
+    "\u0002\u0002\u000225\u0003\u0002\u0002\u000231\u0003\u0002\u0002\u0002",
+    "34\u0003\u0002\u0002\u00024\u0003\u0003\u0002\u0002\u000253\u0003\u0002",
+    "\u0002\u000267\u0007\u0011\u0002\u00027C\u00070\u0002\u000289\u0007",
+    "\u0014\u0002\u00029?\u0007\u001f\u0002\u0002:;\u00070\u0002\u0002;<",
+    "\u0007\u001f\u0002\u0002<=\u0007\u0003\u0002\u0002=>\u0007\u0018\u0002",
+    "\u0002>@\b\u0003\u0001\u0002?:\u0003\u0002\u0002\u0002@A\u0003\u0002",
+    "\u0002\u0002A?\u0003\u0002\u0002\u0002AB\u0003\u0002\u0002\u0002BD\u0003",
+    "\u0002\u0002\u0002C8\u0003\u0002\u0002\u0002CD\u0003\u0002\u0002\u0002",
+    "DI\u0003\u0002\u0002\u0002EF\u0007\u0015\u0002\u0002FG\u0007\u001f\u0002",
+    "\u0002GH\u0007\u0003\u0002\u0002HJ\u0007\u0018\u0002\u0002IE\u0003\u0002",
+    "\u0002\u0002IJ\u0003\u0002\u0002\u0002JK\u0003\u0002\u0002\u0002KL\u0005",
+    "\n\u0006\u0002L\u0005\u0003\u0002\u0002\u0002MN\u0007\u0011\u0002\u0002",
+    "NZ\u00070\u0002\u0002OP\u0007\u0014\u0002\u0002PV\u0007\u001f\u0002",
+    "\u0002QR\u00070\u0002\u0002RS\u0007\u001f\u0002\u0002ST\u0007\u0003",
+    "\u0002\u0002TU\u0007\u0018\u0002\u0002UW\b\u0004\u0001\u0002VQ\u0003",
+    "\u0002\u0002\u0002WX\u0003\u0002\u0002\u0002XV\u0003\u0002\u0002\u0002",
+    "XY\u0003\u0002\u0002\u0002Y[\u0003\u0002\u0002\u0002ZO\u0003\u0002\u0002",
+    "\u0002Z[\u0003\u0002\u0002\u0002[\\\u0003\u0002\u0002\u0002\\]\u0005",
+    "\f\u0007\u0002]\u0007\u0003\u0002\u0002\u0002^_\u0007\u0011\u0002\u0002",
+    "_`\u00070\u0002\u0002`a\u0005\f\u0007\u0002a\t\u0003\u0002\u0002\u0002",
+    "bc\u0007\u0012\u0002\u0002cg\b\u0006\u0001\u0002df\u0005\u0014\u000b",
+    "\u0002ed\u0003\u0002\u0002\u0002fi\u0003\u0002\u0002\u0002ge\u0003\u0002",
+    "\u0002\u0002gh\u0003\u0002\u0002\u0002hj\u0003\u0002\u0002\u0002ig\u0003",
+    "\u0002\u0002\u0002jk\u0007\u0013\u0002\u0002kl\b\u0006\u0001\u0002l",
+    "\u000b\u0003\u0002\u0002\u0002mn\u0007\u0012\u0002\u0002nr\b\u0007\u0001",
+    "\u0002oq\u0005\u0012\n\u0002po\u0003\u0002\u0002\u0002qt\u0003\u0002",
+    "\u0002\u0002rp\u0003\u0002\u0002\u0002rs\u0003\u0002\u0002\u0002su\u0003",
+    "\u0002\u0002\u0002tr\u0003\u0002\u0002\u0002uv\u0007\u0013\u0002\u0002",
+    "vw\b\u0007\u0001\u0002w\r\u0003\u0002\u0002\u0002xy\u0007\u0012\u0002",
+    "\u0002y}\b\b\u0001\u0002z|\u0005\u0014\u000b\u0002{z\u0003\u0002\u0002",
+    "\u0002|\u007f\u0003\u0002\u0002\u0002}{\u0003\u0002\u0002\u0002}~\u0003",
+    "\u0002\u0002\u0002~\u0080\u0003\u0002\u0002\u0002\u007f}\u0003\u0002",
+    "\u0002\u0002\u0080\u0081\u0007\u0013\u0002\u0002\u0081\u0084\b\b\u0001",
+    "\u0002\u0082\u0084\u0005\u0014\u000b\u0002\u0083x\u0003\u0002\u0002",
+    "\u0002\u0083\u0082\u0003\u0002\u0002\u0002\u0084\u000f\u0003\u0002\u0002",
+    "\u0002\u0085\u0086\u0007\u0012\u0002\u0002\u0086\u008a\b\t\u0001\u0002",
+    "\u0087\u0089\u0005\u0012\n\u0002\u0088\u0087\u0003\u0002\u0002\u0002",
+    "\u0089\u008c\u0003\u0002\u0002\u0002\u008a\u0088\u0003\u0002\u0002\u0002",
+    "\u008a\u008b\u0003\u0002\u0002\u0002\u008b\u008d\u0003\u0002\u0002\u0002",
+    "\u008c\u008a\u0003\u0002\u0002\u0002\u008d\u008e\u0007\u0013\u0002\u0002",
+    "\u008e\u0091\b\t\u0001\u0002\u008f\u0091\u0005\u0012\n\u0002\u0090\u0085",
+    "\u0003\u0002\u0002\u0002\u0090\u008f\u0003\u0002\u0002\u0002\u0091\u0011",
+    "\u0003\u0002\u0002\u0002\u0092\u0093\u0007\u000e\u0002\u0002\u0093\u0094",
+    "\u0005\u0016\f\u0002\u0094\u0095\u0007\r\u0002\u0002\u0095\u0098\u0005",
+    "\u0010\t\u0002\u0096\u0097\u0007\f\u0002\u0002\u0097\u0099\u0005\u0010",
+    "\t\u0002\u0098\u0096\u0003\u0002\u0002\u0002\u0098\u0099\u0003\u0002",
+    "\u0002\u0002\u0099\u00ad\u0003\u0002\u0002\u0002\u009a\u009b\u0007\u0010",
+    "\u0002\u0002\u009b\u009c\u0005\u0016\f\u0002\u009c\u009d\u0005\u0010",
+    "\t\u0002\u009d\u00ad\u0003\u0002\u0002\u0002\u009e\u009f\u0005\u0016",
+    "\f\u0002\u009f\u00a0\u0007\u0018\u0002\u0002\u00a0\u00ad\u0003\u0002",
+    "\u0002\u0002\u00a1\u00ad\u0005\u001c\u000f\u0002\u00a2\u00ad\u0007\u0018",
+    "\u0002\u0002\u00a3\u00ad\u0005\u001a\u000e\u0002\u00a4\u00a5\u0007\u0016",
+    "\u0002\u0002\u00a5\u00a6\u0005\u0016\f\u0002\u00a6\u00a7\u0007\u0018",
+    "\u0002\u0002\u00a7\u00ad\u0003\u0002\u0002\u0002\u00a8\u00a9\u0007\u0017",
+    "\u0002\u0002\u00a9\u00aa\u00070\u0002\u0002\u00aa\u00ad\u0007\u0018",
+    "\u0002\u0002\u00ab\u00ad\u0005\f\u0007\u0002\u00ac\u0092\u0003\u0002",
+    "\u0002\u0002\u00ac\u009a\u0003\u0002\u0002\u0002\u00ac\u009e\u0003\u0002",
+    "\u0002\u0002\u00ac\u00a1\u0003\u0002\u0002\u0002\u00ac\u00a2\u0003\u0002",
+    "\u0002\u0002\u00ac\u00a3\u0003\u0002\u0002\u0002\u00ac\u00a4\u0003\u0002",
+    "\u0002\u0002\u00ac\u00a8\u0003\u0002\u0002\u0002\u00ac\u00ab\u0003\u0002",
+    "\u0002\u0002\u00ad\u0013\u0003\u0002\u0002\u0002\u00ae\u00af\u0007\u000e",
+    "\u0002\u0002\u00af\u00b0\u0005\u0016\f\u0002\u00b0\u00b1\b\u000b\u0001",
+    "\u0002\u00b1\u00b2\u0007\r\u0002\u0002\u00b2\u00b5\u0005\u000e\b\u0002",
+    "\u00b3\u00b4\u0007\f\u0002\u0002\u00b4\u00b6\u0005\u000e\b\u0002\u00b5",
+    "\u00b3\u0003\u0002\u0002\u0002\u00b5\u00b6\u0003\u0002\u0002\u0002\u00b6",
+    "\u00ce\u0003\u0002\u0002\u0002\u00b7\u00b8\u0007\u0010\u0002\u0002\u00b8",
+    "\u00b9\u0005\u0016\f\u0002\u00b9\u00ba\u0005\u000e\b\u0002\u00ba\u00ce",
+    "\u0003\u0002\u0002\u0002\u00bb\u00bc\u0005\u0016\f\u0002\u00bc\u00bd",
+    "\u0007\u0018\u0002\u0002\u00bd\u00ce\u0003\u0002\u0002\u0002\u00be\u00ce",
+    "\u0005\u001c\u000f\u0002\u00bf\u00ce\u0007\u0018\u0002\u0002\u00c0\u00ce",
+    "\u0005\u001a\u000e\u0002\u00c1\u00c2\u0007\u0016\u0002\u0002\u00c2\u00c3",
+    "\u0005\u0016\f\u0002\u00c3\u00c4\u0007\u0018\u0002\u0002\u00c4\u00ce",
+    "\u0003\u0002\u0002\u0002\u00c5\u00c6\u0007\u0017\u0002\u0002\u00c6\u00c7",
+    "\u00070\u0002\u0002\u00c7\u00ce\u0007\u0018\u0002\u0002\u00c8\u00c9",
+    "\u0007\u000f\u0002\u0002\u00c9\u00ca\u0005\u0016\f\u0002\u00ca\u00cb",
+    "\u0007\u0018\u0002\u0002\u00cb\u00ce\u0003\u0002\u0002\u0002\u00cc\u00ce",
+    "\u0005\n\u0006\u0002\u00cd\u00ae\u0003\u0002\u0002\u0002\u00cd\u00b7",
+    "\u0003\u0002\u0002\u0002\u00cd\u00bb\u0003\u0002\u0002\u0002\u00cd\u00be",
+    "\u0003\u0002\u0002\u0002\u00cd\u00bf\u0003\u0002\u0002\u0002\u00cd\u00c0",
+    "\u0003\u0002\u0002\u0002\u00cd\u00c1\u0003\u0002\u0002\u0002\u00cd\u00c5",
+    "\u0003\u0002\u0002\u0002\u00cd\u00c8\u0003\u0002\u0002\u0002\u00cd\u00cc",
+    "\u0003\u0002\u0002\u0002\u00ce\u0015\u0003\u0002\u0002\u0002\u00cf\u00d0",
+    "\b\f\u0001\u0002\u00d0\u00d1\u0007\u0005\u0002\u0002\u00d1\u00e8\b\f",
+    "\u0001\u0002\u00d2\u00d3\u0007\u0006\u0002\u0002\u00d3\u00e8\b\f\u0001",
+    "\u0002\u00d4\u00d5\u0007\u0004\u0002\u0002\u00d5\u00e8\b\f\u0001\u0002",
+    "\u00d6\u00d7\u0007.\u0002\u0002\u00d7\u00d8\u0005\u0016\f\u0002\u00d8",
+    "\u00d9\u0007/\u0002\u0002\u00d9\u00da\b\f\u0001\u0002\u00da\u00e8\u0003",
+    "\u0002\u0002\u0002\u00db\u00dc\u00070\u0002\u0002\u00dc\u00de\u0007",
+    ".\u0002\u0002\u00dd\u00df\u0005\u0018\r\u0002\u00de\u00dd\u0003\u0002",
+    "\u0002\u0002\u00de\u00df\u0003\u0002\u0002\u0002\u00df\u00e0\u0003\u0002",
+    "\u0002\u0002\u00e0\u00e8\u0007/\u0002\u0002\u00e1\u00e2\u0007&\u0002",
+    "\u0002\u00e2\u00e3\u0005\u0016\f\u0015\u00e3\u00e4\b\f\u0001\u0002\u00e4",
+    "\u00e8\u0003\u0002\u0002\u0002\u00e5\u00e6\u00070\u0002\u0002\u00e6",
+    "\u00e8\b\f\u0001\u0002\u00e7\u00cf\u0003\u0002\u0002\u0002\u00e7\u00d2",
+    "\u0003\u0002\u0002\u0002\u00e7\u00d4\u0003\u0002\u0002\u0002\u00e7\u00d6",
+    "\u0003\u0002\u0002\u0002\u00e7\u00db\u0003\u0002\u0002\u0002\u00e7\u00e1",
+    "\u0003\u0002\u0002\u0002\u00e7\u00e5\u0003\u0002\u0002\u0002\u00e8\u0140",
+    "\u0003\u0002\u0002\u0002\u00e9\u00ea\f\u0013\u0002\u0002\u00ea\u00eb",
+    "\u0007,\u0002\u0002\u00eb\u00ec\u0005\u0016\f\u0014\u00ec\u00ed\b\f",
+    "\u0001\u0002\u00ed\u013f\u0003\u0002\u0002\u0002\u00ee\u00ef\f\u0012",
+    "\u0002\u0002\u00ef\u00f0\u0007*\u0002\u0002\u00f0\u00f1\u0005\u0016",
+    "\f\u0013\u00f1\u00f2\b\f\u0001\u0002\u00f2\u013f\u0003\u0002\u0002\u0002",
+    "\u00f3\u00f4\f\u0011\u0002\u0002\u00f4\u00f5\u0007+\u0002\u0002\u00f5",
+    "\u00f6\u0005\u0016\f\u0012\u00f6\u00f7\b\f\u0001\u0002\u00f7\u013f\u0003",
+    "\u0002\u0002\u0002\u00f8\u00f9\f\u0010\u0002\u0002\u00f9\u00fa\u0007",
+    "-\u0002\u0002\u00fa\u00fb\u0005\u0016\f\u0011\u00fb\u00fc\b\f\u0001",
+    "\u0002\u00fc\u013f\u0003\u0002\u0002\u0002\u00fd\u00fe\f\u000f\u0002",
+    "\u0002\u00fe\u00ff\u0007(\u0002\u0002\u00ff\u0100\u0005\u0016\f\u0010",
+    "\u0100\u0101\b\f\u0001\u0002\u0101\u013f\u0003\u0002\u0002\u0002\u0102",
+    "\u0103\f\u000e\u0002\u0002\u0103\u0104\u0007)\u0002\u0002\u0104\u0105",
+    "\u0005\u0016\f\u000f\u0105\u0106\b\f\u0001\u0002\u0106\u013f\u0003\u0002",
+    "\u0002\u0002\u0107\u0108\f\r\u0002\u0002\u0108\u0109\u0007!\u0002\u0002",
+    "\u0109\u010a\u0005\u0016\f\u000e\u010a\u010b\b\f\u0001\u0002\u010b\u013f",
+    "\u0003\u0002\u0002\u0002\u010c\u010d\f\f\u0002\u0002\u010d\u010e\u0007",
+    "\"\u0002\u0002\u010e\u010f\u0005\u0016\f\r\u010f\u0110\b\f\u0001\u0002",
+    "\u0110\u013f\u0003\u0002\u0002\u0002\u0111\u0112\f\u000b\u0002\u0002",
+    "\u0112\u0113\u0007\u001b\u0002\u0002\u0113\u0114\u0005\u0016\f\f\u0114",
+    "\u0115\b\f\u0001\u0002\u0115\u013f\u0003\u0002\u0002\u0002\u0116\u0117",
+    "\f\n\u0002\u0002\u0117\u0118\u0007\u001c\u0002\u0002\u0118\u0119\u0005",
+    "\u0016\f\u000b\u0119\u011a\b\f\u0001\u0002\u011a\u013f\u0003\u0002\u0002",
+    "\u0002\u011b\u011c\f\t\u0002\u0002\u011c\u011d\u0007 \u0002\u0002\u011d",
+    "\u011e\u0005\u0016\f\n\u011e\u011f\b\f\u0001\u0002\u011f\u013f\u0003",
+    "\u0002\u0002\u0002\u0120\u0121\f\b\u0002\u0002\u0121\u0122\u0007#\u0002",
+    "\u0002\u0122\u0123\u0005\u0016\f\t\u0123\u0124\b\f\u0001\u0002\u0124",
+    "\u013f\u0003\u0002\u0002\u0002\u0125\u0126\f\u0007\u0002\u0002\u0126",
+    "\u0127\u0007\'\u0002\u0002\u0127\u0128\u0005\u0016\f\b\u0128\u0129\b",
+    "\f\u0001\u0002\u0129\u013f\u0003\u0002\u0002\u0002\u012a\u012b\f\u0006",
+    "\u0002\u0002\u012b\u012c\u0007$\u0002\u0002\u012c\u012d\u0005\u0016",
+    "\f\u0007\u012d\u012e\b\f\u0001\u0002\u012e\u013f\u0003\u0002\u0002\u0002",
+    "\u012f\u0130\f\u0005\u0002\u0002\u0130\u0131\u0007%\u0002\u0002\u0131",
+    "\u0132\u0005\u0016\f\u0006\u0132\u0133\b\f\u0001\u0002\u0133\u013f\u0003",
+    "\u0002\u0002\u0002\u0134\u0135\f\u0004\u0002\u0002\u0135\u0136\u0007",
+    "\u001e\u0002\u0002\u0136\u0137\u0005\u0016\f\u0002\u0137\u0138\u0007",
+    "\u001f\u0002\u0002\u0138\u0139\u0005\u0016\f\u0005\u0139\u013a\b\f\u0001",
+    "\u0002\u013a\u013f\u0003\u0002\u0002\u0002\u013b\u013c\f\u0014\u0002",
+    "\u0002\u013c\u013d\u0007\u001d\u0002\u0002\u013d\u013f\b\f\u0001\u0002",
+    "\u013e\u00e9\u0003\u0002\u0002\u0002\u013e\u00ee\u0003\u0002\u0002\u0002",
+    "\u013e\u00f3\u0003\u0002\u0002\u0002\u013e\u00f8\u0003\u0002\u0002\u0002",
+    "\u013e\u00fd\u0003\u0002\u0002\u0002\u013e\u0102\u0003\u0002\u0002\u0002",
+    "\u013e\u0107\u0003\u0002\u0002\u0002\u013e\u010c\u0003\u0002\u0002\u0002",
+    "\u013e\u0111\u0003\u0002\u0002\u0002\u013e\u0116\u0003\u0002\u0002\u0002",
+    "\u013e\u011b\u0003\u0002\u0002\u0002\u013e\u0120\u0003\u0002\u0002\u0002",
+    "\u013e\u0125\u0003\u0002\u0002\u0002\u013e\u012a\u0003\u0002\u0002\u0002",
+    "\u013e\u012f\u0003\u0002\u0002\u0002\u013e\u0134\u0003\u0002\u0002\u0002",
+    "\u013e\u013b\u0003\u0002\u0002\u0002\u013f\u0142\u0003\u0002\u0002\u0002",
+    "\u0140\u013e\u0003\u0002\u0002\u0002\u0140\u0141\u0003\u0002\u0002\u0002",
+    "\u0141\u0017\u0003\u0002\u0002\u0002\u0142\u0140\u0003\u0002\u0002\u0002",
+    "\u0143\u0148\u0005\u0016\f\u0002\u0144\u0145\u0007\u0019\u0002\u0002",
+    "\u0145\u0147\u0005\u0016\f\u0002\u0146\u0144\u0003\u0002\u0002\u0002",
+    "\u0147\u014a\u0003\u0002\u0002\u0002\u0148\u0146\u0003\u0002\u0002\u0002",
+    "\u0148\u0149\u0003\u0002\u0002\u0002\u0149\u0019\u0003\u0002\u0002\u0002",
+    "\u014a\u0148\u0003\u0002\u0002\u0002\u014b\u014c\u00070\u0002\u0002",
+    "\u014c\u014d\u0007\u001f\u0002\u0002\u014d\u014e\u0007\u0003\u0002\u0002",
+    "\u014e\u014f\u0007\u0018\u0002\u0002\u014f\u0150\b\u000e\u0001\u0002",
+    "\u0150\u001b\u0003\u0002\u0002\u0002\u0151\u0152\u00070\u0002\u0002",
+    "\u0152\u0153\u0007\u001a\u0002\u0002\u0153\u0154\u0005\u0016\f\u0002",
+    "\u0154\u0155\b\u000f\u0001\u0002\u0155\u0156\u0007\u0018\u0002\u0002",
+    "\u0156\u001d\u0003\u0002\u0002\u0002\u001a$&13ACIXZgr}\u0083\u008a\u0090",
+    "\u0098\u00ac\u00b5\u00cd\u00de\u00e7\u013e\u0140\u0148"].join("");
 
 
 var atn = new antlr4.atn.ATNDeserializer().deserialize(serializedATN);
@@ -1647,11 +1683,14 @@ function ExpressionContext(parser, parent, invokingState) {
     this.ruleIndex = FaplaParser.RULE_expression;
     this.value = null
     this.type = null
+    this.a = null; // ExpressionContext
     this._STRINGCONSTANT = null; // Token
     this._REALCONSTANT = null; // Token
     this._BOOLEANCONSTANT = null; // Token
     this._expression = null; // ExpressionContext
     this._Identifier = null; // Token
+    this.b = null; // ExpressionContext
+    this.c = null; // ExpressionContext
     return this;
 }
 
@@ -1800,29 +1839,29 @@ FaplaParser.prototype.expression = function(_p) {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 227;
+        this.state = 229;
         this._errHandler.sync(this);
         var la_ = this._interp.adaptivePredict(this._input,20,this._ctx);
         switch(la_) {
         case 1:
             this.state = 206;
             localctx._STRINGCONSTANT = this.match(FaplaParser.STRINGCONSTANT);
-            localctx.type =  "string"
-                                    localctx.value =  (localctx._STRINGCONSTANT===null ? null : localctx._STRINGCONSTANT.text) 
+            localctx.type = "string";
+                                    localctx.value = (localctx._STRINGCONSTANT===null ? null : localctx._STRINGCONSTANT.text); 
             break;
 
         case 2:
             this.state = 208;
             localctx._REALCONSTANT = this.match(FaplaParser.REALCONSTANT);
-            localctx.type =  "real"
-                                  localctx.value =  (localctx._REALCONSTANT===null ? null : localctx._REALCONSTANT.text) 
+            localctx.type = "real";
+                                  localctx.value = (localctx._REALCONSTANT===null ? null : localctx._REALCONSTANT.text); 
             break;
 
         case 3:
             this.state = 210;
             localctx._BOOLEANCONSTANT = this.match(FaplaParser.BOOLEANCONSTANT);
-            localctx.type =  "bool"
-                                     localctx.value =  (localctx._BOOLEANCONSTANT===null ? null : localctx._BOOLEANCONSTANT.text) 
+            localctx.type = "bool";
+                                     localctx.value = (localctx._BOOLEANCONSTANT===null ? null : localctx._BOOLEANCONSTANT.text); 
             break;
 
         case 4:
@@ -1832,7 +1871,7 @@ FaplaParser.prototype.expression = function(_p) {
             localctx._expression = this.expression(0);
             this.state = 214;
             this.match(FaplaParser.PC);
-            localctx.value =  localctx.value
+            localctx.value =  "(" + localctx.value + ")"
             break;
 
         case 5:
@@ -1855,20 +1894,33 @@ FaplaParser.prototype.expression = function(_p) {
             this.state = 223;
             this.match(FaplaParser.NOT);
             this.state = 224;
-            localctx._expression = this.expression(11);
+            localctx.a = localctx._expression = this.expression(19);
+            if(TypeConverting.canConvertTo(localctx.a.type, "bool")) {
+                                       localctx.type =  "bool"
+                                   } else {
+                                       console.log(localctx.a.type + " can not NOT");
+                                       localctx.type = "noType"
+                                   }
+                                  
             break;
 
         case 7:
-            this.state = 225;
+            this.state = 227;
             localctx._Identifier = this.match(FaplaParser.Identifier);
             var s = currentScope.findSymbol((localctx._Identifier===null ? null : localctx._Identifier.text));
-                                if(!s) console.log("variable " +  (localctx._Identifier===null ? null : localctx._Identifier.text) + " not defined");
-                                else localctx.value = s.value
+                                if(!s) {
+                                    console.log("variable " +  (localctx._Identifier===null ? null : localctx._Identifier.text) + " not defined");
+                                    localctx.type =  "noType"
+                                } else {
+                                    localctx.type =  s.type
+                                    localctx.value =  s.value
+                                }
+                               
             break;
 
         }
         this._ctx.stop = this._input.LT(-1);
-        this.state = 262;
+        this.state = 318;
         this._errHandler.sync(this);
         var _alt = this._interp.adaptivePredict(this._input,22,this._ctx)
         while(_alt!=2 && _alt!=antlr4.atn.ATN.INVALID_ALT_NUMBER) {
@@ -1877,151 +1929,372 @@ FaplaParser.prototype.expression = function(_p) {
                     this.triggerExitRuleEvent();
                 }
                 _prevctx = localctx;
-                this.state = 260;
+                this.state = 316;
                 this._errHandler.sync(this);
                 var la_ = this._interp.adaptivePredict(this._input,21,this._ctx);
                 switch(la_) {
                 case 1:
                     localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
                     this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
-                    this.state = 229;
-                    if (!( this.precpred(this._ctx, 9))) {
-                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 9)");
-                    }
-                    this.state = 230;
-                    this.match(FaplaParser.POW);
                     this.state = 231;
-                    localctx._expression = this.expression(10);
+                    if (!( this.precpred(this._ctx, 17))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 17)");
+                    }
+                    this.state = 232;
+                    this.match(FaplaParser.POW);
+                    this.state = 233;
+                    localctx.b = localctx._expression = this.expression(18);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
+                                                                          localctx.type =  "real"
+                                                                     else {
+                                                                          console.log(localctx.a.type + " can not POW with " + localctx.b.type);
+                                                                          localctx.type = "noType"
+                                                                     }
+                                                                    
                     break;
 
                 case 2:
                     localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
                     this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
-                    this.state = 232;
-                    if (!( this.precpred(this._ctx, 8))) {
-                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 8)");
+                    this.state = 236;
+                    if (!( this.precpred(this._ctx, 16))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 16)");
                     }
-                    this.state = 233;
-                    _la = this._input.LA(1);
-                    if(!(((((_la - 40)) & ~0x1f) == 0 && ((1 << (_la - 40)) & ((1 << (FaplaParser.MUL - 40)) | (1 << (FaplaParser.DIV - 40)) | (1 << (FaplaParser.MOD - 40)))) !== 0))) {
-                    this._errHandler.recoverInline(this);
-                    }
-                    else {
-                        this.consume();
-                    }
-                    this.state = 234;
-                    localctx._expression = this.expression(9);
+                    this.state = 237;
+                    this.match(FaplaParser.MUL);
+                    this.state = 238;
+                    localctx.b = localctx._expression = this.expression(17);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
+                                                                    localctx.type =  "real"
+                                                               else {
+                                                                    console.log(localctx.a.type + " can not MUL with " + localctx.b.type);
+                                                                    localctx.type = "noType"
+                                                               }
+                                                              
                     break;
 
                 case 3:
                     localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
                     this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
-                    this.state = 235;
-                    if (!( this.precpred(this._ctx, 7))) {
-                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 7)");
+                    this.state = 241;
+                    if (!( this.precpred(this._ctx, 15))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 15)");
                     }
-                    this.state = 236;
-                    _la = this._input.LA(1);
-                    if(!(_la===FaplaParser.ADD || _la===FaplaParser.SUB)) {
-                    this._errHandler.recoverInline(this);
-                    }
-                    else {
-                        this.consume();
-                    }
-                    this.state = 237;
-                    localctx._expression = this.expression(8);
+                    this.state = 242;
+                    this.match(FaplaParser.DIV);
+                    this.state = 243;
+                    localctx.b = localctx._expression = this.expression(16);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
+                                                                         localctx.type =  "real"
+                                                                    else {
+                                                                         console.log(localctx.a.type + " can not DIV with " + localctx.b.type);
+                                                                         localctx.type = "noType"
+                                                                    }
+                                                                   
                     break;
 
                 case 4:
                     localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
                     this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
-                    this.state = 238;
-                    if (!( this.precpred(this._ctx, 6))) {
-                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 6)");
+                    this.state = 246;
+                    if (!( this.precpred(this._ctx, 14))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 14)");
                     }
-                    this.state = 239;
-                    _la = this._input.LA(1);
-                    if(!(((((_la - 25)) & ~0x1f) == 0 && ((1 << (_la - 25)) & ((1 << (FaplaParser.GT - 25)) | (1 << (FaplaParser.LT - 25)) | (1 << (FaplaParser.EQUAL - 25)) | (1 << (FaplaParser.LE - 25)) | (1 << (FaplaParser.GE - 25)) | (1 << (FaplaParser.NOTEQUAL - 25)))) !== 0))) {
-                    this._errHandler.recoverInline(this);
-                    }
-                    else {
-                        this.consume();
-                    }
-                    this.state = 240;
-                    localctx._expression = this.expression(7);
-                    localctx.type =  "bool"
+                    this.state = 247;
+                    this.match(FaplaParser.MOD);
+                    this.state = 248;
+                    localctx.b = localctx._expression = this.expression(15);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
+                                                                      localctx.type =  "real"
+                                                                 else {
+                                                                      console.log(localctx.a.type + " can not MOD with " + localctx.b.type);
+                                                                      localctx.type = "noType"
+                                                                 }
+                                                                
                     break;
 
                 case 5:
                     localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
                     this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
-                    this.state = 243;
-                    if (!( this.precpred(this._ctx, 5))) {
-                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 5)");
+                    this.state = 251;
+                    if (!( this.precpred(this._ctx, 13))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 13)");
                     }
-                    this.state = 244;
-                    this.match(FaplaParser.XOR);
-                    this.state = 245;
-                    localctx._expression = this.expression(6);
+                    this.state = 252;
+                    this.match(FaplaParser.ADD);
+                    this.state = 253;
+                    localctx.b = localctx._expression = this.expression(14);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
+                                                                       localctx.type =  "real"
+                                                                  else {
+                                                                       console.log(localctx.a.type + " can not ADD with " + localctx.b.type);
+                                                                       localctx.type = "noType"
+                                                                  }
+                                                                 
                     break;
 
                 case 6:
                     localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
                     this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
-                    this.state = 246;
-                    if (!( this.precpred(this._ctx, 4))) {
-                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 4)");
+                    this.state = 256;
+                    if (!( this.precpred(this._ctx, 12))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 12)");
                     }
-                    this.state = 247;
-                    this.match(FaplaParser.AND);
-                    this.state = 248;
-                    localctx._expression = this.expression(5);
+                    this.state = 257;
+                    this.match(FaplaParser.SUB);
+                    this.state = 258;
+                    localctx.b = localctx._expression = this.expression(13);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
+                                                                        localctx.type =  "real"
+                                                                   else {
+                                                                        console.log(localctx.a.type + " can not SUB with " + localctx.b.type);
+                                                                        localctx.type = "noType"
+                                                                   }
+                                                                  
                     break;
 
                 case 7:
                     localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
                     this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
-                    this.state = 249;
-                    if (!( this.precpred(this._ctx, 3))) {
-                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 3)");
+                    this.state = 261;
+                    if (!( this.precpred(this._ctx, 11))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 11)");
                     }
-                    this.state = 250;
-                    this.match(FaplaParser.OR);
-                    this.state = 251;
-                    localctx._expression = this.expression(4);
+                    this.state = 262;
+                    this.match(FaplaParser.LE);
+                    this.state = 263;
+                    localctx.b = localctx._expression = this.expression(12);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
+                                                                         localctx.type =  "bool"
+                                                                    else {
+                                                                         console.log(localctx.a.type + " can not LE with " + localctx.b.type);
+                                                                         localctx.type = "noType"
+                                                                    }
+                                                                   
                     break;
 
                 case 8:
                     localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
                     this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
-                    this.state = 252;
-                    if (!( this.precpred(this._ctx, 2))) {
-                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 2)");
+                    this.state = 266;
+                    if (!( this.precpred(this._ctx, 10))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 10)");
                     }
-                    this.state = 253;
-                    this.match(FaplaParser.QUESTION);
-                    this.state = 254;
-                    localctx._expression = this.expression(0);
-                    this.state = 255;
-                    this.match(FaplaParser.COLON);
-                    this.state = 256;
-                    localctx._expression = this.expression(3);
+                    this.state = 267;
+                    this.match(FaplaParser.GE);
+                    this.state = 268;
+                    localctx.b = localctx._expression = this.expression(11);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
+                                                                                                             localctx.type =  "bool"
+                                                                                                        else {
+                                                                                                             console.log(localctx.a.type + " can not GE with " + localctx.b.type);
+                                                                                                             localctx.type = "noType"
+                                                                                                        }
+                                                                                                       
                     break;
 
                 case 9:
                     localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
                     this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
-                    this.state = 258;
-                    if (!( this.precpred(this._ctx, 10))) {
-                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 10)");
+                    this.state = 271;
+                    if (!( this.precpred(this._ctx, 9))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 9)");
                     }
-                    this.state = 259;
+                    this.state = 272;
+                    this.match(FaplaParser.GT);
+                    this.state = 273;
+                    localctx.b = localctx._expression = this.expression(10);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
+                                                                                                             localctx.type =  "bool"
+                                                                                                        else {
+                                                                                                             console.log(localctx.a.type + " can not GT with " + localctx.b.type);
+                                                                                                             localctx.type = "noType"
+                                                                                                        }
+                                                                                                       
+                    break;
+
+                case 10:
+                    localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
+                    this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
+                    this.state = 276;
+                    if (!( this.precpred(this._ctx, 8))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 8)");
+                    }
+                    this.state = 277;
+                    this.match(FaplaParser.LT);
+                    this.state = 278;
+                    localctx.b = localctx._expression = this.expression(9);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
+                                                                                                             localctx.type =  "bool"
+                                                                                                        else {
+                                                                                                             console.log(localctx.a.type + " can not SUB with " + localctx.b.type);
+                                                                                                             localctx.type = "noType"
+                                                                                                        }
+                                                                                                       
+                    break;
+
+                case 11:
+                    localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
+                    this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
+                    this.state = 281;
+                    if (!( this.precpred(this._ctx, 7))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 7)");
+                    }
+                    this.state = 282;
+                    this.match(FaplaParser.EQUAL);
+                    this.state = 283;
+                    localctx.b = localctx._expression = this.expression(8);
+                    if(TypeConverting.canConvertTo(localctx.a.type, localctx.b.type))
+                                                                            localctx.type =  "bool"
+                                                                       else {
+                                                                            console.log(localctx.a.type + " can not EQUAL with " + localctx.b.type);
+                                                                            localctx.type = "noType"
+                                                                       }
+                                                                      
+                    break;
+
+                case 12:
+                    localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
+                    this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
+                    this.state = 286;
+                    if (!( this.precpred(this._ctx, 6))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 6)");
+                    }
+                    this.state = 287;
+                    this.match(FaplaParser.NOTEQUAL);
+                    this.state = 288;
+                    localctx.b = localctx._expression = this.expression(7);
+                    if(TypeConverting.canConvertTo(localctx.a.type, localctx.b.type))
+                                            localctx.type =  "bool"
+                                       else {
+                                            console.log(localctx.a.type + " can not NOTEQUAL with " + localctx.b.type);
+                                            localctx.type = "noType"
+                                       }
+                                      
+                    break;
+
+                case 13:
+                    localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
+                    this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
+                    this.state = 291;
+                    if (!( this.precpred(this._ctx, 5))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 5)");
+                    }
+                    this.state = 292;
+                    this.match(FaplaParser.XOR);
+                    this.state = 293;
+                    localctx.b = localctx._expression = this.expression(6);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
+                                            localctx.type =  "bool"
+                                       else {
+                                            console.log(localctx.a.type + " can not XOR with " + localctx.b.type);
+                                            localctx.type = "noType"
+                                       }
+                                      
+                    break;
+
+                case 14:
+                    localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
+                    this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
+                    this.state = 296;
+                    if (!( this.precpred(this._ctx, 4))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 4)");
+                    }
+                    this.state = 297;
+                    this.match(FaplaParser.AND);
+                    this.state = 298;
+                    localctx.b = localctx._expression = this.expression(5);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "bool") && TypeConverting.canConvertTo(localctx.b.type, "bool"))
+                                            localctx.type =  "bool"
+                                       else {
+                                            console.log(localctx.a.type + " can not AND with " + localctx.b.type);
+                                            localctx.type = "noType"
+                                       }
+                                      
+                    break;
+
+                case 15:
+                    localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
+                    this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
+                    this.state = 301;
+                    if (!( this.precpred(this._ctx, 3))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 3)");
+                    }
+                    this.state = 302;
+                    this.match(FaplaParser.OR);
+                    this.state = 303;
+                    localctx.b = localctx._expression = this.expression(4);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "bool") && TypeConverting.canConvertTo(localctx.b.type, "bool"))
+                                            localctx.type =  "bool"
+                                       else {
+                                            console.log(localctx.a.type + " can not OR with " + localctx.b.type);
+                                            localctx.type = "noType"
+                                       }
+                                      
+                    break;
+
+                case 16:
+                    localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
+                    this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
+                    this.state = 306;
+                    if (!( this.precpred(this._ctx, 2))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 2)");
+                    }
+                    this.state = 307;
+                    this.match(FaplaParser.QUESTION);
+                    this.state = 308;
+                    localctx.b = localctx._expression = this.expression(0);
+                    this.state = 309;
+                    this.match(FaplaParser.COLON);
+                    this.state = 310;
+                    localctx.c = localctx._expression = this.expression(3);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "bool"))
+                                            localctx.type =  localctx.b.type
+                                       else {
+                                            console.log("condition expression must have a bool");
+                                            localctx.type = "noType"
+                                       }
+                                      
+                    break;
+
+                case 17:
+                    localctx = new ExpressionContext(this, _parentctx, _parentState);
+                    localctx.a = _prevctx;
+                    this.pushNewRecursionContext(localctx, _startState, FaplaParser.RULE_expression);
+                    this.state = 313;
+                    if (!( this.precpred(this._ctx, 18))) {
+                        throw new antlr4.error.FailedPredicateException(this, "this.precpred(this._ctx, 18)");
+                    }
+                    this.state = 314;
                     this.match(FaplaParser.FACTORIAL);
+                    if(TypeConverting.canConvertTo(localctx.a.type, "real")) {
+                                                                  localctx.type =  "real"
+                                                              } else {
+                                                                  console.log(localctx.a.type + " can not factorial");
+                                                                  localctx.type = "noType"
+                                                              }
+                                                             
                     break;
 
                 } 
             }
-            this.state = 264;
+            this.state = 320;
             this._errHandler.sync(this);
             _alt = this._interp.adaptivePredict(this._input,22,this._ctx);
         }
@@ -2103,17 +2376,17 @@ FaplaParser.prototype.expressionList = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 265;
+        this.state = 321;
         this.expression(0);
-        this.state = 270;
+        this.state = 326;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         while(_la===FaplaParser.COMMA) {
-            this.state = 266;
+            this.state = 322;
             this.match(FaplaParser.COMMA);
-            this.state = 267;
+            this.state = 323;
             this.expression(0);
-            this.state = 272;
+            this.state = 328;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         }
@@ -2188,13 +2461,13 @@ FaplaParser.prototype.varDeclaration = function() {
     this.enterRule(localctx, 24, FaplaParser.RULE_varDeclaration);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 273;
+        this.state = 329;
         localctx._Identifier = this.match(FaplaParser.Identifier);
-        this.state = 274;
+        this.state = 330;
         this.match(FaplaParser.COLON);
-        this.state = 275;
+        this.state = 331;
         localctx._PrimitiveType = this.match(FaplaParser.PrimitiveType);
-        this.state = 276;
+        this.state = 332;
         this.match(FaplaParser.SEMICOLON);
         currentScope.addSymbol(new Symbol((localctx._Identifier===null ? null : localctx._Identifier.text), (localctx._PrimitiveType===null ? null : localctx._PrimitiveType.text), null));
     } catch (re) {
@@ -2268,14 +2541,14 @@ FaplaParser.prototype.assignment = function() {
     this.enterRule(localctx, 26, FaplaParser.RULE_assignment);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 279;
+        this.state = 335;
         localctx._Identifier = this.match(FaplaParser.Identifier);
-        this.state = 280;
+        this.state = 336;
         this.match(FaplaParser.ASSIGN);
-        this.state = 281;
+        this.state = 337;
         localctx._expression = this.expression(0);
         currentScope.findSymbol((localctx._Identifier===null ? null : localctx._Identifier.text)).value = localctx._expression.value
-        this.state = 283;
+        this.state = 339;
         this.match(FaplaParser.SEMICOLON);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -2304,23 +2577,39 @@ FaplaParser.prototype.sempred = function(localctx, ruleIndex, predIndex) {
 FaplaParser.prototype.expression_sempred = function(localctx, predIndex) {
 	switch(predIndex) {
 		case 0:
-			return this.precpred(this._ctx, 9);
+			return this.precpred(this._ctx, 17);
 		case 1:
-			return this.precpred(this._ctx, 8);
+			return this.precpred(this._ctx, 16);
 		case 2:
-			return this.precpred(this._ctx, 7);
+			return this.precpred(this._ctx, 15);
 		case 3:
-			return this.precpred(this._ctx, 6);
+			return this.precpred(this._ctx, 14);
 		case 4:
-			return this.precpred(this._ctx, 5);
+			return this.precpred(this._ctx, 13);
 		case 5:
-			return this.precpred(this._ctx, 4);
+			return this.precpred(this._ctx, 12);
 		case 6:
-			return this.precpred(this._ctx, 3);
+			return this.precpred(this._ctx, 11);
 		case 7:
-			return this.precpred(this._ctx, 2);
-		case 8:
 			return this.precpred(this._ctx, 10);
+		case 8:
+			return this.precpred(this._ctx, 9);
+		case 9:
+			return this.precpred(this._ctx, 8);
+		case 10:
+			return this.precpred(this._ctx, 7);
+		case 11:
+			return this.precpred(this._ctx, 6);
+		case 12:
+			return this.precpred(this._ctx, 5);
+		case 13:
+			return this.precpred(this._ctx, 4);
+		case 14:
+			return this.precpred(this._ctx, 3);
+		case 15:
+			return this.precpred(this._ctx, 2);
+		case 16:
+			return this.precpred(this._ctx, 18);
 		default:
 			throw "No predicate with index:" + predIndex;
 	}
