@@ -1,12 +1,15 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>Fapla IDE</title>
     <link rel="icon" href="app/fapla-icon.png" type="image/png">
     <link rel="stylesheet" href="app/libs/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="app/libs/codemirror/theme/neo.css">
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <!--
     <link rel="stylesheet" href="app/css/mainStyle.css">
-
+    -->
     <script src="app/libs/codemirror/lib/codemirror.js"></script>
     <script src="app/libs/codemirror/mode/fapla/fapla.js"></script>
 
@@ -14,58 +17,86 @@
     <script>$ = window.$ = window.jQuery = require('./node_modules/jquery/dist/jquery.js')</script>
     <!-- to browser support jquery -->
     <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        #toolbar {
+            height: 50px;
+            background-color: #cad6e8;
+        }
+
+        #panel {
+            width: 20%;
+            float: left;
+        }
+
+        #editor {
+            width: 80%;
+            float: left;
+        }
+
+        .CodeMirror {
+            height: 100%;
+            font-size: 20px;
+            background: white;
+        }
+
+        #console {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 160px;
+            border-top: 10px #d0cbba solid;
+            background-color: #eee;
+        }
+        .box {
+            margin: 0;
+            padding: 0;
+        }
+        .fill {
+            height: 100%;
+        }
+    </style>
 </head>
-
-<body>
-
-<div class="wrapper">
-
-    <div class="left-panel">
-    </div>
-
-    <div class="v-indicator"></div>
-
-    <div class="right-panel">
-        <div class="tool-bar"></div>
-        <ul class="tab-pane">
-            <li>
-                <a class="is-show" href="#">main.fapla</a>
-            </li>
-            <li>
-                <a href="#">main.fapla</a>
-            </li>
-            <li>
-                <a href="#">main.fapla</a>
-            </li>
-        </ul>
-        <div style="line-height: 0; height: 90%;">
-            <textarea id="source" rows="30" cols="160"></textarea>
+<body id="body">
+<div id="toolbar"></div>
+<div id="panel">
+    <div class="panel panel-default fill box">
+        <div class="panel-heading">
+            <h3 class="panel-title">Panel title</h3>
         </div>
-        <div id="run-view">
-            <div id="run-view-header">
-
-            </div>
-            <div id="run-view-errors"></div>
+        <div class="panel-body">
+            Panel content
         </div>
     </div>
 </div>
+<div id="editor">
+    <textarea id="source" rows="30" cols="160"></textarea>
+    <div id="console"></div>
+</div>
 
-</body>
 <script>
+    initialize();
+
     var antlr4 = require('antlr4');
     var FaplaLexer = require('../fapla-js/FaplaLexer');
     var FaplaParser = require('../fapla-js/FaplaParser');
-
-    console.log(FaplaParser);
     $(function () {
         var textArea = $('#source')[0];
         var editor = CodeMirror.fromTextArea(textArea, {
-            theme: 'default',
+            theme: 'neo',
             lineNumbers: true
         });
         editor.focus();
         editor.on('change', function () {
-            $('#run-view-errors').text('');
+            $('#console').text('');
             var input = editor.getValue();
             var chars = new antlr4.InputStream(input);
             var lexer = new FaplaLexer.FaplaLexer(chars);
@@ -79,12 +110,24 @@
                 }
                 var line = offendingToken.line;
                 var column = offendingToken.column;
-                $('#run-view-errors').text('line :' + line + ' col :' + column + ' : ' + msg);
+                $('#console').text('line :' + line + ' col :' + column + ' : ' + msg);
                 console.error(line, column, msg);
             }
             parser.buildParseTrees = true;
-            var tree = parser.startState();
+            parser.program();
         });
     });
+
+    function initialize() {
+        var toolbarHeight = $('#toolbar').height() + 25;
+        var height = screen.height;
+        var editorHeight = height - toolbarHeight;
+
+        $('#panel').height(editorHeight);
+        $('#editor').height(editorHeight);
+
+        console.log(toolbarHeight, height, editorHeight);
+    }
 </script>
+</body>
 </html>
