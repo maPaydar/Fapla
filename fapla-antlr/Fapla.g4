@@ -3,9 +3,40 @@ grammar Fapla;
 @parser::header {
 const Scope = require('./Scope').Scope;
 const Symbol = require('./Symbol').Symbol;
+const Function = require('./Function').Function;
 const TypeConverting = require('./TypeConverting').TypeConverting;
-var rootScope = new Scope(null);
+var rootScope = new Scope('root', null);
 var currentScope = rootScope;
+var functionTable = [];
+
+function hasAccess(callerName, calleName, functionTable) {
+    var i = 0, j = 0;
+    for(i = 0; i < functionTable.length; i++) {
+        if(functionTable[i].name == callerName) {
+            break;
+        }
+    }
+    for(j = 0; j < functionTable.length; j++) {
+        if(functionTable[j].name == calleName) {
+            break;
+        }
+    }
+    if(j == functionTable.length) {
+        return "notFound";
+    } else if (j > i) {
+        return "notDecBefore";
+    }
+    return null;
+}
+
+function getFunction(functionName) {
+    for(var i = 0; i < functionTable.length; i++) {
+        if(functionTable[i].name == functionName) {
+            break;
+        }
+    }
+    return functionTable[i];
+}
 }
 
 @parser::members {
@@ -13,37 +44,74 @@ var currentScope = rootScope;
 }
 
 program
-    :   (moduleDeclaration {var scope = new Scope(rootScope);currentScope=scope;} | noRetuenModuleDeclaration {var scope = new Scope(rootScope);currentScope=scope;})* mainModuleDeclaration {var mainScope = new Scope(rootScope);currentScope=mainScope;} (moduleDeclaration {var scope = new Scope(rootScope);currentScope=scope;} | noRetuenModuleDeclaration {var scope = new Scope(rootScope);currentScope=scope;})*
+    :   (moduleDeclaration)* mainModuleDeclaration (moduleDeclaration)*
     ;
 
 moduleDeclaration
     :   MODULE
-        Identifier
-        (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON {currentScope.addSymbol(new Symbol($Identifier.text, $PrimitiveType.text, null));})+)?
+        a=Identifier
+        {
+            var scope = new Scope($a.text, rootScope);
+            currentScope = scope;
+            var paramterList = [];
+        }
+        (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON
+        {
+            var s = new Symbol($Identifier.text, $PrimitiveType.text, null);
+            paramterList.push(s);
+            currentScope.addSymbol(s);
+        }
+        )+)?
         (OUTPUT COLON PrimitiveType SEMICOLON)?
-        block
-    ;
-
-noRetuenModuleDeclaration
-    :   MODULE
-        Identifier
-        (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON {currentScope.addSymbol(new Symbol($Identifier.text, $PrimitiveType.text, null));})+)?
-        noReturnBlock
+        {
+            var f = new Function($a.text, $PrimitiveType.text, paramterList);
+            functionTable.push(f);
+        }
+        moduleBlock
     ;
 
 mainModuleDeclaration
     :   MODULE
-        Identifier
-        noReturnBlock
+        'main'
+        {
+            var mainScope = new Scope('main', rootScope);
+            currentScope = mainScope;
+            var f = new Function('main', null, null);
+            functionTable.push(f);
+        }
+        moduleBlock
+    ;
+
+moduleBlock
+    :
+        BEGIN statement*
+        {
+             var f = getFunction(currentScope.name);
+             if (!f.hadReturn && f.name != 'main') {
+                 console.error("module " + f.name + " must be has return experssion");
+             }
+        }
+        END
+    ;
+
+moduleBlockWithReturn
+    :
+        BEGIN statement*
+        RETURN expression SEMICOLON
+        {
+            // check if currentFunctinon has output or not
+            var f = getFunction(currentScope.name);
+            if(!f.outputType) {
+                console.error("module " + f.name + " has no output");
+            } else if(!TypeConverting.canConvertTo($expression.type, f.outputType)) {
+                console.error("module " + f.name + " must return " + f.outputType);
+            }
+        }
+        END
     ;
 
 block
     :   BEGIN {currentScope = currentScope.enterScope();} statement* END {currentScope = currentScope.exitScope();}
-    ;
-
-noReturnBlock
-    :
-        BEGIN {currentScope = currentScope.enterScope();} noReturnStatement* END {currentScope = currentScope.exitScope();}
     ;
 
 supBlock
@@ -52,35 +120,39 @@ supBlock
     |   statement
     ;
 
-noReturnSupBlock
-    :
-    BEGIN {currentScope = currentScope.enterScope();}  noReturnStatement* END {currentScope = currentScope.exitScope();}
-    |   noReturnStatement
-    ;
+statement returns [type]
+    :   IF expression
+        {   if($expression.type != "bool")
+                console.log("expression " + $expression.text + " must be a bool in if-statement condition");
+        }
+        THEN supBlock (ELSE supBlock)?
 
-noReturnStatement
-    :
-        IF expression THEN noReturnSupBlock (ELSE noReturnSupBlock)?
-    |   WHILE expression noReturnSupBlock
-    |   expression SEMICOLON
-    |   assignment
-    |   SEMICOLON
-    |   varDeclaration
-    |   WRITE expression SEMICOLON
-    |   READ Identifier SEMICOLON
-    |   noReturnBlock
-    ;
-
-statement
-    :   IF expression {if($expression.type != "bool") console.log("expression " + $expression.text + " must be a bool in if-statement condition");} THEN supBlock (ELSE supBlock)?
     |   WHILE expression supBlock
+        {   if($expression.type != "bool")
+                console.log("expression " + $expression.text + " must be a bool in if-statement condition");
+        }
     |   expression SEMICOLON
     |   assignment
     |   SEMICOLON
     |   varDeclaration
     |   WRITE expression SEMICOLON
     |   READ Identifier SEMICOLON
+        {
+            if(!currentScope.findSymbol($Identifier.text)) {
+                console.error("variable " + $Identifier.text + " must be declared before");
+            }
+        }
     |   RETURN expression SEMICOLON
+        {
+            // check if currentFunctinon has output or not
+            var f = getFunction(currentScope.name);
+            f.hadReturn = true;
+            if(!f.outputType) {
+                console.error("module " + f.name + " has no output");
+            } else if(!TypeConverting.canConvertTo($expression.type, f.outputType)) {
+                console.error("module " + f.name + " must return " + f.outputType);
+            }
+        }
     |   block
     ;
 
@@ -99,8 +171,18 @@ expression returns [value, type]
 
 
     |   Identifier PO expressionList? PC
+        {
+            var callerName = currentScope.name;
+            var calleName = $Identifier.text;
+            var access = hasAccess(callerName, calleName, functionTable);
+            if(access == "notFound") {
+                console.error("module " + calleName + " not defined");
+            } else if(access == "notDecBefore") {
+                console.error("module " + calleName + " not defined before module " + callerName);
+            } else {
 
-
+            }
+        }
     |   NOT a=expression {if(TypeConverting.canConvertTo($a.type, "bool")) {
                            $type = "bool";
                        } else {

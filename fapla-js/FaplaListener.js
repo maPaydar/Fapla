@@ -29,21 +29,30 @@ FaplaListener.prototype.exitModuleDeclaration = function(ctx) {
 };
 
 
-// Enter a parse tree produced by FaplaParser#noRetuenModuleDeclaration.
-FaplaListener.prototype.enterNoRetuenModuleDeclaration = function(ctx) {
-};
-
-// Exit a parse tree produced by FaplaParser#noRetuenModuleDeclaration.
-FaplaListener.prototype.exitNoRetuenModuleDeclaration = function(ctx) {
-};
-
-
 // Enter a parse tree produced by FaplaParser#mainModuleDeclaration.
 FaplaListener.prototype.enterMainModuleDeclaration = function(ctx) {
 };
 
 // Exit a parse tree produced by FaplaParser#mainModuleDeclaration.
 FaplaListener.prototype.exitMainModuleDeclaration = function(ctx) {
+};
+
+
+// Enter a parse tree produced by FaplaParser#moduleBlock.
+FaplaListener.prototype.enterModuleBlock = function(ctx) {
+};
+
+// Exit a parse tree produced by FaplaParser#moduleBlock.
+FaplaListener.prototype.exitModuleBlock = function(ctx) {
+};
+
+
+// Enter a parse tree produced by FaplaParser#moduleBlockWithReturn.
+FaplaListener.prototype.enterModuleBlockWithReturn = function(ctx) {
+};
+
+// Exit a parse tree produced by FaplaParser#moduleBlockWithReturn.
+FaplaListener.prototype.exitModuleBlockWithReturn = function(ctx) {
 };
 
 
@@ -56,39 +65,12 @@ FaplaListener.prototype.exitBlock = function(ctx) {
 };
 
 
-// Enter a parse tree produced by FaplaParser#noReturnBlock.
-FaplaListener.prototype.enterNoReturnBlock = function(ctx) {
-};
-
-// Exit a parse tree produced by FaplaParser#noReturnBlock.
-FaplaListener.prototype.exitNoReturnBlock = function(ctx) {
-};
-
-
 // Enter a parse tree produced by FaplaParser#supBlock.
 FaplaListener.prototype.enterSupBlock = function(ctx) {
 };
 
 // Exit a parse tree produced by FaplaParser#supBlock.
 FaplaListener.prototype.exitSupBlock = function(ctx) {
-};
-
-
-// Enter a parse tree produced by FaplaParser#noReturnSupBlock.
-FaplaListener.prototype.enterNoReturnSupBlock = function(ctx) {
-};
-
-// Exit a parse tree produced by FaplaParser#noReturnSupBlock.
-FaplaListener.prototype.exitNoReturnSupBlock = function(ctx) {
-};
-
-
-// Enter a parse tree produced by FaplaParser#noReturnStatement.
-FaplaListener.prototype.enterNoReturnStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by FaplaParser#noReturnStatement.
-FaplaListener.prototype.exitNoReturnStatement = function(ctx) {
 };
 
 

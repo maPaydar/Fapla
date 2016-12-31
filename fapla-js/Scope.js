@@ -3,8 +3,9 @@
  */
 "use strict";
 var Scope = (function () {
-    function Scope(parent) {
+    function Scope(name, parent) {
 
+        this.name = name;
         this.table = {};
         this.parent = parent;
 
@@ -13,7 +14,7 @@ var Scope = (function () {
         }
 
         this.enterScope = function () {
-            return new Scope(this);
+            return new Scope(null, this);
         }
 
         this.exitScope = function () {
