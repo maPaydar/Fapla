@@ -88,7 +88,7 @@ moduleBlock
         {
              var f = getFunction(currentScope.name);
              if (!f.hadReturn && f.name != 'main') {
-                 console.error("module " + f.name + " must be has return experssion");
+                 FaplaParser.prototype.logger.error("module " + f.name + " must be has return experssion");
              }
         }
         END
@@ -102,9 +102,9 @@ moduleBlockWithReturn
             // check if currentFunctinon has output or not
             var f = getFunction(currentScope.name);
             if(!f.outputType) {
-                console.error("module " + f.name + " has no output");
+                FaplaParser.prototype.logger.error("module " + f.name + " has no output");
             } else if(!TypeConverting.canConvertTo($expression.type, f.outputType)) {
-                console.error("module " + f.name + " must return " + f.outputType);
+                FaplaParser.prototype.logger.error("module " + f.name + " must return " + f.outputType);
             }
         }
         END
@@ -123,13 +123,13 @@ supBlock
 statement returns [type]
     :   IF expression
         {   if($expression.type != "bool")
-                console.log("expression " + $expression.text + " must be a bool in if-statement condition");
+                FaplaParser.prototype.logger.error("expression " + $expression.text + " must be a bool in if-statement condition");
         }
         THEN supBlock (ELSE supBlock)?
 
     |   WHILE expression supBlock
         {   if($expression.type != "bool")
-                console.log("expression " + $expression.text + " must be a bool in if-statement condition");
+                FaplaParser.prototype.logger.error("expression " + $expression.text + " must be a bool in if-statement condition");
         }
     |   expression SEMICOLON
     |   assignment
@@ -139,7 +139,7 @@ statement returns [type]
     |   READ Identifier SEMICOLON
         {
             if(!currentScope.findSymbol($Identifier.text)) {
-                console.error("variable " + $Identifier.text + " must be declared before");
+                FaplaParser.prototype.logger.error("variable " + $Identifier.text + " must be declared before");
             }
         }
     |   RETURN expression SEMICOLON
@@ -148,9 +148,9 @@ statement returns [type]
             var f = getFunction(currentScope.name);
             f.hadReturn = true;
             if(!f.outputType) {
-                console.error("module " + f.name + " has no output");
+                FaplaParser.prototype.logger.error("module " + f.name + " has no output");
             } else if(!TypeConverting.canConvertTo($expression.type, f.outputType)) {
-                console.error("module " + f.name + " must return " + f.outputType);
+                FaplaParser.prototype.logger.error("module " + f.name + " must return " + f.outputType);
             }
         }
     |   block
@@ -176,9 +176,9 @@ expression returns [value, type]
             var calleName = $Identifier.text;
             var access = hasAccess(callerName, calleName, functionTable);
             if(access == "notFound") {
-                console.error("module " + calleName + " not defined");
+                FaplaParser.prototype.logger.error("module " + calleName + " not defined");
             } else if(access == "notDecBefore") {
-                console.error("module " + calleName + " not defined before module " + callerName);
+                FaplaParser.prototype.logger.error("module " + calleName + " not defined before module " + callerName);
             } else {
 
             }
@@ -186,7 +186,7 @@ expression returns [value, type]
     |   NOT a=expression {if(TypeConverting.canConvertTo($a.type, "bool")) {
                            $type = "bool";
                        } else {
-                           console.log($a.type + " can not NOT");
+                           FaplaParser.prototype.logger.error($a.type + " can not NOT");
                            $type="noType";
                        }
                       }
@@ -195,7 +195,7 @@ expression returns [value, type]
     |   a=expression FACTORIAL {if(TypeConverting.canConvertTo($a.type, "real")) {
                                     $type = "real";
                                 } else {
-                                    console.log($a.type + " can not factorial");
+                                    FaplaParser.prototype.logger.error($a.type + " can not factorial");
                                     $type="noType";
                                 }
                                }
@@ -204,7 +204,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
                 $type = "real";
            else {
-                console.log($a.type + " can not POW with " + $b.type);
+                FaplaParser.prototype.logger.error($a.type + " can not POW with " + $b.type);
                 $type="noType";
            }
           }
@@ -213,7 +213,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
               $type = "real";
          else {
-              console.log($a.type + " can not MUL with " + $b.type);
+              FaplaParser.prototype.logger.error($a.type + " can not MUL with " + $b.type);
               $type="noType";
          }
         }
@@ -221,7 +221,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
            $type = "real";
         else {
-           console.log($a.type + " can not DIV with " + $b.type);
+           FaplaParser.prototype.logger.error($a.type + " can not DIV with " + $b.type);
            $type="noType";
         }
         }
@@ -229,7 +229,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
             $type = "real";
         else {
-            console.log($a.type + " can not MOD with " + $b.type);
+            FaplaParser.prototype.logger.error($a.type + " can not MOD with " + $b.type);
             $type="noType";
         }
         }
@@ -241,7 +241,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
               $type = "real";
          else {
-              console.log($a.type + " can not SUB with " + $b.type);
+              FaplaParser.prototype.logger.error($a.type + " can not SUB with " + $b.type);
               $type="noType";
          }
         }
@@ -249,7 +249,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
                $type = "bool";
           else {
-               console.log($a.type + " can not LE with " + $b.type);
+               FaplaParser.prototype.logger.error($a.type + " can not LE with " + $b.type);
                $type="noType";
           }
          }
@@ -257,7 +257,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
                $type = "bool";
           else {
-               console.log($a.type + " can not GE with " + $b.type);
+               FaplaParser.prototype.logger.error($a.type + " can not GE with " + $b.type);
                $type="noType";
           }
          }
@@ -266,7 +266,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
            $type = "bool";
          else {
-           console.log($a.type + " can not GT with " + $b.type);
+           FaplaParser.prototype.logger.error($a.type + " can not GT with " + $b.type);
            $type="noType";
          }
         }
@@ -275,7 +275,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
            $type = "bool";
          else {
-           console.log($a.type + " can not SUB with " + $b.type);
+           FaplaParser.prototype.logger.error($a.type + " can not SUB with " + $b.type);
            $type="noType";
          }
         }
@@ -284,7 +284,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, $b.type))
               $type = "bool";
          else {
-              console.log($a.type + " can not EQUAL with " + $b.type);
+              FaplaParser.prototype.logger.error($a.type + " can not EQUAL with " + $b.type);
               $type="noType";
          }
         }
@@ -293,7 +293,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, $b.type))
               $type = "bool";
          else {
-              console.log($a.type + " can not NOTEQUAL with " + $b.type);
+              FaplaParser.prototype.logger.error($a.type + " can not NOTEQUAL with " + $b.type);
               $type="noType";
          }
         }
@@ -301,7 +301,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
               $type = "real";
          else {
-              console.log($a.type + " can not XOR with " + $b.type);
+              FaplaParser.prototype.logger.error($a.type + " can not XOR with " + $b.type);
               $type="noType";
          }
         }
@@ -309,7 +309,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, "bool") && TypeConverting.canConvertTo($b.type, "bool"))
               $type = "bool";
          else {
-              console.log($a.type + " can not AND with " + $b.type);
+              FaplaParser.prototype.logger.error($a.type + " can not AND with " + $b.type);
               $type="noType";
          }
         }
@@ -317,7 +317,7 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, "bool") && TypeConverting.canConvertTo($b.type, "bool"))
               $type = "bool";
          else {
-              console.log($a.type + " can not OR with " + $b.type);
+              FaplaParser.prototype.logger.error($a.type + " can not OR with " + $b.type);
               $type="noType";
          }
         }
@@ -325,13 +325,13 @@ expression returns [value, type]
         {if(TypeConverting.canConvertTo($a.type, "bool"))
               $type = $b.type;
          else {
-              console.log("condition expression must have a bool");
+              FaplaParser.prototype.logger.error("condition expression must have a bool");
               $type="noType";
          }
         }
     |   Identifier {var s = currentScope.findSymbol($Identifier.text);
                     if(!s) {
-                        console.log("variable " +  $Identifier.text + " not defined");
+                        FaplaParser.prototype.logger.error("variable " +  $Identifier.text + " not defined");
                         $type = "noType";
                     } else {
                         $type = s.type;
@@ -355,14 +355,14 @@ assignment returns [type]
         {
             var s = currentScope.findSymbol($Identifier.text);
             if(!s) {
-                console.log("variable " +  $Identifier.text + " not defined");
+                FaplaParser.prototype.logger.error("variable " +  $Identifier.text + " not defined");
                 $type = "noType";
             } else {
                 if(TypeConverting.canConvertTo($expression.type, s.type)) {
                     s.value = $expression.value;
                     $type = s.type;
                 } else {
-                    console.log("can not assign " + $expression.type + " to " + s.type);
+                    FaplaParser.prototype.logger.error("can not assign " + $expression.type + " to " + s.type);
                     $type = "noType";
                 }
             }

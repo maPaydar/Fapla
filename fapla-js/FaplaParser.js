@@ -759,7 +759,7 @@ FaplaParser.prototype.moduleBlock = function() {
 
                      var f = getFunction(currentScope.name);
                      if (!f.hadReturn && f.name != 'main') {
-                         console.error("module " + f.name + " must be has return experssion");
+                         FaplaParser.prototype.logger.error("module " + f.name + " must be has return experssion");
                      }
                 
         this.state = 75;
@@ -874,9 +874,9 @@ FaplaParser.prototype.moduleBlockWithReturn = function() {
                     // check if currentFunctinon has output or not
                     var f = getFunction(currentScope.name);
                     if(!f.outputType) {
-                        console.error("module " + f.name + " has no output");
+                        FaplaParser.prototype.logger.error("module " + f.name + " has no output");
                     } else if(!TypeConverting.canConvertTo(localctx._expression.type, f.outputType)) {
-                        console.error("module " + f.name + " must return " + f.outputType);
+                        FaplaParser.prototype.logger.error("module " + f.name + " must return " + f.outputType);
                     }
                 
         this.state = 88;
@@ -1202,7 +1202,7 @@ FaplaParser.prototype.statement = function() {
             this.state = 115;
             localctx._expression = this.expression(0);
                if(localctx._expression.type != "bool")
-                            console.log("expression " + (localctx._expression===null ? null : this._input.getText(new antlr4.Interval(localctx._expression.start,localctx._expression.stop))) + " must be a bool in if-statement condition");
+                            FaplaParser.prototype.logger.error("expression " + (localctx._expression===null ? null : this._input.getText(new antlr4.Interval(localctx._expression.start,localctx._expression.stop))) + " must be a bool in if-statement condition");
                     
             this.state = 117;
             this.match(FaplaParser.THEN);
@@ -1229,7 +1229,7 @@ FaplaParser.prototype.statement = function() {
             this.state = 125;
             this.supBlock();
                if(localctx._expression.type != "bool")
-                            console.log("expression " + (localctx._expression===null ? null : this._input.getText(new antlr4.Interval(localctx._expression.start,localctx._expression.stop))) + " must be a bool in if-statement condition");
+                            FaplaParser.prototype.logger.error("expression " + (localctx._expression===null ? null : this._input.getText(new antlr4.Interval(localctx._expression.start,localctx._expression.stop))) + " must be a bool in if-statement condition");
                     
             break;
 
@@ -1279,7 +1279,7 @@ FaplaParser.prototype.statement = function() {
             this.match(FaplaParser.SEMICOLON);
 
                         if(!currentScope.findSymbol((localctx._Identifier===null ? null : localctx._Identifier.text))) {
-                            console.error("variable " + (localctx._Identifier===null ? null : localctx._Identifier.text) + " must be declared before");
+                            FaplaParser.prototype.logger.error("variable " + (localctx._Identifier===null ? null : localctx._Identifier.text) + " must be declared before");
                         }
                     
             break;
@@ -1297,9 +1297,9 @@ FaplaParser.prototype.statement = function() {
                         var f = getFunction(currentScope.name);
                         f.hadReturn = true;
                         if(!f.outputType) {
-                            console.error("module " + f.name + " has no output");
+                            FaplaParser.prototype.logger.error("module " + f.name + " has no output");
                         } else if(!TypeConverting.canConvertTo(localctx._expression.type, f.outputType)) {
-                            console.error("module " + f.name + " must return " + f.outputType);
+                            FaplaParser.prototype.logger.error("module " + f.name + " must return " + f.outputType);
                         }
                     
             break;
@@ -1547,9 +1547,9 @@ FaplaParser.prototype.expression = function(_p) {
                         var calleName = (localctx._Identifier===null ? null : localctx._Identifier.text);
                         var access = hasAccess(callerName, calleName, functionTable);
                         if(access == "notFound") {
-                            console.error("module " + calleName + " not defined");
+                            FaplaParser.prototype.logger.error("module " + calleName + " not defined");
                         } else if(access == "notDecBefore") {
-                            console.error("module " + calleName + " not defined before module " + callerName);
+                            FaplaParser.prototype.logger.error("module " + calleName + " not defined before module " + callerName);
                         } else {
 
                         }
@@ -1564,7 +1564,7 @@ FaplaParser.prototype.expression = function(_p) {
             if(TypeConverting.canConvertTo(localctx.a.type, "bool")) {
                                        localctx.type =  "bool"
                                    } else {
-                                       console.log(localctx.a.type + " can not NOT");
+                                       FaplaParser.prototype.logger.error(localctx.a.type + " can not NOT");
                                        localctx.type = "noType"
                                    }
                                   
@@ -1575,7 +1575,7 @@ FaplaParser.prototype.expression = function(_p) {
             localctx._Identifier = this.match(FaplaParser.Identifier);
             var s = currentScope.findSymbol((localctx._Identifier===null ? null : localctx._Identifier.text));
                                 if(!s) {
-                                    console.log("variable " +  (localctx._Identifier===null ? null : localctx._Identifier.text) + " not defined");
+                                    FaplaParser.prototype.logger.error("variable " +  (localctx._Identifier===null ? null : localctx._Identifier.text) + " not defined");
                                     localctx.type =  "noType"
                                 } else {
                                     localctx.type =  s.type
@@ -1614,7 +1614,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
                                               localctx.type =  "real"
                                          else {
-                                              console.log(localctx.a.type + " can not POW with " + localctx.b.type);
+                                              FaplaParser.prototype.logger.error(localctx.a.type + " can not POW with " + localctx.b.type);
                                               localctx.type = "noType"
                                          }
                                         
@@ -1635,7 +1635,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
                                             localctx.type =  "real"
                                        else {
-                                            console.log(localctx.a.type + " can not MUL with " + localctx.b.type);
+                                            FaplaParser.prototype.logger.error(localctx.a.type + " can not MUL with " + localctx.b.type);
                                             localctx.type = "noType"
                                        }
                                       
@@ -1656,7 +1656,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
                                          localctx.type =  "real"
                                       else {
-                                         console.log(localctx.a.type + " can not DIV with " + localctx.b.type);
+                                         FaplaParser.prototype.logger.error(localctx.a.type + " can not DIV with " + localctx.b.type);
                                          localctx.type = "noType"
                                       }
                                       
@@ -1677,7 +1677,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
                                           localctx.type =  "real"
                                       else {
-                                          console.log(localctx.a.type + " can not MOD with " + localctx.b.type);
+                                          FaplaParser.prototype.logger.error(localctx.a.type + " can not MOD with " + localctx.b.type);
                                           localctx.type = "noType"
                                       }
                                       
@@ -1715,7 +1715,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
                                             localctx.type =  "real"
                                        else {
-                                            console.log(localctx.a.type + " can not SUB with " + localctx.b.type);
+                                            FaplaParser.prototype.logger.error(localctx.a.type + " can not SUB with " + localctx.b.type);
                                             localctx.type = "noType"
                                        }
                                       
@@ -1736,7 +1736,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
                                              localctx.type =  "bool"
                                         else {
-                                             console.log(localctx.a.type + " can not LE with " + localctx.b.type);
+                                             FaplaParser.prototype.logger.error(localctx.a.type + " can not LE with " + localctx.b.type);
                                              localctx.type = "noType"
                                         }
                                        
@@ -1757,7 +1757,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
                                              localctx.type =  "bool"
                                         else {
-                                             console.log(localctx.a.type + " can not GE with " + localctx.b.type);
+                                             FaplaParser.prototype.logger.error(localctx.a.type + " can not GE with " + localctx.b.type);
                                              localctx.type = "noType"
                                         }
                                        
@@ -1778,7 +1778,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
                                          localctx.type =  "bool"
                                        else {
-                                         console.log(localctx.a.type + " can not GT with " + localctx.b.type);
+                                         FaplaParser.prototype.logger.error(localctx.a.type + " can not GT with " + localctx.b.type);
                                          localctx.type = "noType"
                                        }
                                       
@@ -1799,7 +1799,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
                                          localctx.type =  "bool"
                                        else {
-                                         console.log(localctx.a.type + " can not SUB with " + localctx.b.type);
+                                         FaplaParser.prototype.logger.error(localctx.a.type + " can not SUB with " + localctx.b.type);
                                          localctx.type = "noType"
                                        }
                                       
@@ -1820,7 +1820,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, localctx.b.type))
                                             localctx.type =  "bool"
                                        else {
-                                            console.log(localctx.a.type + " can not EQUAL with " + localctx.b.type);
+                                            FaplaParser.prototype.logger.error(localctx.a.type + " can not EQUAL with " + localctx.b.type);
                                             localctx.type = "noType"
                                        }
                                       
@@ -1841,7 +1841,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, localctx.b.type))
                                             localctx.type =  "bool"
                                        else {
-                                            console.log(localctx.a.type + " can not NOTEQUAL with " + localctx.b.type);
+                                            FaplaParser.prototype.logger.error(localctx.a.type + " can not NOTEQUAL with " + localctx.b.type);
                                             localctx.type = "noType"
                                        }
                                       
@@ -1862,7 +1862,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "real") && TypeConverting.canConvertTo(localctx.b.type, "real"))
                                             localctx.type =  "real"
                                        else {
-                                            console.log(localctx.a.type + " can not XOR with " + localctx.b.type);
+                                            FaplaParser.prototype.logger.error(localctx.a.type + " can not XOR with " + localctx.b.type);
                                             localctx.type = "noType"
                                        }
                                       
@@ -1883,7 +1883,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "bool") && TypeConverting.canConvertTo(localctx.b.type, "bool"))
                                             localctx.type =  "bool"
                                        else {
-                                            console.log(localctx.a.type + " can not AND with " + localctx.b.type);
+                                            FaplaParser.prototype.logger.error(localctx.a.type + " can not AND with " + localctx.b.type);
                                             localctx.type = "noType"
                                        }
                                       
@@ -1904,7 +1904,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "bool") && TypeConverting.canConvertTo(localctx.b.type, "bool"))
                                             localctx.type =  "bool"
                                        else {
-                                            console.log(localctx.a.type + " can not OR with " + localctx.b.type);
+                                            FaplaParser.prototype.logger.error(localctx.a.type + " can not OR with " + localctx.b.type);
                                             localctx.type = "noType"
                                        }
                                       
@@ -1929,7 +1929,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "bool"))
                                             localctx.type =  localctx.b.type
                                        else {
-                                            console.log("condition expression must have a bool");
+                                            FaplaParser.prototype.logger.error("condition expression must have a bool");
                                             localctx.type = "noType"
                                        }
                                       
@@ -1948,7 +1948,7 @@ FaplaParser.prototype.expression = function(_p) {
                     if(TypeConverting.canConvertTo(localctx.a.type, "real")) {
                                                                   localctx.type =  "real"
                                                               } else {
-                                                                  console.log(localctx.a.type + " can not factorial");
+                                                                  FaplaParser.prototype.logger.error(localctx.a.type + " can not factorial");
                                                                   localctx.type = "noType"
                                                               }
                                                              
@@ -2215,14 +2215,14 @@ FaplaParser.prototype.assignment = function() {
 
                     var s = currentScope.findSymbol((localctx._Identifier===null ? null : localctx._Identifier.text));
                     if(!s) {
-                        console.log("variable " +  (localctx._Identifier===null ? null : localctx._Identifier.text) + " not defined");
+                        FaplaParser.prototype.logger.error("variable " +  (localctx._Identifier===null ? null : localctx._Identifier.text) + " not defined");
                         localctx.type =  "noType"
                     } else {
                         if(TypeConverting.canConvertTo(localctx._expression.type, s.type)) {
                             s.value = localctx._expression.value;
                             localctx.type =  s.type
                         } else {
-                            console.log("can not assign " + localctx._expression.type + " to " + s.type);
+                            FaplaParser.prototype.logger.error("can not assign " + localctx._expression.type + " to " + s.type);
                             localctx.type =  "noType"
                         }
                     }
