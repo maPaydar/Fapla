@@ -94,22 +94,6 @@ moduleBlock
         END
     ;
 
-moduleBlockWithReturn
-    :
-        BEGIN statement*
-        RETURN expression SEMICOLON
-        {
-            // check if currentFunctinon has output or not
-            var f = getFunction(currentScope.name);
-            if(!f.outputType) {
-                FaplaParser.prototype.logger.error("module " + f.name + " has no output");
-            } else if(!TypeConverting.canConvertTo($expression.type, f.outputType)) {
-                FaplaParser.prototype.logger.error("module " + f.name + " must return " + f.outputType);
-            }
-        }
-        END
-    ;
-
 block
     :   BEGIN {currentScope = currentScope.enterScope();} statement* END {currentScope = currentScope.exitScope();}
     ;
