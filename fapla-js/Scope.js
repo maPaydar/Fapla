@@ -9,10 +9,6 @@ var Scope = (function () {
         this.table = {};
         this.parent = parent;
 
-        this.getTable = function () {
-            return this.table;
-        }
-
         this.enterScope = function () {
             return new Scope(null, this);
         }
@@ -22,7 +18,9 @@ var Scope = (function () {
         }
 
         this.addSymbol = function (symbol) {
-            this.table[symbol.name] = symbol;
+            if(!this.findSymbol(symbol.name)) this.table[symbol.name] = symbol;
+            else return false;
+            return true;
         }
 
         this.findSymbol = function (symbolName) {
