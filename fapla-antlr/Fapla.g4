@@ -43,19 +43,15 @@ function checkArguments(func, args) {
         FaplaParser.prototype.logger.error("module " + func.name + " need " + func.parameterList.length + " parameters but found " + args.length + " parameters");
     else {
         let i = 0;
-        for (i = 0; i < params.length; i++) {
-            if(func.parameterList[i] != args[i])
+        for (i = 0; i < func.parameterList.length; i++) {
+            if(func.parameterList[i].type != args[i])
                 break;
         }
-        if(i < params.length) {
-            FaplaParser.prototype.logger.error("module " + func.name + " need " + func.parameterList + " but found " + args);
+        if(i < func.parameterList.length) {
+            FaplaParser.prototype.logger.error("module " + func.name + " need " + func.toString() + " but found " + args);
         }
     }
 }
-}
-
-@parser::members {
-
 }
 
 program
@@ -139,7 +135,6 @@ statement returns [type]
     |   RETURN expression SEMICOLON
         {
             var f = getFunction(currentScope.name);
-            console.log(f);
             f.returnflag = true;
             if(!f.outputType) {
                 FaplaParser.prototype.logger.error("module " + f.name + " has no output");
@@ -147,21 +142,14 @@ statement returns [type]
                 FaplaParser.prototype.logger.error("module " + f.name + " must return " + f.outputType);
             }
         }
-    |   WRITE expression
-        {
-            if(!TypeConverting.canConvertTo($expression.type, "string")) {
-                FaplaParser.prototype.logger.error("write exprssion must be a string");
-            }
-        }
+    |   WRITE expression { if(!TypeConverting.canConvertTo($expression.type, "string")) FaplaParser.prototype.logger.error("write exprssion must be a string");}
         SEMICOLON
     |   READ Identifier SEMICOLON
         {
             if(!currentScope.findSymbol($Identifier.text.toLowerCase())) {
                 FaplaParser.prototype.logger.error("variable " + $Identifier.text + " must be declared before");
                 $type = "noType";
-            } else {
-                $type = currentScope.findSymbol($Identifier.text.toLowerCase()).type;
-            }
+            } else $type = currentScope.findSymbol($Identifier.text.toLowerCase()).type;
         }
     |   expression SEMICOLON
     |   assignment
@@ -186,7 +174,7 @@ expression returns [value, type]
             $value = "(" + $expression.value + ")";
             $type = $a.type;
         }
-    |   Identifier PO (a=expressionList)? PC
+    |   Identifier PO { let args = []; } (a=expressionList { args = $a.type; } )? PC
         {
             var callerName = currentScope.name;
             var calleName = $Identifier.text;
@@ -197,7 +185,8 @@ expression returns [value, type]
                 FaplaParser.prototype.logger.error("module " + calleName + " not defined before module " + callerName);
             } else {
                 let func = getFunction(calleName);
-                checkArguments(func.parameterList, $expressionList.type);
+                console.log(func.parameterList, args);
+                checkArguments(func, args);
             }
         }
     |   NOT a=expression {if(TypeConverting.canConvertTo($a.type, "bool")) {
@@ -356,7 +345,7 @@ expression returns [value, type]
     ;
 
 expressionList returns [type]
-    :   a=expression {$type = [$a.type];} (COMMA b=expression {$type.push($b.type);} )*
+    :   a=expression {$type = [$a.type];} (COMMA b=expression {$type[$type.length] = $b.type;} )*
     ;
 
 varDeclaration
