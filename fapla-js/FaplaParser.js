@@ -281,6 +281,10 @@ function FaplaParser (input) {
     this.ruleNames = ruleNames;
     this.literalNames = literalNames;
     this.symbolicNames = symbolicNames;
+    rootScope = new Scope('root', null);
+    currentScope = rootScope;
+    functionTable = [];
+    code = "";
     return this;
 }
 
@@ -1277,7 +1281,6 @@ function ExpressionContext(parser, parent, invokingState) {
     this.parser = parser;
     this.ruleIndex = FaplaParser.RULE_expression;
     this.code = null
-    this.value = null
     this.type = null
     this.a = null; // ExpressionContext
     this._STRINGCONSTANT = null; // Token
@@ -1444,22 +1447,21 @@ FaplaParser.prototype.expression = function(_p) {
             this.state = 157;
             localctx._STRINGCONSTANT = this.match(FaplaParser.STRINGCONSTANT);
              localctx.type =  "string"
-                                    localctx.value =  (localctx._STRINGCONSTANT===null ? null : localctx._STRINGCONSTANT.text)
-                                     console.log("fuck string constant"); 
+                                     localctx.code =   (localctx._STRINGCONSTANT===null ? null : localctx._STRINGCONSTANT.text) 
             break;
 
         case 2:
             this.state = 159;
             localctx._REALCONSTANT = this.match(FaplaParser.REALCONSTANT);
             localctx.type =  "real"
-                                  localctx.value =  (localctx._REALCONSTANT===null ? null : localctx._REALCONSTANT.text) 
+                                  localctx.code =  (localctx._REALCONSTANT===null ? null : localctx._REALCONSTANT.text) 
             break;
 
         case 3:
             this.state = 161;
             localctx._BOOLEANCONSTANT = this.match(FaplaParser.BOOLEANCONSTANT);
             localctx.type =  "bool"
-                                     localctx.value =  (localctx._BOOLEANCONSTANT===null ? null : localctx._BOOLEANCONSTANT.text) 
+                                     localctx.code =  (localctx._BOOLEANCONSTANT===null ? null : localctx._BOOLEANCONSTANT.text) 
             break;
 
         case 4:
@@ -1470,7 +1472,7 @@ FaplaParser.prototype.expression = function(_p) {
             this.state = 165;
             this.match(FaplaParser.PC);
 
-                        localctx.value =  "(" + localctx.value + ")"
+                        localctx.code =  "(" + localctx.code + ")"
                         localctx.type =  localctx.a.type
                     
             break;
@@ -1480,13 +1482,13 @@ FaplaParser.prototype.expression = function(_p) {
             localctx._Identifier = this.match(FaplaParser.Identifier);
             this.state = 169;
             this.match(FaplaParser.PO);
-             let args = []; 
+             let args = []; let argValues = "";
             this.state = 174;
             _la = this._input.LA(1);
             if((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << FaplaParser.BOOLEANCONSTANT) | (1 << FaplaParser.STRINGCONSTANT) | (1 << FaplaParser.REALCONSTANT))) !== 0) || ((((_la - 37)) & ~0x1f) == 0 && ((1 << (_la - 37)) & ((1 << (FaplaParser.NOT - 37)) | (1 << (FaplaParser.PO - 37)) | (1 << (FaplaParser.Identifier - 37)))) !== 0)) {
                 this.state = 171;
                 localctx.e = this.expressionList();
-                 args = localctx.e.type; 
+                 args = localctx.e.type; argValues = localctx.e.code; 
             }
 
             this.state = 176;
@@ -1504,6 +1506,7 @@ FaplaParser.prototype.expression = function(_p) {
                             console.log(func.parameterList, args);
                             checkArguments(func, args);
                         }
+                        localctx.code =  (localctx._Identifier===null ? null : localctx._Identifier.text) + "(" + argValues + ")";
                     
             break;
 
@@ -1518,6 +1521,7 @@ FaplaParser.prototype.expression = function(_p) {
                                        FaplaParser.prototype.logger.error(localctx.a.type + " can not NOT");
                                        localctx.type = "noType"
                                    }
+                                   localctx.code =  "!" + localctx.a.code
                                   
             break;
 
@@ -1530,7 +1534,7 @@ FaplaParser.prototype.expression = function(_p) {
                                     localctx.type =  "noType"
                                 } else {
                                     localctx.type =  s.type
-                                    localctx.value =  s.value
+                                    localctx.code =  null
                                 }
                                
             break;
@@ -1568,6 +1572,7 @@ FaplaParser.prototype.expression = function(_p) {
                                               FaplaParser.prototype.logger.error(localctx.a.type + " can not POW with " + localctx.b.type);
                                               localctx.type = "noType"
                                          }
+                                         localctx.code =  "Math.pow(" + localctx.a.code + ", " + localctx.b.code + ")";
                                         
                     break;
 
@@ -1902,6 +1907,7 @@ FaplaParser.prototype.expression = function(_p) {
                                                                   FaplaParser.prototype.logger.error(localctx.a.type + " can not factorial");
                                                                   localctx.type = "noType"
                                                               }
+                                                              localctx.code =  "factorial(" + localctx.a.code + ")";
                                                              
                     break;
 
@@ -1936,6 +1942,7 @@ function ExpressionListContext(parser, parent, invokingState) {
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
     this.ruleIndex = FaplaParser.RULE_expressionList;
+    this.code = null
     this.type = null
     this.a = null; // ExpressionContext
     this.d = null; // ExpressionContext
@@ -1994,7 +2001,8 @@ FaplaParser.prototype.expressionList = function() {
         this.enterOuterAlt(localctx, 1);
         this.state = 276;
         localctx.a = this.expression(0);
-        localctx.type =  [localctx.a.type]
+        localctx.type =  [localctx.a.type];
+        localctx.code =  localctx.a.code;
         this.state = 284;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
@@ -2005,6 +2013,7 @@ FaplaParser.prototype.expressionList = function() {
             localctx.d = this.expression(0);
 
                         localctx.type[localctx.type.length] = localctx.d.type;
+                        localctx.code += ", " + localctx.d.code;
                     
             this.state = 286;
             this._errHandler.sync(this);
@@ -2095,6 +2104,7 @@ FaplaParser.prototype.varDeclaration = function() {
                     } else {
                         currentScope.addSymbol(new Symbol((localctx._Identifier===null ? null : localctx._Identifier.text).toLowerCase(), (localctx._PrimitiveType===null ? null : localctx._PrimitiveType.text), null));
                     }
+                    code += "let " + (localctx._Identifier===null ? null : localctx._Identifier.text) + ";";
                 
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -2183,13 +2193,14 @@ FaplaParser.prototype.assignment = function() {
                         localctx.type =  "noType"
                     } else {
                         if(TypeConverting.canConvertTo(localctx._expression.type, s.type)) {
-                            s.value = localctx._expression.value;
+                            s.value = localctx._expression.code;
                             localctx.type =  s.type
                         } else {
                             FaplaParser.prototype.logger.error("can not assign " + localctx._expression.type + " to " + s.type);
                             localctx.type =  "noType"
                         }
                     }
+                    code += (localctx._Identifier===null ? null : localctx._Identifier.text) + " = " + localctx._expression.code + ";";
                 
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {

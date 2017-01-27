@@ -191,7 +191,9 @@ expression returns [code, type]
             $code = "(" + $expression.code + ")";
             $type = $a.type;
         }
-    |   Identifier PO { let args = []; } (e=expressionList { args = $e.type; } )? PC
+    |   Identifier PO { let args = [];
+                        let argValues = "";} (e=expressionList { args = $e.type;
+                                                                 argValues = $e.code; } )? PC
         {
             var callerName = currentScope.name;
             var calleName = $Identifier.text;
@@ -205,7 +207,7 @@ expression returns [code, type]
                 console.log(func.parameterList, args);
                 checkArguments(func, args);
             }
-            $code = $Identifier.text + "(" + getFunction(calleName).toString() + ");";
+            $code = $Identifier.text + "(" + argValues + ");";
         }
     |   NOT a=expression {if(TypeConverting.canConvertTo($a.type, "bool")) {
                            $type = "bool";
@@ -365,10 +367,11 @@ expression returns [code, type]
                    }
     ;
 
-expressionList returns [type]
-    :   a=expression {$type = [$a.type];} (COMMA d=expression
+expressionList returns [code, type]
+    :   a=expression {$type = [$a.type]; $code = $a.code;} (COMMA d=expression
         {
             $type[$type.length] = $d.type;
+            $code += ", " + $d.code;
         } )*
     ;
 
@@ -402,7 +405,7 @@ assignment returns [type]
                     $type = "noType";
                 }
             }
-            code += $Identifier.text " = " + $expression.code + ";";
+            code += $Identifier.text + " = " + $expression.code + ";";
         }
     ;
 
