@@ -47,15 +47,6 @@ FaplaListener.prototype.exitModuleBlock = function(ctx) {
 };
 
 
-// Enter a parse tree produced by FaplaParser#moduleBlockWithReturn.
-FaplaListener.prototype.enterModuleBlockWithReturn = function(ctx) {
-};
-
-// Exit a parse tree produced by FaplaParser#moduleBlockWithReturn.
-FaplaListener.prototype.exitModuleBlockWithReturn = function(ctx) {
-};
-
-
 // Enter a parse tree produced by FaplaParser#block.
 FaplaListener.prototype.enterBlock = function(ctx) {
 };

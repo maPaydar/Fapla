@@ -37,6 +37,21 @@ function getFunction(functionName) {
     }
     return functionTable[i];
 }
+
+function checkArguments(func, args) {
+    if(func.parameterList.length != args.length)
+        FaplaParser.prototype.logger.error("module " + func.name + " need " + func.parameterList.length + " parameters but found " + args.length + " parameters");
+    else {
+        let i = 0;
+        for (i = 0; i < params.length; i++) {
+            if(func.parameterList[i] != args[i])
+                break;
+        }
+        if(i < params.length) {
+            FaplaParser.prototype.logger.error("module " + func.name + " need " + func.parameterList + " but found " + args);
+        }
+    }
+}
 }
 
 @parser::members {
@@ -54,17 +69,23 @@ moduleDeclaration
             var scope = new Scope($a.text, rootScope);
             currentScope = scope;
             var paramterList = [];
+            let f = new Function($a.text, null, null);
         }
         (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON
         {
-            var s = new Symbol($Identifier.text, $PrimitiveType.text, null);
+            var s = new Symbol($Identifier.text.toLowerCase(), $PrimitiveType.text, null);
             paramterList.push(s);
             currentScope.addSymbol(s);
         }
         )+)?
-        (OUTPUT COLON PrimitiveType SEMICOLON)?
         {
-            var f = new Function($a.text, $PrimitiveType.text, paramterList);
+            f.parameterList = paramterList;
+        }
+        (OUTPUT COLON PrimitiveType SEMICOLON
+        {
+            f.outputType = $PrimitiveType.text;
+        })?
+        {
             functionTable.push(f);
         }
         moduleBlock
@@ -76,7 +97,7 @@ mainModuleDeclaration
         {
             var mainScope = new Scope('main', rootScope);
             currentScope = mainScope;
-            var f = new Function('main', null, null);
+            let f = new Function('main', null, null);
             functionTable.push(f);
         }
         moduleBlock
@@ -87,7 +108,7 @@ moduleBlock
         BEGIN statement*
         {
              var f = getFunction(currentScope.name);
-             if (!f.hadReturn && f.name != 'main') {
+             if (!f.returnflag && f.outputType) {
                  FaplaParser.prototype.logger.error("module " + f.name + " must be has return experssion");
              }
         }
@@ -106,37 +127,46 @@ supBlock
 
 statement returns [type]
     :   IF expression
-        {   if($expression.type != "bool")
+        {   if(!TypeConverting.canConvertTo($expression.type, "bool"))
                 FaplaParser.prototype.logger.error("expression " + $expression.text + " must be a bool in if-statement condition");
         }
         THEN supBlock (ELSE supBlock)?
 
     |   WHILE expression supBlock
-        {   if($expression.type != "bool")
-                FaplaParser.prototype.logger.error("expression " + $expression.text + " must be a bool in if-statement condition");
-        }
-    |   expression SEMICOLON
-    |   assignment
-    |   SEMICOLON
-    |   varDeclaration
-    |   WRITE expression SEMICOLON
-    |   READ Identifier SEMICOLON
-        {
-            if(!currentScope.findSymbol($Identifier.text)) {
-                FaplaParser.prototype.logger.error("variable " + $Identifier.text + " must be declared before");
-            }
+        {   if(!TypeConverting.canConvertTo($expression.type, "bool"))
+                FaplaParser.prototype.logger.error("expression " + $expression.text + " must be a bool in while-statement condition");
         }
     |   RETURN expression SEMICOLON
         {
-            // check if currentFunctinon has output or not
             var f = getFunction(currentScope.name);
-            f.hadReturn = true;
+            console.log(f);
+            f.returnflag = true;
             if(!f.outputType) {
                 FaplaParser.prototype.logger.error("module " + f.name + " has no output");
             } else if(!TypeConverting.canConvertTo($expression.type, f.outputType)) {
                 FaplaParser.prototype.logger.error("module " + f.name + " must return " + f.outputType);
             }
         }
+    |   WRITE expression
+        {
+            if(!TypeConverting.canConvertTo($expression.type, "string")) {
+                FaplaParser.prototype.logger.error("write exprssion must be a string");
+            }
+        }
+        SEMICOLON
+    |   READ Identifier SEMICOLON
+        {
+            if(!currentScope.findSymbol($Identifier.text.toLowerCase())) {
+                FaplaParser.prototype.logger.error("variable " + $Identifier.text + " must be declared before");
+                $type = "noType";
+            } else {
+                $type = currentScope.findSymbol($Identifier.text.toLowerCase()).type;
+            }
+        }
+    |   expression SEMICOLON
+    |   assignment
+    |   SEMICOLON
+    |   varDeclaration
     |   block
     ;
 
@@ -151,10 +181,12 @@ expression returns [value, type]
                          $expression.value = $BOOLEANCONSTANT.text; }
 
 
-    |   PO expression PC {$value = "(" + $expression.value + ")";}
-
-
-    |   Identifier PO expressionList? PC
+    |   PO a=expression PC
+        {
+            $value = "(" + $expression.value + ")";
+            $type = $a.type;
+        }
+    |   Identifier PO (a=expressionList)? PC
         {
             var callerName = currentScope.name;
             var calleName = $Identifier.text;
@@ -164,7 +196,8 @@ expression returns [value, type]
             } else if(access == "notDecBefore") {
                 FaplaParser.prototype.logger.error("module " + calleName + " not defined before module " + callerName);
             } else {
-
+                let func = getFunction(calleName);
+                checkArguments(func.parameterList, $expressionList.type);
             }
         }
     |   NOT a=expression {if(TypeConverting.canConvertTo($a.type, "bool")) {
@@ -174,8 +207,6 @@ expression returns [value, type]
                            $type="noType";
                        }
                       }
-
-
     |   a=expression FACTORIAL {if(TypeConverting.canConvertTo($a.type, "real")) {
                                     $type = "real";
                                 } else {
@@ -265,7 +296,7 @@ expression returns [value, type]
         }
 
     |   a=expression EQUAL b=expression
-        {if(TypeConverting.canConvertTo($a.type, $b.type))
+        {if(TypeConverting.canConvertTo($a.type, $b.type) && TypeConverting.canConvertTo($b.type, $a.type))
               $type = "bool";
          else {
               FaplaParser.prototype.logger.error($a.type + " can not EQUAL with " + $b.type);
@@ -274,7 +305,7 @@ expression returns [value, type]
         }
 
     |   a=expression NOTEQUAL b=expression
-        {if(TypeConverting.canConvertTo($a.type, $b.type))
+        {if(TypeConverting.canConvertTo($a.type, $b.type) && TypeConverting.canConvertTo($b.type, $a.type))
               $type = "bool";
          else {
               FaplaParser.prototype.logger.error($a.type + " can not NOTEQUAL with " + $b.type);
@@ -282,7 +313,7 @@ expression returns [value, type]
          }
         }
     |   a=expression XOR b=expression
-        {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
+        {if(TypeConverting.canConvertTo($a.type, "bool") && TypeConverting.canConvertTo($b.type, "bool"))
               $type = "real";
          else {
               FaplaParser.prototype.logger.error($a.type + " can not XOR with " + $b.type);
@@ -307,13 +338,13 @@ expression returns [value, type]
         }
     |   a=expression QUESTION b=expression COLON c=expression
         {if(TypeConverting.canConvertTo($a.type, "bool"))
-              $type = $b.type;
+              $type = TypeConverting.max($b.type, $c.type);
          else {
               FaplaParser.prototype.logger.error("condition expression must have a bool");
               $type="noType";
          }
         }
-    |   Identifier {var s = currentScope.findSymbol($Identifier.text);
+    |   Identifier {var s = currentScope.findSymbol($Identifier.text.toLowerCase());
                     if(!s) {
                         FaplaParser.prototype.logger.error("variable " +  $Identifier.text + " not defined");
                         $type = "noType";
@@ -324,20 +355,27 @@ expression returns [value, type]
                    }
     ;
 
-expressionList
-    :   expression (COMMA expression)*
+expressionList returns [type]
+    :   a=expression {$type = [$a.type];} (COMMA b=expression {$type.push($b.type);} )*
     ;
 
 varDeclaration
     :   Identifier
         COLON
-        PrimitiveType SEMICOLON {currentScope.addSymbol(new Symbol($Identifier.text, $PrimitiveType.text, null));}
+        PrimitiveType SEMICOLON
+        {
+            if(currentScope.findSymbol($Identifier.text.toLowerCase())) {
+                FaplaParser.prototype.logger.error("variable " +  $Identifier.text + " decleared before");
+            } else {
+                currentScope.addSymbol(new Symbol($Identifier.text.toLowerCase(), $PrimitiveType.text, null));
+            }
+        }
     ;
 
 assignment returns [type]
     :   Identifier ASSIGN expression SEMICOLON
         {
-            var s = currentScope.findSymbol($Identifier.text);
+            var s = currentScope.findSymbol($Identifier.text.toLowerCase());
             if(!s) {
                 FaplaParser.prototype.logger.error("variable " +  $Identifier.text + " not defined");
                 $type = "noType";
