@@ -33,7 +33,7 @@ function hasAccess(callerName, calleName, functionTable) {
 
 function getFunction(functionName) {
     for(var i = 0; i < functionTable.length; i++) {
-        if(functionTable[i].name == functionName) {
+        if(functionTable[i].name == functionName.toLowerCase()) {
             break;
         }
     }
@@ -557,7 +557,7 @@ FaplaParser.prototype.moduleDeclaration = function() {
                     var scope = new Scope((localctx.a===null ? null : localctx.a.text), rootScope);
                     currentScope = scope;
                     var paramterList = [];
-                    let f = new Function((localctx.a===null ? null : localctx.a.text), null, null);
+                    let f = new Function((localctx.a===null ? null : localctx.a.text).toLowerCase(), null, null);
                 
         this.state = 49;
         _la = this._input.LA(1);
@@ -1242,6 +1242,7 @@ function ExpressionContext(parser, parent, invokingState) {
     this._BOOLEANCONSTANT = null; // Token
     this._expression = null; // ExpressionContext
     this._Identifier = null; // Token
+    this.e = null; // ExpressionListContext
     this.b = null; // ExpressionContext
     this.c = null; // ExpressionContext
     return this;
@@ -1399,22 +1400,23 @@ FaplaParser.prototype.expression = function(_p) {
         case 1:
             this.state = 139;
             localctx._STRINGCONSTANT = this.match(FaplaParser.STRINGCONSTANT);
-            localctx.type = "string";
-                                    localctx.value = (localctx._STRINGCONSTANT===null ? null : localctx._STRINGCONSTANT.text); 
+             localctx.type =  "string"
+                                    localctx.value =  (localctx._STRINGCONSTANT===null ? null : localctx._STRINGCONSTANT.text)
+                                     console.log("fuck string constant"); 
             break;
 
         case 2:
             this.state = 141;
             localctx._REALCONSTANT = this.match(FaplaParser.REALCONSTANT);
-            localctx.type = "real";
-                                  localctx.value = (localctx._REALCONSTANT===null ? null : localctx._REALCONSTANT.text); 
+            localctx.type =  "real"
+                                  localctx.value =  (localctx._REALCONSTANT===null ? null : localctx._REALCONSTANT.text) 
             break;
 
         case 3:
             this.state = 143;
             localctx._BOOLEANCONSTANT = this.match(FaplaParser.BOOLEANCONSTANT);
-            localctx.type = "bool";
-                                     localctx.value = (localctx._BOOLEANCONSTANT===null ? null : localctx._BOOLEANCONSTANT.text); 
+            localctx.type =  "bool"
+                                     localctx.value =  (localctx._BOOLEANCONSTANT===null ? null : localctx._BOOLEANCONSTANT.text) 
             break;
 
         case 4:
@@ -1440,8 +1442,8 @@ FaplaParser.prototype.expression = function(_p) {
             _la = this._input.LA(1);
             if((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << FaplaParser.BOOLEANCONSTANT) | (1 << FaplaParser.STRINGCONSTANT) | (1 << FaplaParser.REALCONSTANT))) !== 0) || ((((_la - 37)) & ~0x1f) == 0 && ((1 << (_la - 37)) & ((1 << (FaplaParser.NOT - 37)) | (1 << (FaplaParser.PO - 37)) | (1 << (FaplaParser.Identifier - 37)))) !== 0)) {
                 this.state = 153;
-                localctx.a = this.expressionList();
-                 args = localctx.a.type; 
+                localctx.e = this.expressionList();
+                 args = localctx.e.type; 
             }
 
             this.state = 158;
@@ -1645,7 +1647,7 @@ FaplaParser.prototype.expression = function(_p) {
                                              FaplaParser.prototype.logger.error(localctx.a.type + " can not LE with " + localctx.b.type);
                                              localctx.type = "noType"
                                         }
-                                       
+                                      
                     break;
 
                 case 8:
@@ -1893,7 +1895,7 @@ function ExpressionListContext(parser, parent, invokingState) {
     this.ruleIndex = FaplaParser.RULE_expressionList;
     this.type = null
     this.a = null; // ExpressionContext
-    this.b = null; // ExpressionContext
+    this.d = null; // ExpressionContext
     return this;
 }
 
@@ -1957,8 +1959,11 @@ FaplaParser.prototype.expressionList = function() {
             this.state = 260;
             this.match(FaplaParser.COMMA);
             this.state = 261;
-            localctx.b = this.expression(0);
-            localctx.type[localctx.type.length] = localctx.b.type;
+            localctx.d = this.expression(0);
+
+                        localctx.type[localctx.type.length] = localctx.d.type;
+                        console.log('localctx.type', localctx.type, 'localctx.d.type = ', localctx.d.type);
+                    
             this.state = 268;
             this._errHandler.sync(this);
             _la = this._input.LA(1);

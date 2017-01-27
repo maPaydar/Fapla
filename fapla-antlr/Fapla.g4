@@ -31,7 +31,7 @@ function hasAccess(callerName, calleName, functionTable) {
 
 function getFunction(functionName) {
     for(var i = 0; i < functionTable.length; i++) {
-        if(functionTable[i].name == functionName) {
+        if(functionTable[i].name == functionName.toLowerCase()) {
             break;
         }
     }
@@ -65,7 +65,7 @@ moduleDeclaration
             var scope = new Scope($a.text, rootScope);
             currentScope = scope;
             var paramterList = [];
-            let f = new Function($a.text, null, null);
+            let f = new Function($a.text.toLowerCase(), null, null);
         }
         (INPUT COLON (Identifier COLON PrimitiveType SEMICOLON
         {
@@ -159,14 +159,15 @@ statement returns [type]
     ;
 
 expression returns [value, type]
-    :   STRINGCONSTANT {$expression.type = "string";
-                        $expression.value = $STRINGCONSTANT.text; }
+    :   STRINGCONSTANT { $type = "string";
+                        $value = $STRINGCONSTANT.text;
+                         console.log("fuck string constant"); }
 
-    |   REALCONSTANT {$expression.type = "real";
-                      $expression.value = $REALCONSTANT.text; }
+    |   REALCONSTANT {$type = "real";
+                      $value = $REALCONSTANT.text; }
 
-    |   BOOLEANCONSTANT {$expression.type = "bool";
-                         $expression.value = $BOOLEANCONSTANT.text; }
+    |   BOOLEANCONSTANT {$type = "bool";
+                         $value = $BOOLEANCONSTANT.text; }
 
 
     |   PO a=expression PC
@@ -174,7 +175,7 @@ expression returns [value, type]
             $value = "(" + $expression.value + ")";
             $type = $a.type;
         }
-    |   Identifier PO { let args = []; } (a=expressionList { args = $a.type; } )? PC
+    |   Identifier PO { let args = []; } (e=expressionList { args = $e.type; } )? PC
         {
             var callerName = currentScope.name;
             var calleName = $Identifier.text;
@@ -256,7 +257,7 @@ expression returns [value, type]
                FaplaParser.prototype.logger.error($a.type + " can not LE with " + $b.type);
                $type="noType";
           }
-         }
+        }
     |   a=expression GE b=expression
         {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
                $type = "bool";
@@ -345,7 +346,10 @@ expression returns [value, type]
     ;
 
 expressionList returns [type]
-    :   a=expression {$type = [$a.type];} (COMMA b=expression {$type[$type.length] = $b.type;} )*
+    :   a=expression {$type = [$a.type];} (COMMA d=expression
+        {
+            $type[$type.length] = $d.type;
+        } )*
     ;
 
 varDeclaration
