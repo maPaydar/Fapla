@@ -268,7 +268,9 @@ function FaplaParser (input) {
     this.ruleNames = ruleNames;
     this.literalNames = literalNames;
     this.symbolicNames = symbolicNames;
-
+    rootScope = new Scope('root', null);
+    currentScope = rootScope;
+    functionTable = [];
 
 
     return this;
@@ -609,6 +611,7 @@ FaplaParser.prototype.moduleDeclaration = function() {
 
 
                     functionTable.push(f);
+                    console.log(functionTable);
                 
         this.state = 60;
         this.moduleBlock();

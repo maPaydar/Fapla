@@ -12,12 +12,12 @@ var functionTable = [];
 function hasAccess(callerName, calleName, functionTable) {
     var i = 0, j = 0;
     for(i = 0; i < functionTable.length; i++) {
-        if(functionTable[i].name == callerName) {
+        if(functionTable[i].name == callerName.toLowerCase()) {
             break;
         }
     }
     for(j = 0; j < functionTable.length; j++) {
-        if(functionTable[j].name == calleName) {
+        if(functionTable[j].name == calleName.toLowerCase()) {
             break;
         }
     }
