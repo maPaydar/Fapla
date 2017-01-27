@@ -8,6 +8,7 @@ const TypeConverting = require('./TypeConverting').TypeConverting;
 var rootScope = new Scope('root', null);
 var currentScope = rootScope;
 var functionTable = [];
+var code = "";
 
 function hasAccess(callerName, calleName, functionTable) {
     var i = 0, j = 0;
@@ -55,7 +56,7 @@ function checkArguments(func, args) {
 }
 
 program
-    :   (moduleDeclaration)* mainModuleDeclaration (moduleDeclaration)*
+    :   (moduleDeclaration)* mainModuleDeclaration (moduleDeclaration)* { code += "main();"; console.log(code); }
     ;
 
 moduleDeclaration
@@ -83,6 +84,11 @@ moduleDeclaration
         })?
         {
             functionTable.push(f);
+            code += "function " + $a.text +"(";
+            for(let i = 0; i < f.parameterList.length - 1; i++) {
+                code += f.parameterList[i].name + ",";
+            }
+            code += f.parameterList[f.parameterList.length - 1].name + ")";
         }
         moduleBlock
     ;
@@ -91,6 +97,7 @@ mainModuleDeclaration
     :   MODULE
         'main'
         {
+            code += "function main()";
             var mainScope = new Scope('main', rootScope);
             currentScope = mainScope;
             let f = new Function('main', null, null);
@@ -101,36 +108,41 @@ mainModuleDeclaration
 
 moduleBlock
     :
-        BEGIN statement*
+        BEGIN { code += "{"; } (statement { code += $statement.code; } )*
         {
-             var f = getFunction(currentScope.name);
-             if (!f.returnflag && f.outputType) {
-                 FaplaParser.prototype.logger.error("module " + f.name + " must be has return experssion");
-             }
+            var f = getFunction(currentScope.name);
+                if (!f.returnflag && f.outputType) {
+                FaplaParser.prototype.logger.error("module " + f.name + " must be has return experssion");
+            }
+            code += "}";
         }
         END
     ;
 
 block
-    :   BEGIN {currentScope = currentScope.enterScope();} statement* END {currentScope = currentScope.exitScope();}
+    :   BEGIN { code += "{"; } {currentScope = currentScope.enterScope();} (statement { code += $statement.code; })* END { code += "}"; } {currentScope = currentScope.exitScope();}
     ;
 
 supBlock
     :
-        BEGIN {currentScope = currentScope.enterScope();} statement* END {currentScope = currentScope.exitScope();}
-    |   statement
+        BEGIN { code += "{"; } {currentScope = currentScope.enterScope();} (statement { code += $statement.code; })* END { code += "}"; } {currentScope = currentScope.exitScope();}
+    |   statement { code += $statement.code; }
     ;
 
-statement returns [type]
+statement returns [type, code]
     :   IF expression
-        {   if(!TypeConverting.canConvertTo($expression.type, "bool"))
+        {
+            if(!TypeConverting.canConvertTo($expression.type, "bool"))
                 FaplaParser.prototype.logger.error("expression " + $expression.text + " must be a bool in if-statement condition");
+            code += "if ( " + $expression.code + ")";
         }
-        THEN supBlock (ELSE supBlock)?
+        THEN supBlock (ELSE { code += "else" } supBlock)?
 
     |   WHILE expression supBlock
-        {   if(!TypeConverting.canConvertTo($expression.type, "bool"))
+        {
+            if(!TypeConverting.canConvertTo($expression.type, "bool"))
                 FaplaParser.prototype.logger.error("expression " + $expression.text + " must be a bool in while-statement condition");
+            code += "while ( " + $expression.code + ")";
         }
     |   RETURN expression SEMICOLON
         {
@@ -141,8 +153,11 @@ statement returns [type]
             } else if(!TypeConverting.canConvertTo($expression.type, f.outputType)) {
                 FaplaParser.prototype.logger.error("module " + f.name + " must return " + f.outputType);
             }
+            code += "return " + $expression.code + ";";
         }
-    |   WRITE expression { if(!TypeConverting.canConvertTo($expression.type, "string")) FaplaParser.prototype.logger.error("write exprssion must be a string");}
+    |   WRITE expression { if(!TypeConverting.canConvertTo($expression.type, "string")) FaplaParser.prototype.logger.error("write exprssion must be a string");
+                            code += "console.log(" + $expression.code + ");";
+                        }
         SEMICOLON
     |   READ Identifier SEMICOLON
         {
@@ -150,29 +165,30 @@ statement returns [type]
                 FaplaParser.prototype.logger.error("variable " + $Identifier.text + " must be declared before");
                 $type = "noType";
             } else $type = currentScope.findSymbol($Identifier.text.toLowerCase()).type;
+
+            code += "$Identifier.text = console.read();";
         }
-    |   expression SEMICOLON
+    |   expression { code += $expression.code + ";"; } SEMICOLON
     |   assignment
-    |   SEMICOLON
+    |   SEMICOLON { code += ";"; }
     |   varDeclaration
     |   block
     ;
 
-expression returns [value, type]
+expression returns [code, type]
     :   STRINGCONSTANT { $type = "string";
-                        $value = $STRINGCONSTANT.text;
-                         console.log("fuck string constant"); }
+                         $code =  $STRINGCONSTANT.text; }
 
     |   REALCONSTANT {$type = "real";
-                      $value = $REALCONSTANT.text; }
+                      $code = $REALCONSTANT.text; }
 
     |   BOOLEANCONSTANT {$type = "bool";
-                         $value = $BOOLEANCONSTANT.text; }
+                         $code = $BOOLEANCONSTANT.text; }
 
 
     |   PO a=expression PC
         {
-            $value = "(" + $expression.value + ")";
+            $code = "(" + $expression.code + ")";
             $type = $a.type;
         }
     |   Identifier PO { let args = []; } (e=expressionList { args = $e.type; } )? PC
@@ -189,6 +205,7 @@ expression returns [value, type]
                 console.log(func.parameterList, args);
                 checkArguments(func, args);
             }
+            $code = $Identifier.text + "(" + getFunction(calleName).toString() + ");";
         }
     |   NOT a=expression {if(TypeConverting.canConvertTo($a.type, "bool")) {
                            $type = "bool";
@@ -196,6 +213,7 @@ expression returns [value, type]
                            FaplaParser.prototype.logger.error($a.type + " can not NOT");
                            $type="noType";
                        }
+                       $code = "!" + $a.code;
                       }
     |   a=expression FACTORIAL {if(TypeConverting.canConvertTo($a.type, "real")) {
                                     $type = "real";
@@ -203,6 +221,7 @@ expression returns [value, type]
                                     FaplaParser.prototype.logger.error($a.type + " can not factorial");
                                     $type="noType";
                                 }
+                                $code = "factorial(" + $a.code + ");";
                                }
 
     |   a=expression POW b=expression
@@ -212,6 +231,7 @@ expression returns [value, type]
                 FaplaParser.prototype.logger.error($a.type + " can not POW with " + $b.type);
                 $type="noType";
            }
+           $code = "Math.pow(" + $a.code + ", " + $b.code + ");";
           }
 
     |   a=expression MUL b=expression
@@ -340,7 +360,7 @@ expression returns [value, type]
                         $type = "noType";
                     } else {
                         $type = s.type;
-                        $value = s.value;
+                        $code = null;
                     }
                    }
     ;
@@ -362,6 +382,7 @@ varDeclaration
             } else {
                 currentScope.addSymbol(new Symbol($Identifier.text.toLowerCase(), $PrimitiveType.text, null));
             }
+            code += "let " + $Identifier.text + ";";
         }
     ;
 
@@ -374,13 +395,14 @@ assignment returns [type]
                 $type = "noType";
             } else {
                 if(TypeConverting.canConvertTo($expression.type, s.type)) {
-                    s.value = $expression.value;
+                    s.value = $expression.code;
                     $type = s.type;
                 } else {
                     FaplaParser.prototype.logger.error("can not assign " + $expression.type + " to " + s.type);
                     $type = "noType";
                 }
             }
+            code += $Identifier.text " = " + $expression.code + ";";
         }
     ;
 

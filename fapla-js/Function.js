@@ -28,11 +28,11 @@ var Function = (function () {
             return null;
         }
         this.toString = function () {
-            let str = "["
+            let str = "";
             for (let i = 0; i < this.parameterList.length - 1; i++) {
                 str += this.parameterList[i].type + ", ";
             }
-            str += this.parameterList[this.parameterList.length - 1].type + "]";
+            str += this.parameterList[this.parameterList.length - 1].type;
             return str;
         }
     }
