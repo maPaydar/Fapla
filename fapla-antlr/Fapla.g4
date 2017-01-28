@@ -108,7 +108,7 @@ mainModuleDeclaration
 
 moduleBlock
     :
-        BEGIN { code += "{"; } (statement { code += $statement.code; } )*
+        BEGIN { code += "{"; } (statement { code += $statement.code + ";"; } )*
         {
             var f = getFunction(currentScope.name);
                 if (!f.returnflag && f.outputType) {
@@ -120,29 +120,29 @@ moduleBlock
     ;
 
 block
-    :   BEGIN { code += "{"; } {currentScope = currentScope.enterScope();} (statement { code += $statement.code; })* END { code += "}"; } {currentScope = currentScope.exitScope();}
+    :   BEGIN { code += "{"; } {currentScope = currentScope.enterScope();} (statement { code += $statement.code + ";"; })* END { code += "}"; } {currentScope = currentScope.exitScope();}
     ;
 
 supBlock
     :
-        BEGIN { code += "{"; } {currentScope = currentScope.enterScope();} (statement { code += $statement.code; })* END { code += "}"; } {currentScope = currentScope.exitScope();}
+        BEGIN { code += "{"; } {currentScope = currentScope.enterScope();} (statement { code += $statement.code + ";"; })* END { code += "}"; } {currentScope = currentScope.exitScope();}
     |   statement { code += $statement.code; }
     ;
 
 statement returns [type, code]
-    :   IF expression
+    :   IF {$code = "";} expression
         {
             if(!TypeConverting.canConvertTo($expression.type, "bool"))
                 FaplaParser.prototype.logger.error("expression " + $expression.text + " must be a bool in if-statement condition");
-            code += "if ( " + $expression.code + ")";
+            $code += "if ( " + $expression.code + ")";
         }
-        THEN supBlock (ELSE { code += "else" } supBlock)?
+        THEN supBlock (ELSE { $code += "else" } supBlock)?
 
     |   WHILE expression supBlock
         {
             if(!TypeConverting.canConvertTo($expression.type, "bool"))
                 FaplaParser.prototype.logger.error("expression " + $expression.text + " must be a bool in while-statement condition");
-            code += "while ( " + $expression.code + ")";
+            $code = "while ( " + $expression.code + ")";
         }
     |   RETURN expression SEMICOLON
         {
@@ -153,10 +153,10 @@ statement returns [type, code]
             } else if(!TypeConverting.canConvertTo($expression.type, f.outputType)) {
                 FaplaParser.prototype.logger.error("module " + f.name + " must return " + f.outputType);
             }
-            code += "return " + $expression.code + ";";
+            $code = "return " + $expression.code + ";";
         }
     |   WRITE expression { if(!TypeConverting.canConvertTo($expression.type, "string")) FaplaParser.prototype.logger.error("write exprssion must be a string");
-                            code += "console.log(" + $expression.code + ");";
+                            $code = "console.log(" + $expression.code + ");";
                         }
         SEMICOLON
     |   READ Identifier SEMICOLON
@@ -166,12 +166,12 @@ statement returns [type, code]
                 $type = "noType";
             } else $type = currentScope.findSymbol($Identifier.text.toLowerCase()).type;
 
-            code += "$Identifier.text = console.read();";
+            $code += "$Identifier.text = console.read();";
         }
-    |   expression { code += $expression.code + ";"; } SEMICOLON
-    |   assignment
-    |   SEMICOLON { code += ";"; }
-    |   varDeclaration
+    |   expression { $code = $expression.code + ";"; } SEMICOLON
+    |   assignment { $code = $assignment.code + ";"; }
+    |   SEMICOLON { $code = ";"; }
+    |   varDeclaration { $code = $varDeclaration.code + ";"; }
     |   block
     ;
 
@@ -290,7 +290,8 @@ expression returns [code, type]
          }
 
     |   a=expression GT b=expression
-        {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
+        {
+        if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))
            $type = "bool";
          else {
            FaplaParser.prototype.logger.error($a.type + " can not GT with " + $b.type);
@@ -314,6 +315,7 @@ expression returns [code, type]
               FaplaParser.prototype.logger.error($a.type + " can not EQUAL with " + $b.type);
               $type="noType";
          }
+         $code = $a.code + " == " + $b.code;
         }
 
     |   a=expression NOTEQUAL b=expression
@@ -362,20 +364,21 @@ expression returns [code, type]
                         $type = "noType";
                     } else {
                         $type = s.type;
-                        $code = null;
+                        $code = $Identifier.text;
                     }
                    }
     ;
 
 expressionList returns [code, type]
-    :   a=expression {$type = [$a.type]; $code = $a.code;} (COMMA d=expression
+    :   a=expression {$type = [$a.type];
+        $code = $a.code;} (COMMA d=expression
         {
             $type[$type.length] = $d.type;
             $code += ", " + $d.code;
         } )*
     ;
 
-varDeclaration
+varDeclaration returns [code]
     :   Identifier
         COLON
         PrimitiveType SEMICOLON
@@ -385,11 +388,11 @@ varDeclaration
             } else {
                 currentScope.addSymbol(new Symbol($Identifier.text.toLowerCase(), $PrimitiveType.text, null));
             }
-            code += "let " + $Identifier.text + ";";
+            $code = "let " + $Identifier.text + ";";
         }
     ;
 
-assignment returns [type]
+assignment returns [type, code]
     :   Identifier ASSIGN expression SEMICOLON
         {
             var s = currentScope.findSymbol($Identifier.text.toLowerCase());
@@ -405,7 +408,7 @@ assignment returns [type]
                     $type = "noType";
                 }
             }
-            code += $Identifier.text + " = " + $expression.code + ";";
+            $code = $Identifier.text + " = " + $expression.code + ";";
         }
     ;
 
