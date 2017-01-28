@@ -136,13 +136,12 @@ statement returns [type, code]
                 FaplaParser.prototype.logger.error("expression " + $expression.text + " must be a bool in if-statement condition");
             $code += "if ( " + $expression.code + ")";
         }
-        THEN supBlock (ELSE { $code += "else" } supBlock)?
-
+        THEN supBlock { $code += $supBlock.code; } (ELSE { $code += "else " } supBlock { $code += $supBlock.code; })?
     |   WHILE expression supBlock
         {
             if(!TypeConverting.canConvertTo($expression.type, "bool"))
                 FaplaParser.prototype.logger.error("expression " + $expression.text + " must be a bool in while-statement condition");
-            $code = "while ( " + $expression.code + ")";
+            $code = "while ( " + $expression.code + ")" + $supBlock.code;
         }
     |   RETURN expression SEMICOLON
         {
@@ -166,7 +165,7 @@ statement returns [type, code]
                 $type = "noType";
             } else $type = currentScope.findSymbol($Identifier.text.toLowerCase()).type;
 
-            $code += "$Identifier.text = console.read();";
+            $code = "$Identifier.text = console.read();";
         }
     |   expression { $code = $expression.code + ";"; } SEMICOLON
     |   assignment { $code = $assignment.code + ";"; }
