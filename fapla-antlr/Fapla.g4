@@ -204,6 +204,7 @@ expression returns [code, type]
                 console.log(func.parameterList, args);
                 checkArguments(func, args);
             }
+            $type = getFunction(calleName).outputType;
             $code = $Identifier.text + "(" + argValues + ")";
         }
     |   NOT a=expression {if(TypeConverting.canConvertTo($a.type, "bool")) {
@@ -249,7 +250,7 @@ expression returns [code, type]
            FaplaParser.prototype.logger.error($a.type + " can not DIV with " + $b.type);
            $type="noType";
         }
-        $code = $a.code + "*" + $b.code;
+        $code = $a.code + "/" + $b.code;
         }
     |   a=expression MOD b=expression
         {if(TypeConverting.canConvertTo($a.type, "real") && TypeConverting.canConvertTo($b.type, "real"))

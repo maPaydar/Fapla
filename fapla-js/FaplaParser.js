@@ -1525,6 +1525,7 @@ FaplaParser.prototype.expression = function(_p) {
                             console.log(func.parameterList, args);
                             checkArguments(func, args);
                         }
+                        localctx.type =  getFunction(calleName).outputType
                         localctx.code =  (localctx._Identifier===null ? null : localctx._Identifier.text) + "(" + argValues + ")"
                     
             break;
