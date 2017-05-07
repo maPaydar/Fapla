@@ -1,8 +1,8 @@
-#Fapla Programming Language
+# Fapla Programming Language
 This is Design Compiler Project
 
 
-#Make any language
+# Make any language
 
 in the root of project
 ```
@@ -13,7 +13,7 @@ in the root of project
 ```
 and then you see generated classes by antlr in fapla-lang directories
 
-#Run Fapla Editor
+# Run Fapla Editor
 we write a editor using html and js and run it as a electron app
 
 ```bash
